@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/* Alibaba-Style Theme for Pambo */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  
+  /* Primary Alibaba Orange */
+  --color-primary: #FF6700;
+  --color-primary-dark: #E55100;
+  --color-primary-light: #FF8533;
+  
+  /* Secondary colors */
+  --color-secondary: #FF9500;
+  --color-secondary-dark: #FF7A00;
+  
+  /* Neutral palette */
+  --color-neutral-50: #FAFAFA;
+  --color-neutral-100: #F5F5F5;
+  --color-neutral-200: #EEEEEE;
+  --color-neutral-300: #E0E0E0;
+  --color-neutral-400: #BDBDBD;
+  --color-neutral-500: #9E9E9E;
+  --color-neutral-600: #757575;
+  --color-neutral-700: #616161;
+  --color-neutral-800: #424242;
+  --color-neutral-900: #212121;
+  
+  /* Status colors */
+  --color-success: #52C41A;
+  --color-warning: #FAAD14;
+  --color-error: #FF4D4F;
+  --color-info: #1890FF;
+  
+  /* Shadows for depth */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================
+   ALIBABA THEME UTILITIES
+   ======================== */
+
+/* Primary buttons - Bold Alibaba orange */
+.btn-primary {
+  @apply bg-[#FF6700] text-white font-semibold py-2 px-4 rounded-lg hover:bg-[#E55100] transition-colors duration-200 shadow-md hover:shadow-lg;
+}
+
+.btn-primary-lg {
+  @apply bg-[#FF6700] text-white font-semibold py-3 px-6 rounded-lg hover:bg-[#E55100] transition-colors duration-200 shadow-md hover:shadow-lg text-lg;
+}
+
+/* Secondary buttons - Outline style */
+.btn-secondary {
+  @apply border-2 border-[#FF6700] text-[#FF6700] font-semibold py-2 px-4 rounded-lg hover:bg-[#FFF5F0] transition-colors duration-200;
+}
+
+/* Cards - Clean white with subtle shadow */
+.card-alibaba {
+  @apply bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 p-4 border border-[#EEEEEE];
+}
+
+.card-alibaba-elevated {
+  @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 border border-[#EEEEEE];
+}
+
+/* Headers - Bold typography */
+.heading-primary {
+  @apply text-3xl font-bold text-[#212121] tracking-tight;
+}
+
+.heading-secondary {
+  @apply text-2xl font-bold text-[#212121];
+}
+
+.heading-tertiary {
+  @apply text-xl font-semibold text-[#424242];
+}
+
+/* Badges - Orange accents */
+.badge-primary {
+  @apply inline-block bg-[#FFF5F0] text-[#FF6700] px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.badge-success {
+  @apply inline-block bg-[#F6FFED] text-[#52C41A] px-3 py-1 rounded-full text-sm font-medium;
+}
+
+/* Links - Alibaba style */
+.link-primary {
+  @apply text-[#FF6700] font-medium hover:text-[#E55100] transition-colors duration-200;
+}
+
+/* Product grid - Optimized for Alibaba-style display */
+.product-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
+}
+
+/* Centralized styles for consistent Alibaba look */
+
+.hero-overlay {
+    @apply absolute inset-0 bg-gradient-to-r from-[#212121]/80 via-[#212121]/60 to-transparent;
+}
+
+.hero-title {
+    @apply text-white font-bold tracking-tight;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.hero-subtitle {
+    @apply text-white/90 font-medium;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Hide scrollbar for clean carousel design */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Logo image styling */
+.logo img {
+  filter: none !important;
+}
+
+/* Alibaba-style hover effects */
+.hover-lift {
+  @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+}
+
+/* Clean input styling */
+.input-alibaba {
+  @apply w-full px-4 py-2 border border-[#E0E0E0] rounded-lg focus:outline-none focus:border-[#FF6700] focus:ring-1 focus:ring-[#FF6700] transition-colors duration-200;
+}
+
+/* Clean input styling - large */
+.input-alibaba-lg {
+  @apply w-full px-4 py-3 border border-[#E0E0E0] rounded-lg focus:outline-none focus:border-[#FF6700] focus:ring-2 focus:ring-[#FFF5F0] transition-colors duration-200 text-lg;
+}
+
+/* Search bar styling */
+.search-bar-alibaba {
+  @apply flex items-center bg-white border border-[#E0E0E0] rounded-lg px-4 py-2 hover:border-[#FF6700] focus-within:border-[#FF6700] focus-within:ring-1 focus-within:ring-[#FF6700] transition-all duration-200;
+}
+
+/* Navigation bar - Clean and minimal */
+.navbar-alibaba {
+  @apply bg-white border-b border-[#EEEEEE] shadow-sm sticky top-0 z-40;
+}
+
+/* Section background - Light gray for contrast */
+.section-bg {
+  @apply bg-[#FAFAFA];
+}
+
+/* Divider line */
+.divider-alibaba {
+  @apply border-t border-[#EEEEEE];
+}

@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "jsr:@supabase/functions-js/": "https://jsr.io/@supabase/functions-js/",
+    "jsr:@supabase/supabase-js@2": "https://jsr.io/@supabase/supabase-js@2"
+  }
+}

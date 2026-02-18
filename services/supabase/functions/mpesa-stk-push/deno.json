@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "dev": "deno run --allow-net --allow-env http://localhost:54321/functions/v1"
+  }
+}

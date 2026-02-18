@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../services"
+		},
+		{
+			"path": "../node_modules"
+		},
+		{
+			"path": "."
+		}
+	]
+}

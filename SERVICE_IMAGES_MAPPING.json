@@ -1,0 +1,314 @@
+{
+  "description": "All 44 Services with Image URL Mapping for Pambo Platform",
+  "instructions": "Edit the imageUrl field for each service with your chosen image URL. You can use Unsplash URLs or your own hosted images.",
+  "services": [
+    {
+      "id": 1,
+      "name": "Plumber",
+      "slug": "plumber",
+      "imageUrl": "https://images.unsplash.com/photo-1585771724684-38269d6639fd?q=80&w=870&auto=format&fit=crop",
+      "category": "Core Trades & Fundis"
+    },
+    {
+      "id": 2,
+      "name": "Electrician",
+      "slug": "electrician",
+      "imageUrl": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=870&auto=format&fit=crop",
+      "category": "Core Trades & Fundis"
+    },
+    {
+      "id": 3,
+      "name": "Carpenter",
+      "slug": "carpenter",
+      "imageUrl": "https://images.unsplash.com/photo-1507842217343-583f20270319?q=80&w=870&auto=format&fit=crop",
+      "category": "Core Trades & Fundis"
+    },
+    {
+      "id": 4,
+      "name": "Painter",
+      "slug": "painter",
+      "imageUrl": "https://images.unsplash.com/photo-1589939705882-a6b3b6bae15f?q=80&w=870&auto=format&fit=crop",
+      "category": "Core Trades & Fundis"
+    },
+    {
+      "id": 5,
+      "name": "Mason",
+      "slug": "mason",
+      "imageUrl": "https://images.unsplash.com/photo-1504917595217-3404ee9c6e0c?q=80&w=870&auto=format&fit=crop",
+      "category": "Core Trades & Fundis"
+    },
+    {
+      "id": 6,
+      "name": "Interior Designer",
+      "slug": "interior-designer",
+      "imageUrl": "https://images.unsplash.com/photo-1565183657294-1f022470bfb5?q=80&w=870&auto=format&fit=crop",
+      "category": "Design & Creative"
+    },
+    {
+      "id": 7,
+      "name": "Interior Painter",
+      "slug": "interior-painter",
+      "imageUrl": "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?q=80&w=870&auto=format&fit=crop",
+      "category": "Core Trades & Fundis"
+    },
+    {
+      "id": 8,
+      "name": "Mama Fua",
+      "slug": "mama-fua",
+      "imageUrl": "https://images.unsplash.com/photo-1584622741237-b89047672b29?q=80&w=870&auto=format&fit=crop",
+      "category": "Cleaning & Utilities"
+    },
+    {
+      "id": 9,
+      "name": "Water Delivery",
+      "slug": "water-delivery",
+      "imageUrl": "https://images.unsplash.com/photo-1584622741237-b89047672b29?q=80&w=870&auto=format&fit=crop",
+      "category": "Cleaning & Utilities"
+    },
+    {
+      "id": 10,
+      "name": "Photographer",
+      "slug": "photographer",
+      "imageUrl": "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=870&auto=format&fit=crop",
+      "category": "Design & Creative"
+    },
+    {
+      "id": 11,
+      "name": "Videographer",
+      "slug": "videographer",
+      "imageUrl": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?q=80&w=870&auto=format&fit=crop",
+      "category": "Design & Creative"
+    },
+    {
+      "id": 12,
+      "name": "CCTV Installer",
+      "slug": "cctv-installer",
+      "imageUrl": "https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=870&auto=format&fit=crop",
+      "category": "Security & Tech"
+    },
+    {
+      "id": 13,
+      "name": "Home Cleaner",
+      "slug": "home-cleaner",
+      "imageUrl": "https://images.unsplash.com/photo-1584622714792-5dd17f672c4d?q=80&w=870&auto=format&fit=crop",
+      "category": "Cleaning & Utilities"
+    },
+    {
+      "id": 14,
+      "name": "Solar Installer",
+      "slug": "solar-installer",
+      "imageUrl": "https://images.unsplash.com/photo-1497440991519-a2dff83e0b2d?q=80&w=870&auto=format&fit=crop",
+      "category": "Energy & Tech"
+    },
+    {
+      "id": 15,
+      "name": "Welder",
+      "slug": "welder",
+      "imageUrl": "https://images.unsplash.com/photo-1541076529477-87ad86b9824b?q=80&w=870&auto=format&fit=crop",
+      "category": "Core Trades & Fundis"
+    },
+    {
+      "id": 16,
+      "name": "Mechanic",
+      "slug": "mechanic",
+      "imageUrl": "https://images.unsplash.com/photo-1487754180144-351b8e57f0db?q=80&w=870&auto=format&fit=crop",
+      "category": "Auto Services"
+    },
+    {
+      "id": 17,
+      "name": "Barber",
+      "slug": "barber",
+      "imageUrl": "https://images.unsplash.com/photo-1585747860715-cd4628902d4a?q=80&w=870&auto=format&fit=crop",
+      "category": "Personal Care"
+    },
+    {
+      "id": 18,
+      "name": "Salon",
+      "slug": "salon",
+      "imageUrl": "https://images.unsplash.com/photo-1562322503-cebbf507e30f?q=80&w=870&auto=format&fit=crop",
+      "category": "Personal Care"
+    },
+    {
+      "id": 19,
+      "name": "Tailor",
+      "slug": "tailor",
+      "imageUrl": "https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=870&auto=format&fit=crop",
+      "category": "Personal Care"
+    },
+    {
+      "id": 20,
+      "name": "Event DJ",
+      "slug": "event-dj",
+      "imageUrl": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=870&auto=format&fit=crop",
+      "category": "Entertainment"
+    },
+    {
+      "id": 21,
+      "name": "Event Planner",
+      "slug": "event-planner",
+      "imageUrl": "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=870&auto=format&fit=crop",
+      "category": "Entertainment"
+    },
+    {
+      "id": 22,
+      "name": "Catering",
+      "slug": "catering",
+      "imageUrl": "https://images.unsplash.com/photo-1504674900968-5785c0f2f134?q=80&w=870&auto=format&fit=crop",
+      "category": "Food Services"
+    },
+    {
+      "id": 23,
+      "name": "Cook",
+      "slug": "cook",
+      "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=870&auto=format&fit=crop",
+      "category": "Food Services"
+    },
+    {
+      "id": 24,
+      "name": "Tutor",
+      "slug": "tutor",
+      "imageUrl": "https://images.unsplash.com/photo-1427504494785-cdF9b2e8e9ad?q=80&w=870&auto=format&fit=crop",
+      "category": "Education"
+    },
+    {
+      "id": 25,
+      "name": "Accountant",
+      "slug": "accountant",
+      "imageUrl": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=870&auto=format&fit=crop",
+      "category": "Professional Services"
+    },
+    {
+      "id": 26,
+      "name": "Consultant",
+      "slug": "consultant",
+      "imageUrl": "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=870&auto=format&fit=crop",
+      "category": "Professional Services"
+    },
+    {
+      "id": 27,
+      "name": "Handyman",
+      "slug": "handyman",
+      "imageUrl": "https://images.unsplash.com/photo-1517694712206-14dd9538aa97?q=80&w=870&auto=format&fit=crop",
+      "category": "Core Trades & Fundis"
+    },
+    {
+      "id": 28,
+      "name": "Landscaper",
+      "slug": "landscaper",
+      "imageUrl": "https://images.unsplash.com/photo-1552394907-5ec3b4caf2f0?q=80&w=870&auto=format&fit=crop",
+      "category": "Outdoor Services"
+    },
+    {
+      "id": 29,
+      "name": "Plumbing",
+      "slug": "plumbing",
+      "imageUrl": "https://images.unsplash.com/photo-1585771724684-38269d6639fd?q=80&w=870&auto=format&fit=crop",
+      "category": "Core Trades & Fundis"
+    },
+    {
+      "id": 30,
+      "name": "Electrical",
+      "slug": "electrical",
+      "imageUrl": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=870&auto=format&fit=crop",
+      "category": "Core Trades & Fundis"
+    },
+    {
+      "id": 31,
+      "name": "Construction",
+      "slug": "construction",
+      "imageUrl": "https://images.unsplash.com/photo-1504917595217-340ddc3eea4c?q=80&w=870&auto=format&fit=crop",
+      "category": "Construction"
+    },
+    {
+      "id": 32,
+      "name": "Renovation",
+      "slug": "renovation",
+      "imageUrl": "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=870&auto=format&fit=crop",
+      "category": "Construction"
+    },
+    {
+      "id": 33,
+      "name": "Tiling",
+      "slug": "tiling",
+      "imageUrl": "https://images.unsplash.com/photo-1565183657294-1f022470bfb5?q=80&w=870&auto=format&fit=crop",
+      "category": "Construction"
+    },
+    {
+      "id": 34,
+      "name": "Flooring",
+      "slug": "flooring",
+      "imageUrl": "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=870&auto=format&fit=crop",
+      "category": "Construction"
+    },
+    {
+      "id": 35,
+      "name": "Roofing",
+      "slug": "roofing",
+      "imageUrl": "https://images.unsplash.com/photo-1562322503-cebbf507e30f?q=80&w=870&auto=format&fit=crop",
+      "category": "Construction"
+    },
+    {
+      "id": 36,
+      "name": "Installation",
+      "slug": "installation",
+      "imageUrl": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=870&auto=format&fit=crop",
+      "category": "Services"
+    },
+    {
+      "id": 37,
+      "name": "Appliance Repair",
+      "slug": "appliance-repair",
+      "imageUrl": "https://images.unsplash.com/photo-1552654995-5a089e94fcb5?q=80&w=870&auto=format&fit=crop",
+      "category": "Repair Services"
+    },
+    {
+      "id": 38,
+      "name": "Glass Installation",
+      "slug": "glass-installation",
+      "imageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=870&auto=format&fit=crop",
+      "category": "Installation"
+    },
+    {
+      "id": 39,
+      "name": "Door Installation",
+      "slug": "door-installation",
+      "imageUrl": "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=870&auto=format&fit=crop",
+      "category": "Installation"
+    },
+    {
+      "id": 40,
+      "name": "Pest Control",
+      "slug": "pest-control",
+      "imageUrl": "https://images.unsplash.com/photo-1576158622073-a86d0e6e3c46?q=80&w=870&auto=format&fit=crop",
+      "category": "Cleaning & Utilities"
+    },
+    {
+      "id": 41,
+      "name": "Pool Cleaning",
+      "slug": "pool-cleaning",
+      "imageUrl": "https://images.unsplash.com/photo-1576158622073-a86d0e6e3c46?q=80&w=870&auto=format&fit=crop",
+      "category": "Outdoor Services"
+    },
+    {
+      "id": 42,
+      "name": "Gardening",
+      "slug": "gardening",
+      "imageUrl": "https://images.unsplash.com/photo-1597288212624-753a6432c83d?q=80&w=870&auto=format&fit=crop",
+      "category": "Outdoor Services"
+    },
+    {
+      "id": 43,
+      "name": "Tree Removal",
+      "slug": "tree-removal",
+      "imageUrl": "https://images.unsplash.com/photo-1542202229-7d93c4f5d07b?q=80&w=870&auto=format&fit=crop",
+      "category": "Outdoor Services"
+    },
+    {
+      "id": 44,
+      "name": "Moving Service",
+      "slug": "moving-service",
+      "imageUrl": "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=870&auto=format&fit=crop",
+      "category": "Logistics"
+    }
+  ]
+}

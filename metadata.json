@@ -1,0 +1,9 @@
+{
+  "name": "Pambo",
+  "description": "Pambo - A comprehensive verified digital marketplace for B2C, B2B, and Services with M-Pesa integration and AI-powered anti-fake verification.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
