@@ -1,6 +1,7 @@
 import React from 'react';
 import { LiveStream, Product } from '../types';
 import { Wifi, Users, Eye } from 'lucide-react';
+import { SmartImage } from './SmartImage';
 
 interface LiveStreamCardProps {
   stream: LiveStream;
@@ -16,7 +17,7 @@ const LiveStreamCard: React.FC<LiveStreamCardProps> = ({ stream, product, onView
     >
       <div className="relative aspect-[9/16] overflow-hidden bg-gray-900">
         {product?.image ? (
-          <img
+          <SmartImage
             src={product.image}
             alt={stream.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -40,13 +41,17 @@ const LiveStreamCard: React.FC<LiveStreamCardProps> = ({ stream, product, onView
         </div>
       </div>
       <div className="p-3 flex items-center gap-2">
-        <img src={stream.sellerAvatar} alt={stream.sellerName} className="w-8 h-8 rounded-full object-cover" />
+        <SmartImage
+          src={stream.sellerAvatar}
+          alt={stream.sellerName}
+          className="w-8 h-8 rounded-full object-cover"
+        />
         <div>
-            <p className="text-sm font-semibold text-gray-800 truncate">{stream.sellerName}</p>
-            <p className="text-xs text-gray-500">Live now</p>
+          <p className="text-sm font-semibold text-gray-800 truncate">{stream.sellerName}</p>
+          <p className="text-xs text-gray-500">Live now</p>
         </div>
         <button className="ml-auto bg-orange-100 text-orange-600 text-xs font-bold px-3 py-1.5 rounded-md hover:bg-orange-200 transition">
-            Join
+          Join
         </button>
       </div>
     </div>
@@ -59,23 +64,29 @@ interface LiveCommerceViewProps {
   onViewStream: (stream: LiveStream) => void;
 }
 
-export const LiveCommerceView: React.FC<LiveCommerceViewProps> = ({ streams, products, onViewStream }) => {
-  const liveStreams = streams.filter(s => s.status === 'live');
+export const LiveCommerceView: React.FC<LiveCommerceViewProps> = ({
+  streams,
+  products,
+  onViewStream
+}) => {
+  const liveStreams = streams.filter((s) => s.status === 'live');
   return (
     <div className="space-y-6">
       <div className="bg-white p-6 rounded-lg border border-gray-200">
         <h1 className="text-3xl font-bold text-gray-800">Live Commerce</h1>
-        <p className="text-gray-500 mt-1">Join live streams from your favorite sellers for exclusive deals and product showcases.</p>
+        <p className="text-gray-500 mt-1">
+          Join live streams from your favorite sellers for exclusive deals and product showcases.
+        </p>
       </div>
 
       {liveStreams.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {liveStreams.map(stream => {
-            const product = products.find(p => p.id === stream.featuredProductId);
+          {liveStreams.map((stream) => {
+            const product = products.find((p) => p.id === stream.featuredProductId);
             return (
-              <LiveStreamCard 
-                key={stream.id} 
-                stream={stream} 
+              <LiveStreamCard
+                key={stream.id}
+                stream={stream}
                 product={product}
                 onViewStream={onViewStream}
               />
@@ -84,9 +95,9 @@ export const LiveCommerceView: React.FC<LiveCommerceViewProps> = ({ streams, pro
         </div>
       ) : (
         <div className="text-center py-20 bg-white rounded-lg border border-dashed border-gray-300">
-            <Wifi size={48} className="mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-semibold text-gray-700">No Live Streams Currently</h3>
-            <p className="text-gray-500 mt-1">Check back later to see when sellers go live!</p>
+          <Wifi size={48} className="mx-auto text-gray-400 mb-4" />
+          <h3 className="text-lg font-semibold text-gray-700">No Live Streams Currently</h3>
+          <p className="text-gray-500 mt-1">Check back later to see when sellers go live!</p>
         </div>
       )}
     </div>

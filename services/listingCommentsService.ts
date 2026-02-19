@@ -1,4 +1,13 @@
 import { supabase } from '../src/lib/supabaseClient';
+import { buildPaginationMeta, logServiceTiming } from './serviceObservability';
+
+const DEFAULT_PAGE_SIZE = 50;
+const MAX_PAGE_SIZE = 200;
+
+const clampPageSize = (value?: number) => {
+  const parsed = Number.isFinite(value) ? Number(value) : DEFAULT_PAGE_SIZE;
+  return Math.min(Math.max(parsed, 1), MAX_PAGE_SIZE);
+};
 
 export interface CreateListingCommentInput {
   listingId: string;
@@ -45,16 +54,29 @@ export const createListingComment = async (input: CreateListingCommentInput) => 
 };
 
 export const getAllListingComments = async (limit = 2000) => {
+  const startedAt = Date.now();
   try {
-    const { data, error } = await supabase
+    const safeLimit = clampPageSize(limit);
+
+    const { data, error, count } = await supabase
       .from('listing_comments')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('createdAt', { ascending: false })
-      .limit(limit);
+      .limit(safeLimit);
 
     if (error) throw error;
 
-    return { success: true, comments: (data || []) as ListingCommentRecord[] };
+    logServiceTiming('listingComments.getAllListingComments', startedAt, {
+      limit: safeLimit,
+      resultCount: (data || []).length,
+    });
+
+    return {
+      success: true,
+      comments: (data || []) as ListingCommentRecord[],
+      total: count || 0,
+      pagination: buildPaginationMeta(count || 0, safeLimit, 0),
+    };
   } catch (error) {
     console.error('Get listing comments error:', error);
     return { success: false, error };

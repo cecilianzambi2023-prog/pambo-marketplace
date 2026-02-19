@@ -18,7 +18,11 @@ interface BulkSellingModalProps {
   }) => void;
 }
 
-export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onClose, onSubmit }) => {
+export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit
+}) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -29,23 +33,28 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
     minOrderQuantity: 1,
     hub: 'wholesale',
     photoUrls: '',
-    videoUrls: '',
+    videoUrls: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: name === 'quantity' || name === 'pricePerUnit' || name === 'minOrderQuantity' ? parseFloat(value) : value,
+      [name]:
+        name === 'quantity' || name === 'pricePerUnit' || name === 'minOrderQuantity'
+          ? parseFloat(value)
+          : value
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title.trim() || formData.quantity === 0 || formData.pricePerUnit === 0) {
       alert('Please fill in all required fields');
       return;
@@ -75,7 +84,7 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
         minOrderQuantity: formData.minOrderQuantity,
         hub: formData.hub,
         photos,
-        videos,
+        videos
       });
       setFormData({
         title: '',
@@ -87,7 +96,7 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
         minOrderQuantity: 1,
         hub: 'wholesale',
         photoUrls: '',
-        videoUrls: '',
+        videoUrls: ''
       });
     } finally {
       setIsSubmitting(false);
@@ -101,7 +110,7 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
     { value: 'electronics', label: '⚡ Electronics' },
     { value: 'machinery', label: '🔧 Machinery' },
     { value: 'raw-materials', label: '📦 Raw Materials' },
-    { value: 'other', label: '📋 Other' },
+    { value: 'other', label: '📋 Other' }
   ];
 
   const units = ['units', 'kg', 'meters', 'liters', 'sets', 'pieces', 'boxes', 'tons'];
@@ -147,8 +156,10 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              {categories.map(cat => (
-                <option key={cat.value} value={cat.value}>{cat.label}</option>
+              {categories.map((cat) => (
+                <option key={cat.value} value={cat.value}>
+                  {cat.label}
+                </option>
               ))}
             </select>
           </div>
@@ -168,7 +179,9 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Photo URLs (max 10)</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">
+                Photo URLs (max 10)
+              </label>
               <textarea
                 name="photoUrls"
                 value={formData.photoUrls}
@@ -177,10 +190,20 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
                 rows={4}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               />
-              <p className="text-xs text-gray-500 mt-1">{formData.photoUrls.split('\n').map(v => v.trim()).filter(Boolean).length}/10</p>
+              <p className="text-xs text-gray-500 mt-1">
+                {
+                  formData.photoUrls
+                    .split('\n')
+                    .map((v) => v.trim())
+                    .filter(Boolean).length
+                }
+                /10
+              </p>
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Video URLs (max 2)</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">
+                Video URLs (max 2)
+              </label>
               <textarea
                 name="videoUrls"
                 value={formData.videoUrls}
@@ -189,14 +212,24 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
                 rows={4}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               />
-              <p className="text-xs text-gray-500 mt-1">{formData.videoUrls.split('\n').map(v => v.trim()).filter(Boolean).length}/2</p>
+              <p className="text-xs text-gray-500 mt-1">
+                {
+                  formData.videoUrls
+                    .split('\n')
+                    .map((v) => v.trim())
+                    .filter(Boolean).length
+                }
+                /2
+              </p>
             </div>
           </div>
 
           {/* Quantity Section */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Quantity Available *</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">
+                Quantity Available *
+              </label>
               <input
                 type="number"
                 name="quantity"
@@ -214,8 +247,10 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                {units.map(u => (
-                  <option key={u} value={u}>{u}</option>
+                {units.map((u) => (
+                  <option key={u} value={u}>
+                    {u}
+                  </option>
                 ))}
               </select>
             </div>
@@ -224,7 +259,9 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
           {/* Pricing Section */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Price per Unit (KES) *</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">
+                Price per Unit (KES) *
+              </label>
               <div className="flex items-center gap-2">
                 <DollarSign size={18} className="text-gray-500" />
                 <input

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { getAllFeaturedListings, getFeaturedListingsAnalytics } from '../services/featuredListingsService';
+import {
+  getAllFeaturedListings,
+  getFeaturedListingsAnalytics
+} from '../services/featuredListingsService';
 import { Sparkles, TrendingUp, DollarSign, Calendar, Settings, Eye } from 'lucide-react';
 import { COLORS } from '../config/brand';
 
@@ -64,7 +67,10 @@ export const FeaturedListingsAnalyticsTab: React.FC = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
-          <div className="w-12 h-12 rounded-full animate-spin mx-auto mb-4 border-4 border-gray-200" style={{ borderTopColor: COLORS.primary[500] }} />
+          <div
+            className="w-12 h-12 rounded-full animate-spin mx-auto mb-4 border-4 border-gray-200"
+            style={{ borderTopColor: COLORS.primary[500] }}
+          />
           <p style={{ color: COLORS.gray[600] }}>Loading analytics...</p>
         </div>
       </div>
@@ -94,12 +100,18 @@ export const FeaturedListingsAnalyticsTab: React.FC = () => {
     }
   });
 
-  const activeListings = featuredListings.filter(f => f.status === 'active').length;
-  const expiredListings = featuredListings.filter(f => f.status === 'expired').length;
+  const activeListings = featuredListings.filter((f) => f.status === 'active').length;
+  const expiredListings = featuredListings.filter((f) => f.status === 'expired').length;
   const allTimeRevenue = analytics?.total_revenue || 0;
-  const daysActive = 
+  const daysActive =
     featuredListings.length > 0
-      ? Math.ceil((new Date().getTime() - new Date(Math.min(...featuredListings.map(f => new Date(f.created_at).getTime()))).getTime()) / (1000 * 60 * 60 * 24))
+      ? Math.ceil(
+          (new Date().getTime() -
+            new Date(
+              Math.min(...featuredListings.map((f) => new Date(f.created_at).getTime()))
+            ).getTime()) /
+            (1000 * 60 * 60 * 24)
+        )
       : 0;
   const avgRevenuePerDay = daysActive > 0 ? Math.round(allTimeRevenue / daysActive) : 0;
 
@@ -147,8 +159,8 @@ export const FeaturedListingsAnalyticsTab: React.FC = () => {
         />
         <AnalyticsCard
           title="M-Pesa vs Bank"
-          value={`${Math.round((analytics?.mpesa_revenue || 0) / (analytics?.total_revenue || 1) * 100)}% M-Pesa`}
-          subtext={`${Math.round((analytics?.bank_revenue || 0) / (analytics?.total_revenue || 1) * 100)}% Bank`}
+          value={`${Math.round(((analytics?.mpesa_revenue || 0) / (analytics?.total_revenue || 1)) * 100)}% M-Pesa`}
+          subtext={`${Math.round(((analytics?.bank_revenue || 0) / (analytics?.total_revenue || 1)) * 100)}% Bank`}
           icon={<Eye size={24} />}
           color={COLORS.info}
         />
@@ -177,12 +189,15 @@ export const FeaturedListingsAnalyticsTab: React.FC = () => {
                   className="h-2 rounded-full transition-all"
                   style={{
                     background: COLORS.success,
-                    width: `${(analytics?.mpesa_revenue || 0) / (analytics?.total_revenue || 1) * 100}%`,
+                    width: `${((analytics?.mpesa_revenue || 0) / (analytics?.total_revenue || 1)) * 100}%`
                   }}
                 />
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                {Math.round((analytics?.mpesa_revenue || 0) / (analytics?.total_revenue || 1) * 100)}% of total
+                {Math.round(
+                  ((analytics?.mpesa_revenue || 0) / (analytics?.total_revenue || 1)) * 100
+                )}
+                % of total
               </p>
             </div>
 
@@ -201,12 +216,15 @@ export const FeaturedListingsAnalyticsTab: React.FC = () => {
                   className="h-2 rounded-full transition-all"
                   style={{
                     background: COLORS.info,
-                    width: `${(analytics?.bank_revenue || 0) / (analytics?.total_revenue || 1) * 100}%`,
+                    width: `${((analytics?.bank_revenue || 0) / (analytics?.total_revenue || 1)) * 100}%`
                   }}
                 />
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                {Math.round((analytics?.bank_revenue || 0) / (analytics?.total_revenue || 1) * 100)}% of total
+                {Math.round(
+                  ((analytics?.bank_revenue || 0) / (analytics?.total_revenue || 1)) * 100
+                )}
+                % of total
               </p>
             </div>
           </div>
@@ -272,7 +290,12 @@ export const FeaturedListingsAnalyticsTab: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ background: COLORS.gray[50], borderBottom: `1px solid ${COLORS.gray[200]}` }}>
+              <tr
+                style={{
+                  background: COLORS.gray[50],
+                  borderBottom: `1px solid ${COLORS.gray[200]}`
+                }}
+              >
                 <th className="px-6 py-4 text-left font-bold" style={{ color: COLORS.gray[700] }}>
                   Listing ID
                 </th>
@@ -313,11 +336,25 @@ export const FeaturedListingsAnalyticsTab: React.FC = () => {
                       <span
                         className="px-3 py-1 rounded-full text-xs font-bold"
                         style={{
-                          background: listing.status === 'active' ? '#D1FAE5' : listing.status === 'expired' ? '#FEE2E2' : '#E0E7FF',
-                          color: listing.status === 'active' ? COLORS.success : listing.status === 'expired' ? COLORS.danger : COLORS.secondary[600],
+                          background:
+                            listing.status === 'active'
+                              ? '#D1FAE5'
+                              : listing.status === 'expired'
+                                ? '#FEE2E2'
+                                : '#E0E7FF',
+                          color:
+                            listing.status === 'active'
+                              ? COLORS.success
+                              : listing.status === 'expired'
+                                ? COLORS.danger
+                                : COLORS.secondary[600]
                         }}
                       >
-                        {listing.status === 'active' ? '✅ Active' : listing.status === 'expired' ? '⏰ Expired' : '❌ Cancelled'}
+                        {listing.status === 'active'
+                          ? '✅ Active'
+                          : listing.status === 'expired'
+                            ? '⏰ Expired'
+                            : '❌ Cancelled'}
                       </span>
                     </td>
                     <td className="px-6 py-4" style={{ color: COLORS.gray[700] }}>
@@ -336,7 +373,7 @@ export const FeaturedListingsAnalyticsTab: React.FC = () => {
                         className="px-2 py-1 rounded text-xs font-semibold"
                         style={{
                           background: listing.payment_method === 'mpesa' ? '#D1FAE5' : '#DBEAFE',
-                          color: listing.payment_method === 'mpesa' ? COLORS.success : COLORS.info,
+                          color: listing.payment_method === 'mpesa' ? COLORS.success : COLORS.info
                         }}
                       >
                         {listing.payment_method === 'mpesa' ? 'M-Pesa' : 'Bank'}
@@ -351,7 +388,11 @@ export const FeaturedListingsAnalyticsTab: React.FC = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center" style={{ color: COLORS.gray[500] }}>
+                  <td
+                    colSpan={7}
+                    className="px-6 py-8 text-center"
+                    style={{ color: COLORS.gray[500] }}
+                  >
                     No featured listings yet
                   </td>
                 </tr>
@@ -401,8 +442,15 @@ const AnalyticsCard: React.FC<{
   </div>
 );
 
-const StatRow: React.FC<{ label: string; value: string; color: string }> = ({ label, value, color }) => (
-  <div className="flex items-center justify-between py-3 border-b" style={{ borderColor: COLORS.gray[200] }}>
+const StatRow: React.FC<{ label: string; value: string; color: string }> = ({
+  label,
+  value,
+  color
+}) => (
+  <div
+    className="flex items-center justify-between py-3 border-b"
+    style={{ borderColor: COLORS.gray[200] }}
+  >
     <span style={{ color: COLORS.gray[600] }}>{label}</span>
     <span className="font-bold text-lg" style={{ color }}>
       {value}

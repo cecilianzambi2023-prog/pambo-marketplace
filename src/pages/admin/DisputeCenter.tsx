@@ -1,7 +1,7 @@
 /**
  * Admin Dispute Center - ADMIN ONLY
  * Centralized dashboard for managing disputes across all hubs
- * 
+ *
  * Access Control: Only info@pambo.biz can access
  * Features:
  * - View all disputes (Marketplace, Wholesale, Services)
@@ -23,7 +23,7 @@ import {
   Shield,
   Download,
   RefreshCw,
-  Lock,
+  Lock
 } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 
@@ -94,10 +94,12 @@ export const DisputeCenter: React.FC = () => {
    */
   const checkAdminAccess = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+
       const adminEmail = 'info@pambo.biz';
-      
+
       if (user?.email === adminEmail) {
         setIsAuthorized(true);
       } else {
@@ -117,11 +119,12 @@ export const DisputeCenter: React.FC = () => {
   const loadAllDisputes = async () => {
     try {
       setIsLoading(true);
-      
+
       // Fetch disputes from all hubs
       const { data: allDisputes, error } = await supabase
         .from('disputes')
-        .select(`
+        .select(
+          `
           id,
           order_id,
           buyer_id,
@@ -144,7 +147,8 @@ export const DisputeCenter: React.FC = () => {
             full_name,
             avatar_url
           )
-        `)
+        `
+        )
         .order('created_at', { ascending: false });
 
       if (error) {
@@ -154,10 +158,10 @@ export const DisputeCenter: React.FC = () => {
 
       setDisputes(allDisputes || []);
       setLastRefresh(new Date().toLocaleTimeString());
-      
+
       // Calculate stats
       if (allDisputes) {
-        const urgent = allDisputes.filter(d => {
+        const urgent = allDisputes.filter((d) => {
           if (d.status !== 'seller_response_pending') return false;
           const created = new Date(d.created_at);
           const deadline = new Date(created.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -165,8 +169,8 @@ export const DisputeCenter: React.FC = () => {
           return daysLeft <= 3;
         }).length;
 
-        const pending = allDisputes.filter(d => d.status === 'seller_response_pending').length;
-        const resolved = allDisputes.filter(d => d.status === 'resolved').length;
+        const pending = allDisputes.filter((d) => d.status === 'seller_response_pending').length;
+        const resolved = allDisputes.filter((d) => d.status === 'resolved').length;
 
         setStats({
           total: allDisputes.length,
@@ -190,7 +194,7 @@ export const DisputeCenter: React.FC = () => {
 
     switch (filter) {
       case 'urgent':
-        filtered = disputes.filter(d => {
+        filtered = disputes.filter((d) => {
           if (d.status !== 'seller_response_pending') return false;
           const created = new Date(d.created_at);
           const deadline = new Date(created.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -199,10 +203,10 @@ export const DisputeCenter: React.FC = () => {
         });
         break;
       case 'pending_seller':
-        filtered = disputes.filter(d => d.status === 'seller_response_pending');
+        filtered = disputes.filter((d) => d.status === 'seller_response_pending');
         break;
       case 'resolved':
-        filtered = disputes.filter(d => d.status === 'resolved');
+        filtered = disputes.filter((d) => d.status === 'resolved');
         break;
       case 'all':
       default:
@@ -214,19 +218,27 @@ export const DisputeCenter: React.FC = () => {
 
   const getHubBadgeColor = (hub: string) => {
     switch (hub) {
-      case 'marketplace': return 'bg-blue-100 text-blue-700';
-      case 'wholesale': return 'bg-purple-100 text-purple-700';
-      case 'services': return 'bg-green-100 text-green-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case 'marketplace':
+        return 'bg-blue-100 text-blue-700';
+      case 'wholesale':
+        return 'bg-purple-100 text-purple-700';
+      case 'services':
+        return 'bg-green-100 text-green-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
-      case 'seller_response_pending': return 'bg-red-100 text-red-700 font-semibold';
-      case 'in_negotiation': return 'bg-yellow-100 text-yellow-700';
-      case 'resolved': return 'bg-green-100 text-green-700';
-      default: return 'bg-gray-100 text-gray-700';
+      case 'seller_response_pending':
+        return 'bg-red-100 text-red-700 font-semibold';
+      case 'in_negotiation':
+        return 'bg-yellow-100 text-yellow-700';
+      case 'resolved':
+        return 'bg-green-100 text-green-700';
+      default:
+        return 'bg-gray-100 text-gray-700';
     }
   };
 
@@ -257,7 +269,9 @@ export const DisputeCenter: React.FC = () => {
           <Lock size={48} className="mx-auto mb-4 text-red-600" />
           <h1 className="text-2xl font-bold text-red-900 mb-2">Access Denied</h1>
           <p className="text-red-700">This page is restricted to admins only.</p>
-          <p className="text-sm text-red-600 mt-2">Contact support if you believe this is a mistake.</p>
+          <p className="text-sm text-red-600 mt-2">
+            Contact support if you believe this is a mistake.
+          </p>
         </div>
       </div>
     );
@@ -285,7 +299,9 @@ export const DisputeCenter: React.FC = () => {
               Refresh
             </button>
           </div>
-          <p className="text-gray-600">Manage disputes across Marketplace, Wholesale, and Services hubs</p>
+          <p className="text-gray-600">
+            Manage disputes across Marketplace, Wholesale, and Services hubs
+          </p>
           {lastRefresh && <p className="text-xs text-gray-500 mt-2">Last updated: {lastRefresh}</p>}
         </div>
 
@@ -371,22 +387,42 @@ export const DisputeCenter: React.FC = () => {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Order</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Title</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Buyer</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Seller</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">
+                      Order
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">
+                      Title
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">
+                      Buyer
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">
+                      Seller
+                    </th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Hub</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Amount</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Status</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Days</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">Actions</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">
+                      Amount
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">
+                      Status
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">
+                      Days
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-700">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {filteredDisputes.map(dispute => (
+                  {filteredDisputes.map((dispute) => (
                     <tr key={dispute.id} className="hover:bg-gray-50 transition">
-                      <td className="px-4 py-3 text-sm font-semibold text-gray-900">#{dispute.order_id.slice(0, 8)}</td>
-                      <td className="px-4 py-3 text-sm text-gray-800 max-w-xs truncate">{dispute.title}</td>
+                      <td className="px-4 py-3 text-sm font-semibold text-gray-900">
+                        #{dispute.order_id.slice(0, 8)}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-800 max-w-xs truncate">
+                        {dispute.title}
+                      </td>
                       <td className="px-4 py-3 text-sm text-gray-700">
                         <div className="flex items-center gap-2">
                           {dispute.buyer?.avatar_url && (
@@ -412,7 +448,9 @@ export const DisputeCenter: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`text-xs px-2 py-1 rounded-full font-semibold ${getHubBadgeColor(dispute.hub)}`}>
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full font-semibold ${getHubBadgeColor(dispute.hub)}`}
+                        >
                           {dispute.hub.charAt(0).toUpperCase() + dispute.hub.slice(1)}
                         </span>
                       </td>
@@ -420,13 +458,19 @@ export const DisputeCenter: React.FC = () => {
                         KES {dispute.amount.toLocaleString()}
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`text-xs px-2 py-1 rounded-full font-semibold ${getStatusBadgeColor(dispute.status)}`}>
-                          {dispute.status === 'seller_response_pending' ? '⏳ Awaiting' : dispute.status.replace('_', ' ')}
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full font-semibold ${getStatusBadgeColor(dispute.status)}`}
+                        >
+                          {dispute.status === 'seller_response_pending'
+                            ? '⏳ Awaiting'
+                            : dispute.status.replace('_', ' ')}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm">
                         {dispute.status === 'seller_response_pending' ? (
-                          <span className={`font-bold ${getDaysRemaining(dispute.created_at) <= 3 ? 'text-red-600' : 'text-gray-700'}`}>
+                          <span
+                            className={`font-bold ${getDaysRemaining(dispute.created_at) <= 3 ? 'text-red-600' : 'text-gray-700'}`}
+                          >
                             {getDaysRemaining(dispute.created_at)}d
                           </span>
                         ) : (
@@ -448,7 +492,9 @@ export const DisputeCenter: React.FC = () => {
 
         {/* Footer */}
         <div className="mt-6 text-center text-xs text-gray-600">
-          <p>Showing {filteredDisputes.length} of {disputes.length} disputes</p>
+          <p>
+            Showing {filteredDisputes.length} of {disputes.length} disputes
+          </p>
         </div>
       </div>
     </div>

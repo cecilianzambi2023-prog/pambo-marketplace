@@ -1,10 +1,15 @@
 import React from 'react';
-import { useListingsByHub, useFeaturedListings, useAuthentication } from '../hooks/usePamboIntegration';
+import {
+  useListingsByHub,
+  useFeaturedListings,
+  useAuthentication
+} from '../hooks/usePamboIntegration';
 import { Loader, AlertCircle } from 'lucide-react';
+import { SmartImage } from './SmartImage';
 
 /**
  * Example: Using Pambo Integration Hooks
- * 
+ *
  * This component demonstrates how to use the custom hooks
  * to fetch data from Supabase and display it in your UI
  */
@@ -14,10 +19,16 @@ export const DashboardIntegrationExample: React.FC = () => {
   const { user, isLoading: authLoading, error: authError } = useAuthentication();
 
   // Get marketplace listings
-  const { listings: marketplaceListings, isLoading: marketplaceLoading } = useListingsByHub('marketplace', 10);
+  const { listings: marketplaceListings, isLoading: marketplaceLoading } = useListingsByHub(
+    'marketplace',
+    10
+  );
 
   // Get featured listings
-  const { listings: featuredListings, isLoading: featuredLoading } = useFeaturedListings('marketplace', 5);
+  const { listings: featuredListings, isLoading: featuredLoading } = useFeaturedListings(
+    'marketplace',
+    5
+  );
 
   if (authLoading) {
     return (
@@ -65,10 +76,13 @@ export const DashboardIntegrationExample: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             {featuredListings.map((listing) => (
-              <div key={listing.id} className="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-lg transition">
+              <div
+                key={listing.id}
+                className="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-lg transition"
+              >
                 {listing.thumbnail && (
-                  <img 
-                    src={listing.thumbnail} 
+                  <SmartImage
+                    src={listing.thumbnail}
                     alt={listing.title}
                     className="w-full h-40 object-cover rounded-lg mb-3"
                   />
@@ -90,7 +104,9 @@ export const DashboardIntegrationExample: React.FC = () => {
 
       {/* Marketplace Listings Section */}
       <div>
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Marketplace ({marketplaceListings.length} listings)</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-4">
+          Marketplace ({marketplaceListings.length} listings)
+        </h2>
         {marketplaceLoading ? (
           <div className="flex items-center gap-2">
             <Loader className="animate-spin" size={20} />
@@ -99,10 +115,13 @@ export const DashboardIntegrationExample: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {marketplaceListings.map((listing) => (
-              <div key={listing.id} className="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-lg transition">
+              <div
+                key={listing.id}
+                className="bg-white p-4 rounded-lg border border-gray-200 hover:shadow-lg transition"
+              >
                 {listing.thumbnail && (
-                  <img 
-                    src={listing.thumbnail} 
+                  <SmartImage
+                    src={listing.thumbnail}
                     alt={listing.title}
                     className="w-full h-32 object-cover rounded-lg mb-3"
                   />
@@ -132,7 +151,8 @@ export const DashboardIntegrationExample: React.FC = () => {
           ✅ <strong>Backend Integration Active!</strong>
         </p>
         <p className="text-green-700 text-sm mt-1">
-          Your Pambo app is now connected to Supabase. All data is being loaded from the database in real-time.
+          Your Pambo app is now connected to Supabase. All data is being loaded from the database in
+          real-time.
         </p>
       </div>
     </div>

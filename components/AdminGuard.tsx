@@ -13,10 +13,7 @@ interface AdminGuardProps {
   fallback?: React.ReactNode;
 }
 
-export const AdminGuard: React.FC<AdminGuardProps> = ({
-  children,
-  fallback = null,
-}) => {
+export const AdminGuard: React.FC<AdminGuardProps> = ({ children, fallback = null }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -26,13 +23,16 @@ export const AdminGuard: React.FC<AdminGuardProps> = ({
 
   const checkAdminStatus = async () => {
     try {
-      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+      const {
+        data: { user: authUser },
+        error: authError
+      } = await supabase.auth.getUser();
 
       if (authError || !authUser) {
         setIsAdmin(false);
         setLoading(false);
         // Redirect to home
-        window.location.href = '/';
+        window.location.hash = '#/';
         return;
       }
 
@@ -45,7 +45,7 @@ export const AdminGuard: React.FC<AdminGuardProps> = ({
       if (userError || !userProfile) {
         setIsAdmin(false);
         setLoading(false);
-        window.location.href = '/';
+        window.location.hash = '#/';
         return;
       }
 
@@ -53,12 +53,12 @@ export const AdminGuard: React.FC<AdminGuardProps> = ({
         setIsAdmin(true);
       } else {
         setIsAdmin(false);
-        window.location.href = '/';
+        window.location.hash = '#/';
       }
     } catch (error) {
       console.error('Admin guard check failed:', error);
       setIsAdmin(false);
-      window.location.href = '/';
+      window.location.hash = '#/';
     } finally {
       setLoading(false);
     }

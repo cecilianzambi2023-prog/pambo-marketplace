@@ -46,6 +46,9 @@ export interface User {
   businessCategory?: string;
   businessType?: 'individual' | 'registered_business';
   isSeller?: boolean;  // Optional: so you can distinguish buyers from sellers
+  badges?: SellerBadge[];
+  topBadge?: SellerBadge;
+  badgeCount?: number;
 }
 
 export interface Product {
@@ -73,6 +76,9 @@ export interface Product {
   averageRating?: number;
   reviewCount?: number;
   paymentArrangement?: 'jiji_direct' | 'mpesa' | 'cash_on_delivery' | 'bank_transfer';
+  isBoosted?: boolean;
+  boostExpiresAt?: string;
+  boostTier?: 'quick' | 'standard' | 'premium' | 'power_bundle';
 }
 
 export interface FeaturedListing {
@@ -87,6 +93,66 @@ export interface FeaturedListing {
   paymentMethod: string;
   status: 'active' | 'expired' | 'cancelled';
   mpesaReceiptNumber?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Boost {
+  id: string;
+  listingId: string;
+  sellerId: string;
+  boostTier: 'quick' | 'standard' | 'premium' | 'power_bundle';
+  activatedAt: string;
+  expiresAt: string;
+  amountPaid: number;
+  currency: string;
+  paymentMethod: string;
+  status: 'active' | 'expired' | 'cancelled';
+  impressions: number;
+  clicks: number;
+  mpesaReceiptNumber?: string;
+  autoRenew: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Advertisement {
+  id: string;
+  sellerId: string;
+  listingId?: string;
+  adType: 'category_tag' | 'search_result' | 'hub_banner' | 'carousel';
+  targetCategory?: string;
+  targetKeyword?: string;
+  targetLocation?: string;
+  displayName: string;
+  imageUrl: string;
+  startDate: string;
+  endDate: string;
+  dailyBudget: number;
+  totalSpent: number;
+  impressions: number;
+  clicks: number;
+  ctr: number;
+  currency: string;
+  status: 'active' | 'paused' | 'expired' | 'cancelled';
+  paymentSchedule: 'daily' | 'weekly' | 'monthly';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SellerBadge {
+  id: string;
+  sellerId: string;
+  badgeType: 'verified' | 'premium_member' | 'trusted_seller' | 'super_seller' | 'exclusive_partner' | 'speed_shipper' | 'eco_seller' | 'best_value';
+  isActive: boolean;
+  earnedDate: string;
+  expiresAt?: string;
+  autoRenew: boolean;
+  amountPaid?: number;
+  currency?: string;
+  paymentMethod?: string;
+  mpesaReceiptNumber?: string;
+  displayOrder: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -223,7 +289,7 @@ export interface BulkInquiry {
   updated_at: string;
 }
 
-export type ViewState = 'home' | 'marketplace' | 'wholesale' | 'importlinkGlobal' | 'secondhand' | 'services' | 'dashboard' | 'admin' | 'digital' | 'live' | 'banned' | 'farmers';
+export type ViewState = 'home' | 'marketplace' | 'wholesale' | 'importlinkGlobal' | 'secondhand' | 'services' | 'dashboard' | 'admin' | 'digital' | 'live' | 'banned' | 'farmers' | 'seller';
 
 export interface CartItem extends Product {
   quantity: number;

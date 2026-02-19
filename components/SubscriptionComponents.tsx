@@ -17,40 +17,72 @@ export const PricingPlans: React.FC<{
       price: 1500,
       tier: 'mkulima',
       period: '1 YEAR',
-      features: { listings: Infinity, images: 10, featured: 5, analytics: true, apiAccess: false, automations: 0, customBranding: false },
+      features: {
+        listings: Infinity,
+        images: 10,
+        featured: 5,
+        analytics: true,
+        apiAccess: false,
+        automations: 0,
+        customBranding: false
+      },
       description: 'Special Offer - 1 Year Protection',
       highlight: false,
-      isSpecialOffer: true,
+      isSpecialOffer: true
     },
     {
       name: 'Starter',
       price: 3500,
       tier: 'starter',
       period: 'Monthly',
-      features: { listings: 20, images: 5, featured: 2, analytics: false, apiAccess: false, automations: 0, customBranding: false },
+      features: {
+        listings: 20,
+        images: 5,
+        featured: 2,
+        analytics: false,
+        apiAccess: false,
+        automations: 0,
+        customBranding: false
+      },
       description: 'Perfect for getting started',
       highlight: false,
-      isSpecialOffer: false,
+      isSpecialOffer: false
     },
     {
       name: 'Pro',
       price: 5000,
       tier: 'pro',
       period: 'Monthly',
-      features: { listings: 50, images: 10, featured: 5, analytics: true, apiAccess: false, automations: 3, customBranding: true },
+      features: {
+        listings: 50,
+        images: 10,
+        featured: 5,
+        analytics: true,
+        apiAccess: false,
+        automations: 3,
+        customBranding: true
+      },
       description: 'Best for growing businesses',
       highlight: true,
-      isSpecialOffer: false,
+      isSpecialOffer: false
     },
     {
       name: 'Enterprise',
       price: 9000,
       tier: 'enterprise',
       period: 'Monthly',
-      features: { listings: Infinity, images: 20, featured: 10, analytics: true, apiAccess: true, automations: 10, customBranding: true },
+      features: {
+        listings: Infinity,
+        images: 20,
+        featured: 10,
+        analytics: true,
+        apiAccess: true,
+        automations: 10,
+        customBranding: true
+      },
       description: 'For large-scale operations',
       highlight: false,
-      isSpecialOffer: false,
+      isSpecialOffer: false
     }
   ];
 
@@ -62,9 +94,9 @@ export const PricingPlans: React.FC<{
           className={`rounded-lg border-2 p-8 relative ${
             plan.isSpecialOffer
               ? 'border-green-500 bg-green-50 shadow-lg transform scale-105'
-              : plan.highlight 
-              ? 'border-blue-500 bg-blue-50 shadow-lg transform scale-105' 
-              : 'border-gray-200 bg-white'
+              : plan.highlight
+                ? 'border-blue-500 bg-blue-50 shadow-lg transform scale-105'
+                : 'border-gray-200 bg-white'
           }`}
         >
           {plan.isSpecialOffer && (
@@ -89,7 +121,11 @@ export const PricingPlans: React.FC<{
             {plan.isSpecialOffer && (
               <p className="text-green-700 font-bold text-sm mt-2">✅ Safe & Supported</p>
             )}
-            <p className="text-gray-600 text-sm mt-2">{plan.isSpecialOffer ? 'One-time payment' : 'Billed ' + (plan.period === 'Monthly' ? 'monthly' : 'yearly')}</p>
+            <p className="text-gray-600 text-sm mt-2">
+              {plan.isSpecialOffer
+                ? 'One-time payment'
+                : 'Billed ' + (plan.period === 'Monthly' ? 'monthly' : 'yearly')}
+            </p>
           </div>
 
           {currentPlan === plan.tier ? (
@@ -106,8 +142,8 @@ export const PricingPlans: React.FC<{
                 plan.isSpecialOffer
                   ? 'bg-green-600 text-white hover:bg-green-700'
                   : plan.highlight
-                  ? 'bg-blue-500 text-white hover:bg-blue-600'
-                  : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                    ? 'bg-blue-500 text-white hover:bg-blue-600'
+                    : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
               }`}
             >
               Choose {plan.name}
@@ -118,38 +154,53 @@ export const PricingPlans: React.FC<{
             <h4 className="font-semibold text-gray-900">Features:</h4>
             <ul className="space-y-2">
               <li className="flex items-center text-sm text-gray-700">
-                <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">✓</span>
-                {plan.features.listings === Infinity ? 'Unlimited' : plan.features.listings} active listings
+                <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">
+                  ✓
+                </span>
+                {plan.features.listings === Infinity ? 'Unlimited' : plan.features.listings} active
+                listings
               </li>
               <li className="flex items-center text-sm text-gray-700">
-                <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">✓</span>
+                <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">
+                  ✓
+                </span>
                 {plan.features.images} images per listing
               </li>
               <li className="flex items-center text-sm text-gray-700">
-                <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">✓</span>
+                <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">
+                  ✓
+                </span>
                 {plan.features.featured} featured listings
               </li>
               {plan.features.analytics && (
                 <li className="flex items-center text-sm text-gray-700">
-                  <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">✓</span>
+                  <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">
+                    ✓
+                  </span>
                   Analytics & Reports
                 </li>
               )}
               {plan.features.apiAccess && (
                 <li className="flex items-center text-sm text-gray-700">
-                  <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">✓</span>
+                  <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">
+                    ✓
+                  </span>
                   API access
                 </li>
               )}
               {plan.features.automations > 0 && (
                 <li className="flex items-center text-sm text-gray-700">
-                  <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">✓</span>
+                  <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">
+                    ✓
+                  </span>
                   {plan.features.automations} automations
                 </li>
               )}
               {plan.features.customBranding && (
                 <li className="flex items-center text-sm text-gray-700">
-                  <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">✓</span>
+                  <span className="inline-block w-5 h-5 mr-2 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center">
+                    ✓
+                  </span>
                   Custom branding
                 </li>
               )}
@@ -181,19 +232,19 @@ export const SubscriptionModal: React.FC<{
   const planPricing = {
     starter: 3500,
     pro: 7000,
-    enterprise: 14000,
+    enterprise: 14000
   };
 
   const amount = planPricing[selectedPlan as keyof typeof planPricing];
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, '');
-    
+
     // Convert 0... to 254...
     if (value.startsWith('0')) {
       value = '254' + value.slice(1);
     }
-    
+
     setPhone(value);
   };
 
@@ -239,7 +290,9 @@ export const SubscriptionModal: React.FC<{
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-t-lg">
           <h2 className="text-2xl font-bold">Upgrade to {selectedPlan.toUpperCase()}</h2>
-          <p className="text-blue-100 mt-1">{hub} Hub • {amount.toLocaleString()} KES/month</p>
+          <p className="text-blue-100 mt-1">
+            {hub} Hub • {amount.toLocaleString()} KES/month
+          </p>
         </div>
 
         <div className="p-6">
@@ -290,9 +343,7 @@ export const SubscriptionModal: React.FC<{
                   <span className="text-3xl">✓</span>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Check Your Phone</h3>
-                <p className="text-gray-600 mb-6">
-                  You should see an M-Pesa STK prompt on {phone}
-                </p>
+                <p className="text-gray-600 mb-6">You should see an M-Pesa STK prompt on {phone}</p>
 
                 <div className="bg-gray-50 p-4 rounded-lg mb-6 text-left text-sm">
                   <p className="text-gray-700">
@@ -302,9 +353,7 @@ export const SubscriptionModal: React.FC<{
                   </p>
                 </div>
 
-                <p className="text-gray-600 text-sm mb-6">
-                  Complete the payment within 2 minutes
-                </p>
+                <p className="text-gray-600 text-sm mb-6">Complete the payment within 2 minutes</p>
               </div>
 
               <button
@@ -318,10 +367,7 @@ export const SubscriptionModal: React.FC<{
         </div>
 
         <div className="border-t px-6 py-4 flex justify-end">
-          <button
-            onClick={onClose}
-            className="text-gray-600 hover:text-gray-900 font-semibold"
-          >
+          <button onClick={onClose} className="text-gray-600 hover:text-gray-900 font-semibold">
             Close
           </button>
         </div>
@@ -347,13 +393,17 @@ export const SubscriptionStatus: React.FC<{
         const activeSub = subs.find((s: any) => s.status === 'active');
 
         return (
-          <div key={hub} className="flex items-center justify-between py-3 border-b last:border-b-0">
+          <div
+            key={hub}
+            className="flex items-center justify-between py-3 border-b last:border-b-0"
+          >
             <div>
               <p className="font-semibold text-gray-900 capitalize">{hub} Hub</p>
               {activeSub ? (
                 <>
                   <p className="text-sm text-gray-600">
-                    Plan: <strong>{activeSub.plan.toUpperCase()}</strong> • {activeSub.monthlyPrice.toLocaleString()} KES/month
+                    Plan: <strong>{activeSub.plan.toUpperCase()}</strong> •{' '}
+                    {activeSub.monthlyPrice.toLocaleString()} KES/month
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
                     Renews: {new Date(activeSub.nextBillingDate).toLocaleDateString()}

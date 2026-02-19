@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../src/lib/supabaseClient';
 import { Loader2 } from 'lucide-react';
+import { SmartImage } from './SmartImage';
 
 interface Category {
   id: string;
@@ -75,8 +76,11 @@ export const CategoryGrid: React.FC = () => {
           >
             {/* Image Container */}
             <div className="relative h-40 bg-gray-200 overflow-hidden">
-              <img
-                src={category.image_url || 'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=400&auto=format&fit=crop'}
+              <SmartImage
+                src={
+                  category.image_url ||
+                  'https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=400&auto=format&fit=crop'
+                }
                 alt={category.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
@@ -88,9 +92,7 @@ export const CategoryGrid: React.FC = () => {
               <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors">
                 {category.name}
               </h3>
-              <p className="text-sm text-gray-600 line-clamp-2 mb-3">
-                {category.description}
-              </p>
+              <p className="text-sm text-gray-600 line-clamp-2 mb-3">{category.description}</p>
 
               {/* Browse Button */}
               <button className="w-full bg-gradient-to-r from-orange-600 to-amber-600 text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition-all text-sm">

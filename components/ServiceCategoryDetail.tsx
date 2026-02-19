@@ -1,10 +1,11 @@
+import { SmartImage } from './SmartImage';
 /**
  * ServiceCategoryDetail.tsx
  * =========================
- * 
+ *
  * Detail page for a single service category (/services/:slug).
  * Shows all service providers in the category.
- * 
+ *
  * FEATURES:
  * - Displays providers with phone & WhatsApp buttons (large touch targets)
  * - Verification badges (Bronze → Platinum)
@@ -44,7 +45,10 @@ interface ServiceCategoryDetailProps {
   onBackClick?: () => void;
 }
 
-export const ServiceCategoryDetail: React.FC<ServiceCategoryDetailProps> = ({ categorySlug, onBackClick }) => {
+export const ServiceCategoryDetail: React.FC<ServiceCategoryDetailProps> = ({
+  categorySlug,
+  onBackClick
+}) => {
   const [listings, setListings] = useState<ServiceListing[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<CategoryStats | null>(null);
@@ -60,7 +64,7 @@ export const ServiceCategoryDetail: React.FC<ServiceCategoryDetailProps> = ({ ca
     'https://images.unsplash.com/photo-1550974868-9a6f3a3a40b2?q=80&w=870&auto=format&fit=crop', // Tailor
     'https://images.unsplash.com/photo-1545174787-a0651a025622?q=80&w=870&auto=format&fit=crop', // Laundry
     'https://images.unsplash.com/photo-1598214886343-7b4155f9f6b6?q=80&w=870&auto=format&fit=crop', // Water
-    'https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?q=80&w=870&auto=format&fit=crop', // Photographer
+    'https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?q=80&w=870&auto=format&fit=crop' // Photographer
   ];
 
   const getImageUrl = (index: number) => {
@@ -75,7 +79,7 @@ export const ServiceCategoryDetail: React.FC<ServiceCategoryDetailProps> = ({ ca
         setLoading(true);
         const response = await getServicesByCategory(categorySlug.toLowerCase(), {
           county_id: selectedCounty,
-          per_page: 50,
+          per_page: 50
         });
         setListings(response.listings);
 
@@ -103,12 +107,12 @@ export const ServiceCategoryDetail: React.FC<ServiceCategoryDetailProps> = ({ ca
     <div className="service-detail">
       {/* BACK BUTTON & HEADER */}
       <div className="detail-header">
-        <button 
+        <button
           onClick={() => {
             if (onBackClick) {
               onBackClick();
             }
-          }} 
+          }}
           className="back-btn flex items-center gap-2 mb-4"
         >
           <ArrowLeft size={20} />
@@ -120,8 +124,10 @@ export const ServiceCategoryDetail: React.FC<ServiceCategoryDetailProps> = ({ ca
 
       {/* COUNTY FILTER DROPDOWN */}
       <div className="county-filter-container mb-6 px-4">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">Filter by City/County:</label>
-        <select 
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          Filter by City/County:
+        </label>
+        <select
           value={selectedCounty || ''}
           onChange={(e) => setSelectedCounty(e.target.value || undefined)}
           className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -166,16 +172,16 @@ export const ServiceCategoryDetail: React.FC<ServiceCategoryDetailProps> = ({ ca
             <div key={listing.id} className="service-listing-card">
               {/* SERVICE IMAGE */}
               <div className="service-image-container">
-                <img 
-                  src={getImageUrl(index)} 
+                <SmartImage
+                  src={getImageUrl(index)}
                   alt={listing.title}
                   className="service-image"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/300x200?text=' + encodeURIComponent(listing.title);
-                  }}
+                  fallbackSrc={
+                    'https://via.placeholder.com/300x200?text=' + encodeURIComponent(listing.title)
+                  }
                 />
               </div>
-              
+
               {/* HEADER: NAME + BADGE + RATING */}
               <div className="listing-header">
                 <div className="header-left">
@@ -190,7 +196,10 @@ export const ServiceCategoryDetail: React.FC<ServiceCategoryDetailProps> = ({ ca
                   <div className="rating-box">
                     <div className="rating-stars">
                       {[...Array(5)].map((_, i) => (
-                        <span key={i} className={i < Math.floor(listing.rating || 0) ? 'star filled' : 'star'}>
+                        <span
+                          key={i}
+                          className={i < Math.floor(listing.rating || 0) ? 'star filled' : 'star'}
+                        >
                           ★
                         </span>
                       ))}
@@ -205,7 +214,9 @@ export const ServiceCategoryDetail: React.FC<ServiceCategoryDetailProps> = ({ ca
                 {listing.reviews_count !== undefined && (
                   <div className="stat-item">
                     <span className="stat-value">{listing.reviews_count}</span>
-                    <span className="stat-label">Review{listing.reviews_count !== 1 ? 's' : ''}</span>
+                    <span className="stat-label">
+                      Review{listing.reviews_count !== 1 ? 's' : ''}
+                    </span>
                   </div>
                 )}
                 {listing.follower_count !== undefined && (
@@ -217,9 +228,7 @@ export const ServiceCategoryDetail: React.FC<ServiceCategoryDetailProps> = ({ ca
               </div>
 
               {/* DESCRIPTION */}
-              {listing.description && (
-                <p className="listing-description">{listing.description}</p>
-              )}
+              {listing.description && <p className="listing-description">{listing.description}</p>}
 
               {/* SELLER INFO */}
               {listing.profiles && (

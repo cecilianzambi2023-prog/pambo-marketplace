@@ -1,5 +1,19 @@
 import { supabase } from '../src/lib/supabaseClient';
 import { PamboReview } from '../types';
+import { buildPaginationMeta, logServiceTiming } from './serviceObservability';
+
+const DEFAULT_PAGE_SIZE = 20;
+const MAX_PAGE_SIZE = 100;
+
+const clampPageSize = (value?: number) => {
+  const parsed = Number.isFinite(value) ? Number(value) : DEFAULT_PAGE_SIZE;
+  return Math.min(Math.max(parsed, 1), MAX_PAGE_SIZE);
+};
+
+const normalizeOffset = (value?: number) => {
+  const parsed = Number.isFinite(value) ? Number(value) : 0;
+  return Math.max(parsed, 0);
+};
 
 interface CreateReviewInput extends Omit<PamboReview, 'id' | 'createdAt'> {
   status?: 'pending' | 'approved' | 'rejected';
@@ -37,18 +51,34 @@ export const createReview = async (review: CreateReviewInput) => {
  * Get reviews for a listing
  */
 export const getListingReviews = async (listingId: string, limit = 10, offset = 0) => {
+  const startedAt = Date.now();
   try {
+    const safeLimit = clampPageSize(limit);
+    const safeOffset = normalizeOffset(offset);
+
     const { data, error, count } = await supabase
       .from('reviews')
       .select('*', { count: 'exact' })
       .eq('listingId', listingId)
       .eq('status', 'approved')
       .order('createdAt', { ascending: false })
-      .range(offset, offset + limit - 1);
+      .range(safeOffset, safeOffset + safeLimit - 1);
 
     if (error) throw error;
 
-    return { success: true, reviews: data || [], total: count || 0 };
+    logServiceTiming('reviews.getListingReviews', startedAt, {
+      listingId,
+      limit: safeLimit,
+      offset: safeOffset,
+      resultCount: (data || []).length,
+    });
+
+    return {
+      success: true,
+      reviews: data || [],
+      total: count || 0,
+      pagination: buildPaginationMeta(count || 0, safeLimit, safeOffset),
+    };
   } catch (error) {
     console.error('Get listing reviews error:', error);
     return { success: false, error };
@@ -59,18 +89,34 @@ export const getListingReviews = async (listingId: string, limit = 10, offset = 
  * Get reviews for a seller
  */
 export const getSellerReviews = async (sellerId: string, limit = 10, offset = 0) => {
+  const startedAt = Date.now();
   try {
+    const safeLimit = clampPageSize(limit);
+    const safeOffset = normalizeOffset(offset);
+
     const { data, error, count } = await supabase
       .from('reviews')
       .select('*', { count: 'exact' })
       .eq('sellerId', sellerId)
       .eq('status', 'approved')
       .order('createdAt', { ascending: false })
-      .range(offset, offset + limit - 1);
+      .range(safeOffset, safeOffset + safeLimit - 1);
 
     if (error) throw error;
 
-    return { success: true, reviews: data || [], total: count || 0 };
+    logServiceTiming('reviews.getSellerReviews', startedAt, {
+      sellerId,
+      limit: safeLimit,
+      offset: safeOffset,
+      resultCount: (data || []).length,
+    });
+
+    return {
+      success: true,
+      reviews: data || [],
+      total: count || 0,
+      pagination: buildPaginationMeta(count || 0, safeLimit, safeOffset),
+    };
   } catch (error) {
     console.error('Get seller reviews error:', error);
     return { success: false, error };
@@ -78,16 +124,29 @@ export const getSellerReviews = async (sellerId: string, limit = 10, offset = 0)
 };
 
 export const getAllReviews = async (limit = 2000) => {
+  const startedAt = Date.now();
   try {
-    const { data, error } = await supabase
+    const safeLimit = clampPageSize(limit);
+
+    const { data, error, count } = await supabase
       .from('reviews')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('createdAt', { ascending: false })
-      .limit(limit);
+      .limit(safeLimit);
 
     if (error) throw error;
 
-    return { success: true, reviews: data || [] };
+    logServiceTiming('reviews.getAllReviews', startedAt, {
+      limit: safeLimit,
+      resultCount: (data || []).length,
+    });
+
+    return {
+      success: true,
+      reviews: data || [],
+      total: count || 0,
+      pagination: buildPaginationMeta(count || 0, safeLimit, 0),
+    };
   } catch (error) {
     console.error('Get all reviews error:', error);
     return { success: false, error };

@@ -1,7 +1,7 @@
 /**
  * Liquidity Dashboard - Admin/Operations View
  * ===========================================
- * 
+ *
  * Real-time view of marketplace health:
  * - Category supply/demand balance
  * - Seller response SLA compliance
@@ -10,11 +10,20 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { AlertTriangle, TrendingUp, TrendingDown, Clock, CheckCircle, XCircle, Users, Package } from 'lucide-react';
+import {
+  AlertTriangle,
+  TrendingUp,
+  TrendingDown,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Users,
+  Package
+} from 'lucide-react';
 import {
   getAllCategoryLiquidity,
   getLowLiquidityAlerts,
-  CategoryLiquidity,
+  CategoryLiquidity
 } from '../services/liquidityEngine';
 
 interface LiquidityDashboardProps {
@@ -24,7 +33,12 @@ interface LiquidityDashboardProps {
 export const LiquidityDashboard: React.FC<LiquidityDashboardProps> = ({ onClose }) => {
   const [categoryLiquidity, setCategoryLiquidity] = useState<CategoryLiquidity[]>([]);
   const [alerts, setAlerts] = useState<
-    Array<{ category: string; issue: string; recommendation: string; urgency: 'high' | 'medium' | 'low' }>
+    Array<{
+      category: string;
+      issue: string;
+      recommendation: string;
+      urgency: 'high' | 'medium' | 'low';
+    }>
   >([]);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<'overview' | 'categories' | 'alerts'>('overview');
@@ -38,7 +52,7 @@ export const LiquidityDashboard: React.FC<LiquidityDashboardProps> = ({ onClose 
     try {
       const [categoryData, alertsData] = await Promise.all([
         getAllCategoryLiquidity(),
-        getLowLiquidityAlerts(),
+        getLowLiquidityAlerts()
       ]);
 
       setCategoryLiquidity(categoryData);
@@ -76,7 +90,7 @@ export const LiquidityDashboard: React.FC<LiquidityDashboardProps> = ({ onClose 
     const colors = {
       high: 'bg-red-100 text-red-800 border-red-300',
       medium: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-      low: 'bg-blue-100 text-blue-800 border-blue-300',
+      low: 'bg-blue-100 text-blue-800 border-blue-300'
     };
 
     return (
@@ -92,7 +106,9 @@ export const LiquidityDashboard: React.FC<LiquidityDashboardProps> = ({ onClose 
   const criticalCategories = categoryLiquidity.filter((c) => c.status === 'critical').length;
   const avgLiquidityScore =
     categoryLiquidity.length > 0
-      ? Math.round(categoryLiquidity.reduce((sum, c) => sum + c.liquidityScore, 0) / categoryLiquidity.length)
+      ? Math.round(
+          categoryLiquidity.reduce((sum, c) => sum + c.liquidityScore, 0) / categoryLiquidity.length
+        )
       : 0;
 
   return (
@@ -229,7 +245,9 @@ export const LiquidityDashboard: React.FC<LiquidityDashboardProps> = ({ onClose 
                               <span className="text-sm text-gray-600">
                                 {cat.activeListings} listings • {cat.last7DaysInquiries} inquiries
                               </span>
-                              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getHealthColor(cat.liquidityScore)}`}>
+                              <span
+                                className={`px-3 py-1 rounded-full text-sm font-semibold ${getHealthColor(cat.liquidityScore)}`}
+                              >
                                 {cat.liquidityScore}
                               </span>
                             </div>
@@ -258,7 +276,9 @@ export const LiquidityDashboard: React.FC<LiquidityDashboardProps> = ({ onClose 
                               <span className="text-sm text-gray-600 capitalize">{cat.status}</span>
                             </div>
                           </div>
-                          <span className={`px-4 py-2 rounded-full text-lg font-bold ${getHealthColor(cat.liquidityScore)}`}>
+                          <span
+                            className={`px-4 py-2 rounded-full text-lg font-bold ${getHealthColor(cat.liquidityScore)}`}
+                          >
                             {cat.liquidityScore}
                           </span>
                         </div>
@@ -287,7 +307,9 @@ export const LiquidityDashboard: React.FC<LiquidityDashboardProps> = ({ onClose 
                             <div className="text-gray-600 mb-1 flex items-center">
                               <Clock size={14} className="mr-1" /> Response Time
                             </div>
-                            <div className="font-semibold">{cat.topSellerResponseTime.toFixed(1)}h</div>
+                            <div className="font-semibold">
+                              {cat.topSellerResponseTime.toFixed(1)}h
+                            </div>
                             <div className="text-gray-500">SLA: {'<'}2h</div>
                           </div>
                         </div>
@@ -313,8 +335,8 @@ export const LiquidityDashboard: React.FC<LiquidityDashboardProps> = ({ onClose 
                           alert.urgency === 'high'
                             ? 'border-red-500 bg-red-50'
                             : alert.urgency === 'medium'
-                            ? 'border-yellow-500 bg-yellow-50'
-                            : 'border-blue-500 bg-blue-50'
+                              ? 'border-yellow-500 bg-yellow-50'
+                              : 'border-blue-500 bg-blue-50'
                         } p-4 rounded-r-lg`}
                       >
                         <div className="flex items-start justify-between mb-2">
@@ -324,8 +346,8 @@ export const LiquidityDashboard: React.FC<LiquidityDashboardProps> = ({ onClose 
                                 alert.urgency === 'high'
                                   ? 'text-red-600'
                                   : alert.urgency === 'medium'
-                                  ? 'text-yellow-600'
-                                  : 'text-blue-600'
+                                    ? 'text-yellow-600'
+                                    : 'text-blue-600'
                               }
                               size={20}
                             />

@@ -1,10 +1,10 @@
 /**
  * CrossHubListingsView.tsx
  * =========================
- * 
+ *
  * Component that displays user's listings across ALL hubs in one unified view
  * Enables user to see their full selling presence across the 6 hubs
- * 
+ *
  * ARCHITECTURE:
  * - Shared: User profile (users are same across all hubs)
  * - Segregated: Listings (each hub has sep listings, filtered by hub_id)
@@ -59,7 +59,7 @@ export const CrossHubListingsView: React.FC = () => {
 
         // Get current user
         const {
-          data: { user },
+          data: { user }
         } = await supabaseClient.auth.getUser();
 
         if (!user) {
@@ -102,9 +102,9 @@ export const CrossHubListingsView: React.FC = () => {
         const hubStats: HubStats[] = [];
 
         for (const [hubId, listings] of hubListingsMap) {
-          const activeCount = listings.filter(l => l.status === 'active').length;
+          const activeCount = listings.filter((l) => l.status === 'active').length;
           const totalGmv = listings
-            .filter(l => l.status === 'sold')
+            .filter((l) => l.status === 'sold')
             .reduce((sum, l) => sum + (l.price || 0), 0);
 
           hubStats.push({
@@ -112,13 +112,13 @@ export const CrossHubListingsView: React.FC = () => {
             listing_count: listings.length,
             active_count: activeCount,
             total_gmv: totalGmv,
-            listings: listings.sort((a, b) => 
-              new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-            ),
+            listings: listings.sort(
+              (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+            )
           });
         }
 
-        setStats(hubStats.filter(s => s.listing_count > 0 || s.hub_id === currentHub)); // Show all or at least current hub
+        setStats(hubStats.filter((s) => s.listing_count > 0 || s.hub_id === currentHub)); // Show all or at least current hub
       } catch (err) {
         console.error('Failed to fetch cross-hub listings:', err);
       } finally {
@@ -141,7 +141,7 @@ export const CrossHubListingsView: React.FC = () => {
 
   // ===== RENDER EMPTY STATE =====
 
-  if (stats.length === 0 || stats.every(s => s.listing_count === 0)) {
+  if (stats.length === 0 || stats.every((s) => s.listing_count === 0)) {
     return (
       <div className="cross-hub-view empty">
         <div className="empty-state">
@@ -166,8 +166,8 @@ export const CrossHubListingsView: React.FC = () => {
       <div className="chv-header">
         <h2>📊 Your Presence Across All Hubs</h2>
         <p className="chv-subtitle">
-          View your complete selling presence. Listings are segregated by hub, but your 
-          profile and subscription tier apply across all hubs.
+          View your complete selling presence. Listings are segregated by hub, but your profile and
+          subscription tier apply across all hubs.
         </p>
       </div>
 
@@ -196,9 +196,9 @@ export const CrossHubListingsView: React.FC = () => {
 
         <div className="hub-grid">
           {stats
-            .filter(s => s.listing_count > 0)
+            .filter((s) => s.listing_count > 0)
             .sort((a, b) => b.listing_count - a.listing_count)
-            .map(hubStat => {
+            .map((hubStat) => {
               const hubConfig = getHub(hubStat.hub_id as any);
               if (!hubConfig) return null;
 
@@ -233,7 +233,9 @@ export const CrossHubListingsView: React.FC = () => {
                     </div>
                     <div className="hub-stat-item">
                       <span className="stat-label">GMV</span>
-                      <span className="stat-value gmv">{hubStat.total_gmv.toLocaleString()} KES</span>
+                      <span className="stat-value gmv">
+                        {hubStat.total_gmv.toLocaleString()} KES
+                      </span>
                     </div>
                   </div>
 
@@ -241,7 +243,7 @@ export const CrossHubListingsView: React.FC = () => {
                   <div className="hub-recent-listings">
                     <p className="recent-label">Recent:</p>
                     <ul>
-                      {hubStat.listings.slice(0, 3).map(listing => (
+                      {hubStat.listings.slice(0, 3).map((listing) => (
                         <li key={listing.id}>
                           <span className="listing-title">{listing.title.substring(0, 25)}...</span>
                           <span className={`listing-status ${listing.status}`}>
@@ -250,9 +252,7 @@ export const CrossHubListingsView: React.FC = () => {
                         </li>
                       ))}
                       {hubStat.listings.length > 3 && (
-                        <li className="more-listings">
-                          +{hubStat.listings.length - 3} more
-                        </li>
+                        <li className="more-listings">+{hubStat.listings.length - 3} more</li>
                       )}
                     </ul>
                   </div>
@@ -264,15 +264,9 @@ export const CrossHubListingsView: React.FC = () => {
                       {hubConfig.rules.commissionFee > 0 && (
                         <li>💰 {hubConfig.rules.commissionFee}% commission</li>
                       )}
-                      {hubConfig.rules.verificationRequired && (
-                        <li>✅ Verification required</li>
-                      )}
-                      {hubConfig.features.escrow && (
-                        <li>🔒 Escrow protection</li>
-                      )}
-                      {hubConfig.features.shipping && (
-                        <li>📦 Shipping available</li>
-                      )}
+                      {hubConfig.rules.verificationRequired && <li>✅ Verification required</li>}
+                      {hubConfig.features.escrow && <li>🔒 Escrow protection</li>}
+                      {hubConfig.features.shipping && <li>📦 Shipping available</li>}
                     </ul>
                   </div>
                 </div>
@@ -294,8 +288,8 @@ export const CrossHubListingsView: React.FC = () => {
               <li>✅ M-Pesa Account</li>
             </ul>
             <p className="explanation">
-              You have ONE profile. When you upgrade your subscription in any hub, 
-              it applies to ALL hubs.
+              You have ONE profile. When you upgrade your subscription in any hub, it applies to ALL
+              hubs.
             </p>
           </div>
 
@@ -308,8 +302,8 @@ export const CrossHubListingsView: React.FC = () => {
               <li>💬 Messages</li>
             </ul>
             <p className="explanation">
-              Each hub has its own listings, analytics, and reviews. 
-              Your Marketplace listings don't appear in Mkulima.
+              Each hub has its own listings, analytics, and reviews. Your Marketplace listings don't
+              appear in Mkulima.
             </p>
           </div>
         </div>
@@ -319,7 +313,7 @@ export const CrossHubListingsView: React.FC = () => {
       {selectedHub && (
         <DetailedHubView
           hubId={selectedHub}
-          stats={stats.find(s => s.hub_id === selectedHub)}
+          stats={stats.find((s) => s.hub_id === selectedHub)}
           onClose={() => setSelectedHub(null)}
         />
       )}
@@ -722,13 +716,10 @@ const DetailedHubView: React.FC<DetailedHubViewProps> = ({ hubId, stats, onClose
 
   return (
     <div className="detailed-hub-view-modal" onClick={onClose}>
-      <div className="modal-content" onClick={e => e.stopPropagation()}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div className="modal-title-row">
-            <div
-              className="modal-icon"
-              style={{ backgroundColor: hubConfig.color }}
-            >
+            <div className="modal-icon" style={{ backgroundColor: hubConfig.color }}>
               {hubConfig.icon}
             </div>
             <div>
@@ -744,7 +735,7 @@ const DetailedHubView: React.FC<DetailedHubViewProps> = ({ hubId, stats, onClose
         <div className="modal-body">
           <h3>All Listings ({stats.listing_count} total)</h3>
           <div className="listings-table">
-            {stats.listings.map(listing => (
+            {stats.listings.map((listing) => (
               <div key={listing.id} className="listing-row">
                 <div className="listing-info">
                   <h4>{listing.title}</h4>
@@ -753,9 +744,7 @@ const DetailedHubView: React.FC<DetailedHubViewProps> = ({ hubId, stats, onClose
                   </p>
                 </div>
                 <div className="listing-price">{listing.price.toLocaleString()} KES</div>
-                <div className={`listing-badge ${listing.status}`}>
-                  {listing.status}
-                </div>
+                <div className={`listing-badge ${listing.status}`}>{listing.status}</div>
               </div>
             ))}
           </div>

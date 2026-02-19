@@ -1,16 +1,30 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const defaultAllowedOrigins = [
+const productionAllowedOrigins = ["https://pambo.biz", "https://www.pambo.biz"];
+
+const developmentAllowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5173",
-  "https://pambo.biz",
-  "https://www.pambo.biz",
+  ...productionAllowedOrigins,
 ];
+
+function isProductionRuntime(): boolean {
+  const runtimeHints = [
+    Deno.env.get("ENVIRONMENT"),
+    Deno.env.get("NODE_ENV"),
+    Deno.env.get("SUPABASE_ENV"),
+    Deno.env.get("DENO_ENV"),
+  ];
+
+  return runtimeHints.some((value) => value?.trim().toLowerCase() === "production");
+}
 
 function getAllowedOrigins(): string[] {
   const configured = Deno.env.get("CORS_ALLOWED_ORIGINS");
-  if (!configured) return defaultAllowedOrigins;
+  if (!configured) {
+    return isProductionRuntime() ? productionAllowedOrigins : developmentAllowedOrigins;
+  }
 
   return configured
     .split(",")
@@ -24,7 +38,7 @@ function buildCorsHeaders(origin: string | null): Record<string, string> {
 
   return {
     "Access-Control-Allow-Origin": isAllowedOrigin ? origin : allowedOrigins[0],
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-mpesa-signature, x-mpesa-timestamp, x-mpesa-nonce",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Vary": "Origin",
   };
@@ -59,7 +73,8 @@ interface CallbackBody {
 async function verifyMPesaSignature(
   bodyText: string,
   signature: string | null,
-  secret: string
+  secret: string,
+  timestamp: string | null
 ): Promise<boolean> {
   if (!signature) {
     // No signature provided (legacy behavior)
@@ -70,7 +85,8 @@ async function verifyMPesaSignature(
   try {
     const encoder = new TextEncoder();
     const keyData = encoder.encode(secret);
-    const messageData = encoder.encode(bodyText);
+    const signedMessage = timestamp ? `${timestamp}.${bodyText}` : bodyText;
+    const messageData = encoder.encode(signedMessage);
 
     const cryptoKey = await crypto.subtle.importKey(
       "raw",
@@ -82,12 +98,37 @@ async function verifyMPesaSignature(
 
     const signatureBytes = await crypto.subtle.sign("HMAC", cryptoKey, messageData);
     const expectedSignature = btoa(String.fromCharCode(...new Uint8Array(signatureBytes)));
+    const normalizedSignature = signature
+      .trim()
+      .replace(/^sha256=/i, "");
 
-    return expectedSignature === signature;
+    return expectedSignature === normalizedSignature;
   } catch (error) {
     console.error("Signature verification error:", error);
     return false;
   }
+}
+
+function parseTimestampHeader(value: string | null): number | null {
+  if (!value) return null;
+
+  const normalized = value.trim();
+  if (!normalized) return null;
+
+  if (/^\d+$/.test(normalized)) {
+    const asNumber = Number(normalized);
+    if (!Number.isFinite(asNumber) || asNumber <= 0) return null;
+    return normalized.length >= 13 ? asNumber : asNumber * 1000;
+  }
+
+  const parsed = Date.parse(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function isTimestampWithinWindow(timestampMs: number, maxAgeSeconds: number): boolean {
+  const now = Date.now();
+  const ageMs = Math.abs(now - timestampMs);
+  return ageMs <= maxAgeSeconds * 1000;
 }
 
 serve(async (req) => {
@@ -116,6 +157,12 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     const callbackSecret = Deno.env.get("MPESA_CALLBACK_SECRET");
+    const replayMaxAgeSeconds = Math.max(
+      30,
+      Number(Deno.env.get("MPESA_CALLBACK_MAX_AGE_SECONDS") || "300")
+    );
+    const requireNonceAndTimestamp =
+      (Deno.env.get("MPESA_REQUIRE_NONCE_TIMESTAMP") || "true").toLowerCase() === "true";
 
     if (!supabaseUrl || !supabaseServiceKey) {
       return new Response(
@@ -131,18 +178,127 @@ serve(async (req) => {
     const bodyText = await req.text();
     const body = JSON.parse(bodyText) as CallbackBody;
     const stkCallback = body.Body.stkCallback;
+    const signature = req.headers.get("X-Mpesa-Signature");
+    const callbackTimestampHeader = req.headers.get("X-Mpesa-Timestamp");
+    const callbackNonce = req.headers.get("X-Mpesa-Nonce");
+    const callbackTimestampMs = parseTimestampHeader(callbackTimestampHeader);
+    const callbackTimestampIso = callbackTimestampMs
+      ? new Date(callbackTimestampMs).toISOString()
+      : null;
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // SECURITY: Verify signature if secret is configured
-    const signature = req.headers.get("X-Mpesa-Signature");
     let signatureValid: boolean | null = null;
 
     if (callbackSecret) {
-      signatureValid = await verifyMPesaSignature(bodyText, signature, callbackSecret);
+      if (requireNonceAndTimestamp) {
+        if (!callbackNonce || !callbackTimestampHeader || !callbackTimestampMs) {
+          await supabase.from("mpesa_callback_log").insert({
+            merchant_request_id: stkCallback.MerchantRequestID,
+            checkout_request_id: stkCallback.CheckoutRequestID,
+            result_code: stkCallback.ResultCode,
+            result_desc: stkCallback.ResultDesc,
+            raw_callback: body,
+            ip_address: req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip"),
+            signature_valid: false,
+            signature_header: signature,
+            request_nonce: callbackNonce,
+            request_timestamp: callbackTimestampIso,
+            processing_status: "failed",
+            processing_error: "Missing or invalid nonce/timestamp",
+          });
+
+          return new Response(
+            JSON.stringify({
+              ResultCode: 1,
+              ResultDesc: "Missing or invalid nonce/timestamp",
+            }),
+            {
+              status: 401,
+              headers: { "Content-Type": "application/json", ...corsHeaders },
+            }
+          );
+        }
+
+        if (!isTimestampWithinWindow(callbackTimestampMs, replayMaxAgeSeconds)) {
+          await supabase.from("mpesa_callback_log").insert({
+            merchant_request_id: stkCallback.MerchantRequestID,
+            checkout_request_id: stkCallback.CheckoutRequestID,
+            result_code: stkCallback.ResultCode,
+            result_desc: stkCallback.ResultDesc,
+            raw_callback: body,
+            ip_address: req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip"),
+            signature_valid: false,
+            signature_header: signature,
+            request_nonce: callbackNonce,
+            request_timestamp: callbackTimestampIso,
+            processing_status: "failed",
+            processing_error: "Stale callback timestamp (outside replay window)",
+          });
+
+          return new Response(
+            JSON.stringify({
+              ResultCode: 1,
+              ResultDesc: "Stale callback timestamp",
+            }),
+            {
+              status: 401,
+              headers: { "Content-Type": "application/json", ...corsHeaders },
+            }
+          );
+        }
+
+        const { data: nonceAlreadySeen, error: nonceCheckError } = await supabase.rpc(
+          "check_recent_callback_nonce",
+          {
+            p_nonce: callbackNonce,
+            p_window_seconds: replayMaxAgeSeconds,
+          }
+        );
+
+        if (nonceCheckError) {
+          console.error("Nonce replay check failed:", nonceCheckError);
+        }
+
+        if (nonceAlreadySeen) {
+          await supabase.from("mpesa_callback_log").insert({
+            merchant_request_id: stkCallback.MerchantRequestID,
+            checkout_request_id: stkCallback.CheckoutRequestID,
+            result_code: stkCallback.ResultCode,
+            result_desc: stkCallback.ResultDesc,
+            raw_callback: body,
+            ip_address: req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip"),
+            signature_valid: false,
+            signature_header: signature,
+            request_nonce: callbackNonce,
+            request_timestamp: callbackTimestampIso,
+            processing_status: "duplicate",
+            processing_error: "Replay attempt detected (nonce reuse)",
+          });
+
+          return new Response(
+            JSON.stringify({
+              ResultCode: 1,
+              ResultDesc: "Replay detected",
+            }),
+            {
+              status: 409,
+              headers: { "Content-Type": "application/json", ...corsHeaders },
+            }
+          );
+        }
+      }
+
+      signatureValid = await verifyMPesaSignature(
+        bodyText,
+        signature,
+        callbackSecret,
+        callbackTimestampHeader
+      );
       
-      if (!signatureValid && signature) {
-        console.error("🚨 INVALID SIGNATURE - Possible spoofed callback!");
+      if (!signatureValid) {
+        console.error("🚨 INVALID OR MISSING SIGNATURE - Possible spoofed callback!");
         
         // Log the invalid attempt
         await supabase.from("mpesa_callback_log").insert({
@@ -154,14 +310,16 @@ serve(async (req) => {
           ip_address: req.headers.get("x-forwarded-for") || req.headers.get("cf-connecting-ip"),
           signature_valid: false,
           signature_header: signature,
+          request_nonce: callbackNonce,
+          request_timestamp: callbackTimestampIso,
           processing_status: "failed",
-          processing_error: "Invalid signature",
+          processing_error: signature ? "Invalid signature" : "Missing signature",
         });
 
         return new Response(
           JSON.stringify({
             ResultCode: 1,
-            ResultDesc: "Invalid signature",
+            ResultDesc: signature ? "Invalid signature" : "Missing signature",
           }),
           {
             status: 401,
@@ -187,6 +345,8 @@ serve(async (req) => {
         result_desc: stkCallback.ResultDesc,
         raw_callback: body,
         signature_valid: signatureValid,
+        request_nonce: callbackNonce,
+        request_timestamp: callbackTimestampIso,
         processing_status: "duplicate",
       });
 
@@ -250,6 +410,8 @@ serve(async (req) => {
           phone_number: phoneNumber,
           raw_callback: body,
           signature_valid: signatureValid,
+          request_nonce: callbackNonce,
+          request_timestamp: callbackTimestampIso,
           processing_status: "failed",
           processing_error: "Payment record not found in database",
         });
@@ -302,6 +464,8 @@ serve(async (req) => {
           user_id: payment.user_id,
           subscription_tier: payment.tier,
           signature_valid: signatureValid,
+          request_nonce: callbackNonce,
+          request_timestamp: callbackTimestampIso,
           processing_status: "failed",
           processing_error: `DB update failed: ${updateError.message}`,
         });
@@ -348,6 +512,8 @@ serve(async (req) => {
         user_id: payment.user_id,
         subscription_tier: payment.tier,
         signature_valid: signatureValid,
+        request_nonce: callbackNonce,
+        request_timestamp: callbackTimestampIso,
         processing_status: "processed",
         processed_at: new Date().toISOString(),
       });
@@ -412,6 +578,8 @@ serve(async (req) => {
         user_id: failedPayment?.user_id,
         subscription_tier: failedPayment?.tier,
         signature_valid: signatureValid,
+        request_nonce: callbackNonce,
+        request_timestamp: callbackTimestampIso,
         processing_status: "processed",
         processed_at: new Date().toISOString(),
       });

@@ -1,7 +1,7 @@
 /**
  * Seller Verification Badge Component
  * Displays trust indicators on seller profiles and listings
- * 
+ *
  * Features:
  * - Subscription-based badges (Bronze, Silver, Gold, Platinum)
  * - Verification checkmark
@@ -13,7 +13,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { Star, ShieldCheck, Clock, Award, TrendingUp } from 'lucide-react';
-import { getVerificationBadge, calculateTrustScore, getSellerKYCStatus } from '../services/kycService';
+import {
+  getVerificationBadge,
+  calculateTrustScore,
+  getSellerKYCStatus
+} from '../services/kycService';
 
 interface SellerVerificationBadgeProps {
   seller_id: string;
@@ -40,7 +44,7 @@ export const SellerVerificationBadge: React.FC<SellerVerificationBadgeProps> = (
   size = 'md',
   showTooltip = true,
   avgRating = 0,
-  responseTime = 0,
+  responseTime = 0
 }) => {
   const [badgeData, setBadgeData] = useState<BadgeData | null>(null);
   const [trustScore, setTrustScore] = useState(0);
@@ -55,7 +59,7 @@ export const SellerVerificationBadge: React.FC<SellerVerificationBadgeProps> = (
     try {
       const [badge, score] = await Promise.all([
         getVerificationBadge(seller_id),
-        calculateTrustScore(seller_id),
+        calculateTrustScore(seller_id)
       ]);
       setBadgeData(badge);
       setTrustScore(score);
@@ -72,35 +76,32 @@ export const SellerVerificationBadge: React.FC<SellerVerificationBadgeProps> = (
   const sizeClasses = {
     sm: 'text-sm gap-2',
     md: 'text-base gap-3',
-    lg: 'text-lg gap-4',
+    lg: 'text-lg gap-4'
   };
 
   const badgeEmojiSize = {
     sm: 16,
     md: 20,
-    lg: 24,
+    lg: 24
   };
 
   return (
     <div className="relative">
       {/* Badge Display */}
-      <div className={`flex items-center ${sizeClasses[size]} cursor-pointer`}
+      <div
+        className={`flex items-center ${sizeClasses[size]} cursor-pointer`}
         onMouseEnter={() => setShowTooltipContent(true)}
         onMouseLeave={() => setShowTooltipContent(false)}
       >
         {/* Verification Checkmark */}
         <div className="flex items-center gap-1">
-          <ShieldCheck
-            size={badgeEmojiSize[size]}
-            className="text-green-600"
-            fill="currentColor"
-          />
+          <ShieldCheck size={badgeEmojiSize[size]} className="text-green-600" fill="currentColor" />
           <span className="font-bold text-green-700">Verified by Pambo</span>
         </div>
 
         {/* Subscription Badge */}
         {badgeData.badge && (
-          <div 
+          <div
             className="px-2 py-1 rounded-full text-white font-semibold flex items-center gap-1"
             style={{ backgroundColor: badgeData.badge.color }}
           >
@@ -126,9 +127,7 @@ export const SellerVerificationBadge: React.FC<SellerVerificationBadgeProps> = (
             <ShieldCheck size={24} className="text-green-600" />
             <div>
               <h3 className="font-bold text-gray-900">Verified Seller (Pambo)</h3>
-              <p className="text-xs text-gray-600">
-                {badgeData.badge?.name} Badge
-              </p>
+              <p className="text-xs text-gray-600">{badgeData.badge?.name} Badge</p>
             </div>
           </div>
 
@@ -187,19 +186,27 @@ export const SellerVerificationBadge: React.FC<SellerVerificationBadgeProps> = (
               <div className="space-y-1 text-xs">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">🥉</span>
-                  <span className="text-gray-600"><strong>Bronze:</strong> Basic verification</span>
+                  <span className="text-gray-600">
+                    <strong>Bronze:</strong> Basic verification
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-lg">🥈</span>
-                  <span className="text-gray-600"><strong>Silver:</strong> Phone verified</span>
+                  <span className="text-gray-600">
+                    <strong>Silver:</strong> Phone verified
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-lg">🥇</span>
-                  <span className="text-gray-600"><strong>Gold:</strong> Established seller</span>
+                  <span className="text-gray-600">
+                    <strong>Gold:</strong> Established seller
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-lg">💎</span>
-                  <span className="text-gray-600"><strong>Platinum:</strong> Premium seller</span>
+                  <span className="text-gray-600">
+                    <strong>Platinum:</strong> Premium seller
+                  </span>
                 </div>
               </div>
             </div>
@@ -240,7 +247,7 @@ export const VerificationBadgeSimple: React.FC<{ seller_id: string }> = ({ selle
  */
 export const TrustScoreMeter: React.FC<{ seller_id: string; size?: 'sm' | 'md' | 'lg' }> = ({
   seller_id,
-  size = 'md',
+  size = 'md'
 }) => {
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -260,7 +267,7 @@ export const TrustScoreMeter: React.FC<{ seller_id: string; size?: 'sm' | 'md' |
   const sizeClasses = {
     sm: 'h-2',
     md: 'h-3',
-    lg: 'h-4',
+    lg: 'h-4'
   };
 
   const getColor = (score: number) => {

@@ -26,20 +26,22 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onClose }) => {
       {/* Content */}
       <div className="container mx-auto px-4 lg:px-8 py-12 max-w-4xl">
         <div className="space-y-8 text-gray-700">
-          
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Introduction</h2>
             <p className="leading-relaxed">
-              Offspring Decor Limited ("we", "us", "our") operates the Pambo platform. This page informs you of our 
-              policies regarding the collection, use, and disclosure of personal data when you use our service and 
-              the choices you have associated with that data.
+              Offspring Decor Limited ("we", "us", "our") operates the Pambo platform. This page
+              informs you of our policies regarding the collection, use, and disclosure of personal
+              data when you use our service and the choices you have associated with that data.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Information Collection and Use</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              2. Information Collection and Use
+            </h2>
             <p className="leading-relaxed mb-4">
-              We collect several different types of information for various purposes to improve our service to you:
+              We collect several different types of information for various purposes to improve our
+              service to you:
             </p>
             <div className="space-y-4">
               <div>
@@ -73,35 +75,39 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onClose }) => {
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">4. Security of Data</h2>
             <p className="leading-relaxed">
-              The security of your data is important to us but remember that no method of transmission over the 
-              Internet or method of electronic storage is 100% secure. While we strive to use commercially acceptable 
-              means to protect your personal data, we cannot guarantee its absolute security.
+              The security of your data is important to us but remember that no method of
+              transmission over the Internet or method of electronic storage is 100% secure. While
+              we strive to use commercially acceptable means to protect your personal data, we
+              cannot guarantee its absolute security.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">5. Change Links</h2>
             <p className="leading-relaxed">
-              Our service may contain links to other sites that are not operated by us. If you click on a third party 
-              link, you will be directed to that third party's site. We strongly advise you to review the Privacy 
-              Policy of every site you visit.
+              Our service may contain links to other sites that are not operated by us. If you click
+              on a third party link, you will be directed to that third party's site. We strongly
+              advise you to review the Privacy Policy of every site you visit.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">6. Children's Privacy</h2>
             <p className="leading-relaxed">
-              Pambo does not knowingly collect personally identifiable information from anyone under the age of 18. 
-              If we become aware that a child under 18 has provided us with personal data, we immediately delete such 
-              information and terminate the child's account.
+              Pambo does not knowingly collect personally identifiable information from anyone under
+              the age of 18. If we become aware that a child under 18 has provided us with personal
+              data, we immediately delete such information and terminate the child's account.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Changes to This Privacy Policy</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              7. Changes to This Privacy Policy
+            </h2>
             <p className="leading-relaxed">
-              We may update our Privacy Policy from time to time. We will notify you of any changes by posting the 
-              new Privacy Policy on this page and updating the "Last Updated" date at the top of this Privacy Policy.
+              We may update our Privacy Policy from time to time. We will notify you of any changes
+              by posting the new Privacy Policy on this page and updating the "Last Updated" date at
+              the top of this Privacy Policy.
             </p>
           </section>
 
@@ -116,7 +122,6 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onClose }) => {
               <p>Email: info@pambo.biz</p>
             </div>
           </section>
-
         </div>
       </div>
     </div>

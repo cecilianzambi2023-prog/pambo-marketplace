@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MessageSquare, Phone, Zap, Star, Package, Filter, Eye, UserPlus, UserMinus, Shield } from 'lucide-react';
+import {
+  Search,
+  MessageSquare,
+  Phone,
+  Zap,
+  Star,
+  Package,
+  Filter,
+  Eye,
+  UserPlus,
+  UserMinus,
+  Shield
+} from 'lucide-react';
 import { BulkSellingModal } from '../components/BulkSellingModal';
 import { BulkOffering } from '../types';
 import {
@@ -15,7 +27,7 @@ import {
   getKenyaWholesaleListings,
   incrementKenyaListingViews,
   unfollowKenyaSeller,
-  upsertKenyaSellerProfile,
+  upsertKenyaSellerProfile
 } from '../services/kenyaWholesaleService';
 
 interface WholesaleHubProps {
@@ -43,7 +55,11 @@ interface SellerProfileView {
   products: BulkOffering[];
 }
 
-export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, onOpenSubscription }) => {
+export const WholesaleHub: React.FC<WholesaleHubProps> = ({
+  isLoggedIn,
+  user,
+  onOpenSubscription
+}) => {
   const [offerings, setOfferings] = useState<BulkOffering[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -78,7 +94,7 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
       const result = await getKenyaWholesaleListings({
         category: selectedCategory !== 'all' ? selectedCategory : undefined,
         search: searchTerm || undefined,
-        limit: 60,
+        limit: 60
       });
 
       if (!result.success) {
@@ -93,7 +109,8 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
     }
   };
 
-  const hasActiveSubscription = isLoggedIn && user?.subscriptionExpiry && user.subscriptionExpiry > Date.now();
+  const hasActiveSubscription =
+    isLoggedIn && user?.subscriptionExpiry && user.subscriptionExpiry > Date.now();
   const isAdmin = user?.role === 'admin';
 
   const handleOpenSellerPage = async (sellerId: string) => {
@@ -146,14 +163,18 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
       if (!prev) return prev;
       return {
         ...prev,
-        followersCount: Math.max(0, prev.followersCount + (isFollowingSeller ? -1 : 1)),
+        followersCount: Math.max(0, prev.followersCount + (isFollowingSeller ? -1 : 1))
       };
     });
   };
 
   const handleTrackView = async (listingId: string) => {
     await incrementKenyaListingViews(listingId);
-    setOfferings((prev) => prev.map(item => item.id === listingId ? { ...item, viewsCount: (item.viewsCount || 0) + 1 } : item));
+    setOfferings((prev) =>
+      prev.map((item) =>
+        item.id === listingId ? { ...item, viewsCount: (item.viewsCount || 0) + 1 } : item
+      )
+    );
   };
 
   const loadComments = async (listingId: string) => {
@@ -161,7 +182,7 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
     if (!result.success) return;
     setCommentsByListing((prev) => ({
       ...prev,
-      [listingId]: ((result as any).data?.comments || []) as KenyaComment[],
+      [listingId]: ((result as any).data?.comments || []) as KenyaComment[]
     }));
   };
 
@@ -187,7 +208,7 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
 
     const result = await createKenyaListingComment(listingId, {
       commenterUserId: user.id,
-      comment: commentText,
+      comment: commentText
     });
 
     if (!result.success) {
@@ -212,7 +233,10 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
     await handleOpenSellerPage(selectedSeller.sellerId);
   };
 
-  const handleListingModeration = async (listingId: string, status: 'pending' | 'approved' | 'rejected' | 'suspended') => {
+  const handleListingModeration = async (
+    listingId: string,
+    status: 'pending' | 'approved' | 'rejected' | 'suspended'
+  ) => {
     const notes = window.prompt('Admin moderation note (optional):') || undefined;
     const response = await adminModerateKenyaListing(listingId, status, notes);
     if (!response.success) {
@@ -222,7 +246,11 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
     await loadOfferings();
   };
 
-  const handleCommentModeration = async (commentId: string, status: 'pending' | 'approved' | 'rejected' | 'suspended', listingId: string) => {
+  const handleCommentModeration = async (
+    commentId: string,
+    status: 'pending' | 'approved' | 'rejected' | 'suspended',
+    listingId: string
+  ) => {
     const notes = window.prompt('Admin moderation note (optional):') || undefined;
     const response = await adminModerateKenyaComment(commentId, status, notes);
     if (!response.success) {
@@ -253,7 +281,7 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
       sellerName: user.businessName || user.name,
       contactPhone: user.phone,
       whatsappNumber: user.phone,
-      businessLocation: user.county || 'Kenya',
+      businessLocation: user.county || 'Kenya'
     });
 
     if (!profileResult.success) {
@@ -274,7 +302,7 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
       sellerPhone: user.phone,
       sellerEmail: user.email,
       photos: payload.photos || [],
-      videos: payload.videos || [],
+      videos: payload.videos || []
     });
 
     if (!listingResult.success) {
@@ -282,20 +310,24 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
       return;
     }
 
-    alert('Listing submitted successfully. It may require admin moderation before public visibility.');
+    alert(
+      'Listing submitted successfully. It may require admin moderation before public visibility.'
+    );
     setIsSellingModalOpen(false);
     await loadOfferings();
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FFF5F0] to-[#FAFAFA]">
+    <div className="min-h-screen bg-gradient-to-b from-[#FFF5F0] to-[#FAFAFA] text-[15px]">
       {/* Header Hero */}
-      <div className="bg-gradient-to-r from-[#FF6700] to-[#FF8533] text-white py-12 px-4">
+      <div className="bg-gradient-to-r from-[#FF6700] to-[#FF8533] text-white py-8 px-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold mb-2">Kenya Wholesale Hub</h1>
-          <p className="text-xl text-orange-100 mb-6">Kenya-to-Kenya wholesale marketplace for local sellers and buyers</p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold mb-1.5">Kenya Wholesale Hub</h1>
+          <p className="text-base md:text-lg text-orange-100 mb-4">
+            Kenya-to-Kenya wholesale marketplace for local sellers and buyers
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5 text-sm">
             <div className="flex items-center gap-2">
               <Zap size={20} />
               <span>Local Bulk Prices</span>
@@ -318,18 +350,18 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
               placeholder="Search products, sellers, categories..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-lg text-[#212121] focus:outline-none focus:ring-2 focus:ring-[#FF6700] bg-white"
+              className="w-full pl-12 pr-4 py-2.5 rounded-lg text-[#212121] focus:outline-none focus:ring-2 focus:ring-[#FF6700] bg-white"
             />
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto py-8 px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="max-w-6xl mx-auto py-6 px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {/* Sidebar Filters */}
           <div className="lg:col-span-1">
-            <div className="card-alibaba-elevated sticky top-4">
+            <div className="card-alibaba-elevated sticky top-3">
               <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-[#212121]">
                 <Filter size={20} /> Filters
               </h3>
@@ -337,8 +369,11 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
               <div>
                 <h4 className="font-semibold text-sm text-[#424242] mb-3">Category</h4>
                 <div className="space-y-2">
-                  {categories.map(cat => (
-                    <label key={cat} className="flex items-center gap-2 cursor-pointer hover:bg-[#FFF5F0] p-2 rounded transition">
+                  {categories.map((cat) => (
+                    <label
+                      key={cat}
+                      className="flex items-center gap-2 cursor-pointer hover:bg-[#FFF5F0] p-2 rounded transition"
+                    >
                       <input
                         type="radio"
                         name="category"
@@ -354,19 +389,22 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
               </div>
 
               {/* Info Box */}
-              <div className="mt-8 p-4 bg-[#FFF5F0] rounded-lg border border-[#FF6700]/20">
+              <div className="mt-6 p-3 bg-[#FFF5F0] rounded-lg border border-[#FF6700]/20">
                 <h4 className="font-semibold text-sm text-[#FF6700] mb-2 flex items-center gap-2">
                   <MessageSquare size={16} /> Contact Sellers
                 </h4>
                 <div>
                   <p className="text-xs text-[#E55100] font-medium">✅ 100% FREE for all buyers!</p>
-                  <p className="text-xs text-[#424242] mt-2">Call or WhatsApp sellers directly. Payment is handled between buyer and seller (Jiji-style).</p>
+                  <p className="text-xs text-[#424242] mt-2">
+                    Call or WhatsApp sellers directly. Payment is handled between buyer and seller
+                    (Jiji-style).
+                  </p>
                 </div>
               </div>
 
               <button
                 onClick={() => setIsSellingModalOpen(true)}
-                className="w-full mt-4 bg-[#FF6700] hover:bg-[#E55100] text-white font-semibold px-4 py-2.5 rounded-lg transition"
+                className="w-full mt-3 bg-[#FF6700] hover:bg-[#E55100] text-white font-semibold px-4 py-2 rounded-lg transition"
               >
                 Post Wholesale Listing
               </button>
@@ -381,8 +419,8 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
                 <p className="mt-4 text-[#424242]">Loading Kenya wholesale sellers...</p>
               </div>
             ) : offerings.length > 0 ? (
-              <div className="space-y-4">
-                {offerings.map(offering => (
+              <div className="space-y-3">
+                {offerings.map((offering) => (
                   <OfferingCard
                     key={offering.id}
                     offering={offering}
@@ -394,11 +432,15 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
                     commentsOpen={Boolean(openCommentsFor[offering.id])}
                     onToggleComments={() => toggleComments(offering.id)}
                     commentInput={commentInputs[offering.id] || ''}
-                    onCommentInputChange={(value) => setCommentInputs((prev) => ({ ...prev, [offering.id]: value }))}
+                    onCommentInputChange={(value) =>
+                      setCommentInputs((prev) => ({ ...prev, [offering.id]: value }))
+                    }
                     onPostComment={() => handlePostComment(offering.id)}
                     isAdmin={isAdmin}
                     onModerateListing={(status) => handleListingModeration(offering.id, status)}
-                    onModerateComment={(commentId, status) => handleCommentModeration(commentId, status, offering.id)}
+                    onModerateComment={(commentId, status) =>
+                      handleCommentModeration(commentId, status, offering.id)
+                    }
                   />
                 ))}
               </div>
@@ -407,10 +449,7 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
                 <Package size={48} className="mx-auto text-[#BDBDBD] mb-4" />
                 <p className="text-[#424242] mb-4">No Kenya wholesale sellers found</p>
                 {searchTerm && (
-                  <button
-                    onClick={() => setSearchTerm('')}
-                    className="link-primary font-semibold"
-                  >
+                  <button onClick={() => setSearchTerm('')} className="link-primary font-semibold">
                     Clear search
                   </button>
                 )}
@@ -418,17 +457,25 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
             )}
 
             {sellerLoading && (
-              <div className="mt-6 card-alibaba-elevated p-6 text-center text-[#424242]">Loading seller page...</div>
+              <div className="mt-5 card-alibaba-elevated p-5 text-center text-[#424242]">
+                Loading seller page...
+              </div>
             )}
 
             {selectedSeller && !sellerLoading && (
               <div className="mt-6 card-alibaba-elevated p-6">
                 <div className="flex items-center justify-between gap-4 mb-4">
                   <div>
-                    <h3 className="text-2xl font-bold text-[#212121]">{selectedSeller.sellerName || 'Seller'}</h3>
+                    <h3 className="text-2xl font-bold text-[#212121]">
+                      {selectedSeller.sellerName || 'Seller'}
+                    </h3>
                     <p className="text-sm text-[#424242]">Public Seller Page</p>
-                    <p className="text-xs text-[#757575] mt-1">Followers: {selectedSeller.followersCount || 0}</p>
-                    <p className="text-xs text-[#757575] mt-1">Phone: {selectedSeller.contactPhone || 'N/A'}</p>
+                    <p className="text-xs text-[#757575] mt-1">
+                      Followers: {selectedSeller.followersCount || 0}
+                    </p>
+                    <p className="text-xs text-[#757575] mt-1">
+                      Phone: {selectedSeller.contactPhone || 'N/A'}
+                    </p>
                   </div>
                   <button
                     onClick={() => setSelectedSeller(null)}
@@ -467,25 +514,54 @@ export const WholesaleHub: React.FC<WholesaleHubProps> = ({ isLoggedIn, user, on
 
                 {isAdmin && (
                   <div className="mb-5 p-3 bg-[#FAFAFA] rounded-lg border border-[#EEEEEE]">
-                    <p className="text-sm font-semibold text-[#212121] mb-2 flex items-center gap-2"><Shield size={16} /> Admin Seller Moderation</p>
+                    <p className="text-sm font-semibold text-[#212121] mb-2 flex items-center gap-2">
+                      <Shield size={16} /> Admin Seller Moderation
+                    </p>
                     <div className="flex flex-wrap gap-2">
-                      <button onClick={() => handleSellerStatus('approved')} className="px-3 py-1.5 text-sm rounded bg-green-100 text-green-700">Approve</button>
-                      <button onClick={() => handleSellerStatus('pending')} className="px-3 py-1.5 text-sm rounded bg-yellow-100 text-yellow-700">Pending</button>
-                      <button onClick={() => handleSellerStatus('suspended')} className="px-3 py-1.5 text-sm rounded bg-orange-100 text-orange-700">Suspend</button>
-                      <button onClick={() => handleSellerStatus('rejected')} className="px-3 py-1.5 text-sm rounded bg-red-100 text-red-700">Reject</button>
+                      <button
+                        onClick={() => handleSellerStatus('approved')}
+                        className="px-3 py-1.5 text-sm rounded bg-green-100 text-green-700"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => handleSellerStatus('pending')}
+                        className="px-3 py-1.5 text-sm rounded bg-yellow-100 text-yellow-700"
+                      >
+                        Pending
+                      </button>
+                      <button
+                        onClick={() => handleSellerStatus('suspended')}
+                        className="px-3 py-1.5 text-sm rounded bg-orange-100 text-orange-700"
+                      >
+                        Suspend
+                      </button>
+                      <button
+                        onClick={() => handleSellerStatus('rejected')}
+                        className="px-3 py-1.5 text-sm rounded bg-red-100 text-red-700"
+                      >
+                        Reject
+                      </button>
                     </div>
                   </div>
                 )}
 
                 <h4 className="font-semibold text-[#212121] mb-3">Seller Products</h4>
                 <div className="space-y-2">
-                  {selectedSeller.products.map(item => (
-                    <div key={item.id} className="border border-[#EEEEEE] rounded-lg p-3 flex justify-between items-center">
+                  {selectedSeller.products.map((item) => (
+                    <div
+                      key={item.id}
+                      className="border border-[#EEEEEE] rounded-lg p-3 flex justify-between items-center"
+                    >
                       <div>
                         <p className="font-semibold text-[#212121]">{item.title}</p>
-                        <p className="text-xs text-[#757575]">{item.category} • {item.description}</p>
+                        <p className="text-xs text-[#757575]">
+                          {item.category} • {item.description}
+                        </p>
                       </div>
-                      <p className="font-bold text-[#FF6700]">KES {item.pricePerUnit?.toLocaleString()}</p>
+                      <p className="font-bold text-[#FF6700]">
+                        KES {item.pricePerUnit?.toLocaleString()}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -521,7 +597,10 @@ interface OfferingCardProps {
   onPostComment: () => void;
   isAdmin: boolean;
   onModerateListing: (status: 'pending' | 'approved' | 'rejected' | 'suspended') => void;
-  onModerateComment: (commentId: string, status: 'pending' | 'approved' | 'rejected' | 'suspended') => void;
+  onModerateComment: (
+    commentId: string,
+    status: 'pending' | 'approved' | 'rejected' | 'suspended'
+  ) => void;
 }
 
 const OfferingCard: React.FC<OfferingCardProps> = ({
@@ -536,7 +615,7 @@ const OfferingCard: React.FC<OfferingCardProps> = ({
   onPostComment,
   isAdmin,
   onModerateListing,
-  onModerateComment,
+  onModerateComment
 }) => {
   const handleContact = (method: 'whatsapp' | 'phone') => {
     if (method === 'whatsapp' && offering.sellerPhone) {
@@ -548,54 +627,58 @@ const OfferingCard: React.FC<OfferingCardProps> = ({
       );
       window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
     } else if (method === 'phone' && offering.sellerPhone) {
-      const phoneNumber = offering.sellerPhone.startsWith('+') ? offering.sellerPhone : '+254' + offering.sellerPhone.substring(1);
+      const phoneNumber = offering.sellerPhone.startsWith('+')
+        ? offering.sellerPhone
+        : '+254' + offering.sellerPhone.substring(1);
       window.location.href = `tel:${phoneNumber}`;
     }
   };
 
   return (
     <div className="card-alibaba-elevated hover-lift">
-      <div className="p-6">
+      <div className="p-4 md:p-5">
         {/* Header */}
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h3 className="text-xl font-bold text-[#212121]">{offering.title}</h3>
-            <div className="flex items-center gap-4 mt-2 text-sm text-[#424242]">
-              {offering.category && (
-                <span className="badge-primary">
-                  {offering.category}
-                </span>
-              )}
+            <h3 className="text-lg md:text-xl font-bold text-[#212121]">{offering.title}</h3>
+            <div className="flex items-center gap-3 mt-1.5 text-xs md:text-sm text-[#424242]">
+              {offering.category && <span className="badge-primary">{offering.category}</span>}
             </div>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold text-[#FF6700]">KES {offering.pricePerUnit?.toLocaleString()}</p>
+            <p className="text-xl md:text-2xl font-bold text-[#FF6700]">
+              KES {offering.pricePerUnit?.toLocaleString()}
+            </p>
             <p className="text-xs text-[#757575]">per {offering.unit || 'unit'}</p>
           </div>
         </div>
 
         {/* Description */}
-        <p className="text-[#424242] mb-4 line-clamp-2">{offering.description}</p>
+        <p className="text-[#424242] mb-3 line-clamp-2 text-sm">{offering.description}</p>
 
         {/* Details */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
-          <div className="bg-[#FAFAFA] p-3 rounded border border-[#EEEEEE]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-4 text-xs md:text-sm">
+          <div className="bg-[#FAFAFA] p-2.5 rounded border border-[#EEEEEE]">
             <p className="text-[#757575] text-xs uppercase font-semibold">Min Order</p>
-            <p className="font-bold text-[#212121]">{offering.minOrderQuantity || 0} {offering.unit}</p>
+            <p className="font-bold text-[#212121]">
+              {offering.minOrderQuantity || 0} {offering.unit}
+            </p>
           </div>
-          <div className="bg-[#FAFAFA] p-3 rounded border border-[#EEEEEE]">
+          <div className="bg-[#FAFAFA] p-2.5 rounded border border-[#EEEEEE]">
             <p className="text-[#757575] text-xs uppercase font-semibold">Stock</p>
-            <p className="font-bold text-[#212121]">{offering.quantityAvailable?.toLocaleString() || 0}</p>
+            <p className="font-bold text-[#212121]">
+              {offering.quantityAvailable?.toLocaleString() || 0}
+            </p>
           </div>
-          <div className="bg-[#FAFAFA] p-3 rounded border border-[#EEEEEE]">
+          <div className="bg-[#FAFAFA] p-2.5 rounded border border-[#EEEEEE]">
             <p className="text-[#757575] text-xs uppercase font-semibold">Lead Time</p>
             <p className="font-bold text-[#212121]">{offering.leadTimeDays || 3} days</p>
           </div>
-          <div className="bg-[#FAFAFA] p-3 rounded border border-[#EEEEEE]">
+          <div className="bg-[#FAFAFA] p-2.5 rounded border border-[#EEEEEE]">
             <p className="text-[#757575] text-xs uppercase font-semibold">Inquiries</p>
             <p className="font-bold text-[#212121]">{offering.inquiriesCount || 0}</p>
           </div>
-          <div className="bg-[#FAFAFA] p-3 rounded border border-[#EEEEEE]">
+          <div className="bg-[#FAFAFA] p-2.5 rounded border border-[#EEEEEE]">
             <p className="text-[#757575] text-xs uppercase font-semibold">Views</p>
             <p className="font-bold text-[#212121]">{offering.viewsCount || 0}</p>
           </div>
@@ -603,12 +686,34 @@ const OfferingCard: React.FC<OfferingCardProps> = ({
 
         {isAdmin && (
           <div className="mb-4 p-3 bg-[#FAFAFA] rounded-lg border border-[#EEEEEE]">
-            <p className="text-xs font-semibold text-[#212121] mb-2 flex items-center gap-2"><Shield size={14} /> Admin Listing Moderation</p>
+            <p className="text-xs font-semibold text-[#212121] mb-2 flex items-center gap-2">
+              <Shield size={14} /> Admin Listing Moderation
+            </p>
             <div className="flex flex-wrap gap-2">
-              <button onClick={() => onModerateListing('approved')} className="px-2.5 py-1 text-xs rounded bg-green-100 text-green-700">Approve</button>
-              <button onClick={() => onModerateListing('pending')} className="px-2.5 py-1 text-xs rounded bg-yellow-100 text-yellow-700">Pending</button>
-              <button onClick={() => onModerateListing('suspended')} className="px-2.5 py-1 text-xs rounded bg-orange-100 text-orange-700">Suspend</button>
-              <button onClick={() => onModerateListing('rejected')} className="px-2.5 py-1 text-xs rounded bg-red-100 text-red-700">Reject</button>
+              <button
+                onClick={() => onModerateListing('approved')}
+                className="px-2.5 py-1 text-xs rounded bg-green-100 text-green-700"
+              >
+                Approve
+              </button>
+              <button
+                onClick={() => onModerateListing('pending')}
+                className="px-2.5 py-1 text-xs rounded bg-yellow-100 text-yellow-700"
+              >
+                Pending
+              </button>
+              <button
+                onClick={() => onModerateListing('suspended')}
+                className="px-2.5 py-1 text-xs rounded bg-orange-100 text-orange-700"
+              >
+                Suspend
+              </button>
+              <button
+                onClick={() => onModerateListing('rejected')}
+                className="px-2.5 py-1 text-xs rounded bg-red-100 text-red-700"
+              >
+                Reject
+              </button>
             </div>
           </div>
         )}
@@ -618,7 +723,9 @@ const OfferingCard: React.FC<OfferingCardProps> = ({
           <p className="text-sm text-[#424242] mb-2">
             <strong>Seller:</strong> {offering.sellerName}
           </p>
-          <p className="text-xs text-[#757575] mb-2"><strong>Followers:</strong> {offering.followersCount || 0}</p>
+          <p className="text-xs text-[#757575] mb-2">
+            <strong>Followers:</strong> {offering.followersCount || 0}
+          </p>
           {offering.sellerVerified && (
             <span className="inline-flex items-center gap-1 text-xs bg-[#F6FFED] text-[#52C41A] px-2 py-1 rounded font-semibold">
               <Star size={14} /> Verified Supplier
@@ -627,7 +734,7 @@ const OfferingCard: React.FC<OfferingCardProps> = ({
         </div>
 
         {/* Contact Buttons */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2">
           <button
             onClick={() => handleContact('whatsapp')}
             className="py-2 px-4 rounded-lg font-semibold transition flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1FA24E] text-white"
@@ -674,20 +781,46 @@ const OfferingCard: React.FC<OfferingCardProps> = ({
 
           {commentsOpen && (
             <div className="mt-3 space-y-3">
-              {comments.length > 0 ? comments.map((comment) => (
-                <div key={comment.id} className="border border-[#EEEEEE] rounded p-2.5">
-                  <p className="text-sm text-[#212121]">{comment.comment}</p>
-                  <p className="text-xs text-[#757575] mt-1">{new Date(comment.created_at).toLocaleString()}</p>
-                  {isAdmin && (
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      <button onClick={() => onModerateComment(comment.id, 'approved')} className="px-2 py-1 text-xs rounded bg-green-100 text-green-700">Approve</button>
-                      <button onClick={() => onModerateComment(comment.id, 'pending')} className="px-2 py-1 text-xs rounded bg-yellow-100 text-yellow-700">Pending</button>
-                      <button onClick={() => onModerateComment(comment.id, 'suspended')} className="px-2 py-1 text-xs rounded bg-orange-100 text-orange-700">Suspend</button>
-                      <button onClick={() => onModerateComment(comment.id, 'rejected')} className="px-2 py-1 text-xs rounded bg-red-100 text-red-700">Reject</button>
-                    </div>
-                  )}
-                </div>
-              )) : <p className="text-xs text-[#757575]">No approved comments yet.</p>}
+              {comments.length > 0 ? (
+                comments.map((comment) => (
+                  <div key={comment.id} className="border border-[#EEEEEE] rounded p-2.5">
+                    <p className="text-sm text-[#212121]">{comment.comment}</p>
+                    <p className="text-xs text-[#757575] mt-1">
+                      {new Date(comment.created_at).toLocaleString()}
+                    </p>
+                    {isAdmin && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <button
+                          onClick={() => onModerateComment(comment.id, 'approved')}
+                          className="px-2 py-1 text-xs rounded bg-green-100 text-green-700"
+                        >
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => onModerateComment(comment.id, 'pending')}
+                          className="px-2 py-1 text-xs rounded bg-yellow-100 text-yellow-700"
+                        >
+                          Pending
+                        </button>
+                        <button
+                          onClick={() => onModerateComment(comment.id, 'suspended')}
+                          className="px-2 py-1 text-xs rounded bg-orange-100 text-orange-700"
+                        >
+                          Suspend
+                        </button>
+                        <button
+                          onClick={() => onModerateComment(comment.id, 'rejected')}
+                          className="px-2 py-1 text-xs rounded bg-red-100 text-red-700"
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p className="text-xs text-[#757575]">No approved comments yet.</p>
+              )}
 
               <div className="space-y-2">
                 <textarea

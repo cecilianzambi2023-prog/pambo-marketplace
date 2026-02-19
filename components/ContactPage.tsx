@@ -17,7 +17,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onClose }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -41,10 +41,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onClose }) => {
         <div className="container mx-auto px-4 lg:px-8 relative">
           <h1 className="text-4xl font-bold mb-4">Get In Touch</h1>
           <p className="text-gray-400 text-lg">
-            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon
+            as possible.
           </p>
           {onClose && (
-            <button 
+            <button
               onClick={onClose}
               className="absolute top-4 right-4 text-gray-400 hover:text-white transition"
               title="Close"
@@ -58,11 +59,10 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onClose }) => {
       {/* Main Content */}
       <div className="container mx-auto px-4 lg:px-8 py-12">
         <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          
           {/* Contact Information */}
           <div className="space-y-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h2>
-            
+
             <div className="flex gap-4">
               <div className="bg-orange-100 p-4 rounded-lg h-fit">
                 <Mail className="text-orange-600" size={24} />
@@ -128,7 +128,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onClose }) => {
           {/* Contact Form */}
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
-            
+
             {submitted ? (
               <div className="bg-green-50 border border-green-200 text-green-700 px-6 py-8 rounded-lg text-center">
                 <p className="font-semibold mb-2">✓ Message Received!</p>
@@ -136,11 +136,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onClose }) => {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
-                
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Your Name
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
                   <input
                     type="text"
                     name="name"
@@ -168,9 +165,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onClose }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Subject
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
                   <input
                     type="text"
                     name="subject"
@@ -183,9 +178,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onClose }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Message
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
                   <textarea
                     name="message"
                     value={formData.message}
@@ -206,12 +199,12 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onClose }) => {
                 </button>
 
                 <p className="text-xs text-gray-500 text-center">
-                  We respect your privacy. Your information will only be used to respond to your inquiry.
+                  We respect your privacy. Your information will only be used to respond to your
+                  inquiry.
                 </p>
               </form>
             )}
           </div>
-
         </div>
       </div>
     </div>

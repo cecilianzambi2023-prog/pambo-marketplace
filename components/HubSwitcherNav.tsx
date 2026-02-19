@@ -2,7 +2,7 @@
  * HubSwitcherNav.tsx
  * ===================
  * Hub Navigation Switcher Component
- * 
+ *
  * Provides:
  * - Hub selection with visual feedback
  * - Keyboard shortcuts for hub navigation
@@ -11,12 +11,7 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  useHubSwitch,
-  useAllHubs,
-  useHub,
-  useHubBranding,
-} from '../contexts/HubContext';
+import { useHubSwitch, useAllHubs, useHub, useHubBranding } from '../contexts/HubContext';
 import { Search, X, ChevronRight, Zap } from 'lucide-react';
 
 // ===================================
@@ -115,11 +110,7 @@ const HubNavButton: React.FC<HubNavButtonProps> = ({ hub, isActive, onClick }) =
           ? 'text-white shadow-lg'
           : 'text-gray-700 bg-white border-2 border-gray-200 hover:border-gray-300'
       }`}
-      style={
-        isActive
-          ? { backgroundColor: hub.color.primary }
-          : {}
-      }
+      style={isActive ? { backgroundColor: hub.color.primary } : {}}
     >
       <span className="text-lg">{hub.icon}</span>
       <span className="hidden sm:inline">{hub.displayName}</span>
@@ -139,9 +130,10 @@ export const HubSearchSwitcher: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Filter hubs based on search
-  const filteredHubs = availableHubs.filter((hub) =>
-    hub.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    hub.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredHubs = availableHubs.filter(
+    (hub) =>
+      hub.displayName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      hub.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Open dialog with Cmd+K / Ctrl+K
@@ -209,7 +201,7 @@ const HubSearchDialog: React.FC<HubSearchDialogProps> = ({
   selectedIndex,
   setSelectedIndex,
   onClose,
-  inputRef,
+  inputRef
 }) => {
   const { switchHub } = useHubSwitch();
 
@@ -328,13 +320,9 @@ export const HubSidebarSwitcher: React.FC<HubSidebarSwitcherProps> = ({ isCollap
           key={hub.id}
           onClick={() => switchHub(hub.id)}
           className={`relative rounded-lg transition ${
-            hubId === hub.id
-              ? 'text-white'
-              : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
+            hubId === hub.id ? 'text-white' : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
           } ${isCollapsed ? 'p-3' : 'px-4 py-3 w-full text-left flex items-center gap-2'}`}
-          style={
-            hubId === hub.id ? { backgroundColor: hub.color.primary } : {}
-          }
+          style={hubId === hub.id ? { backgroundColor: hub.color.primary } : {}}
           title={isCollapsed ? hub.displayName : undefined}
         >
           <span className="text-lg flexshrink-0">{hub.icon}</span>
@@ -372,11 +360,7 @@ export const HubSwitcherBadges: React.FC = () => {
               ? 'text-white shadow-md'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           }`}
-          style={
-            hubId === hub.id
-              ? { backgroundColor: hub.color.primary }
-              : {}
-          }
+          style={hubId === hub.id ? { backgroundColor: hub.color.primary } : {}}
         >
           {hub.icon} {hub.displayName}
         </button>

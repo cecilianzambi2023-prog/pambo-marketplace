@@ -1,13 +1,13 @@
 /**
  * SubscriptionRevenueAnalytics.tsx
  * ==================================
- * 
+ *
  * Admin Dashboard showing:
  * - Revenue by subscription tier
  * - Total MRR (Monthly Recurring Revenue)
  * - Subscriber count per tier
  * - Revenue trends
- * 
+ *
  * Commission: 0% (Sellers keep 100%)
  * Payment Model: Direct-Connect (No Escrow)
  */
@@ -39,8 +39,10 @@ export const SubscriptionRevenueAnalytics: React.FC = () => {
 
   const checkAdminAccess = async () => {
     try {
-      const { data: { user } } = await supabaseClient.auth.getUser();
-      
+      const {
+        data: { user }
+      } = await supabaseClient.auth.getUser();
+
       // Only allow info@pambo.biz to access analytics
       if (user?.email === 'info@pambo.biz') {
         setIsAuthorized(true);
@@ -73,7 +75,7 @@ export const SubscriptionRevenueAnalytics: React.FC = () => {
 
       (data || []).forEach((payment: any) => {
         const tierId = payment.subscription_tier_id;
-        const tier = Object.values(SUBSCRIPTION_TIERS).find(t => t.id === tierId);
+        const tier = Object.values(SUBSCRIPTION_TIERS).find((t) => t.id === tierId);
 
         if (!tier) return;
 
@@ -112,7 +114,6 @@ export const SubscriptionRevenueAnalytics: React.FC = () => {
       // Calculate total subscribers
       const totalSubs = statsArray.reduce((sum, s) => sum + s.subscriber_count, 0);
       setTotalSubscribers(totalSubs);
-
     } catch (error) {
       console.error('Error fetching revenue data:', error);
     } finally {
@@ -214,10 +215,19 @@ export const SubscriptionRevenueAnalytics: React.FC = () => {
       <div className="mt-8 bg-slate-700 p-6 rounded-lg border border-slate-600">
         <h3 className="text-white font-semibold mb-3">📊 Business Model</h3>
         <ul className="space-y-2 text-slate-300 text-sm">
-          <li>✅ <strong>Commission:</strong> 0% - Sellers keep 100% of their earnings</li>
-          <li>✅ <strong>Payment Model:</strong> Direct-Connect - No escrow delays</li>
-          <li>✅ <strong>Hub Access:</strong> Determined by subscription tier</li>
-          <li>✅ <strong>MRR:</strong> Monthly subscriptions (Starter/Pro/Enterprise) + Annual subscriptions amortized (Mkulima)</li>
+          <li>
+            ✅ <strong>Commission:</strong> 0% - Sellers keep 100% of their earnings
+          </li>
+          <li>
+            ✅ <strong>Payment Model:</strong> Direct-Connect - No escrow delays
+          </li>
+          <li>
+            ✅ <strong>Hub Access:</strong> Determined by subscription tier
+          </li>
+          <li>
+            ✅ <strong>MRR:</strong> Monthly subscriptions (Starter/Pro/Enterprise) + Annual
+            subscriptions amortized (Mkulima)
+          </li>
         </ul>
       </div>
     </div>

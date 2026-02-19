@@ -25,18 +25,23 @@ interface BulkOfferingsProps {
   isLoading?: boolean;
 }
 
-export const BulkOfferingsPanel: React.FC<BulkOfferingsProps> = ({ offerings, onContact, isLoading }) => {
+export const BulkOfferingsPanel: React.FC<BulkOfferingsProps> = ({
+  offerings,
+  onContact,
+  isLoading
+}) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredOfferings = offerings.filter(offering => {
-    const matchesSearch = offering.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         offering.description.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredOfferings = offerings.filter((offering) => {
+    const matchesSearch =
+      offering.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      offering.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = !selectedCategory || offering.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const categories = Array.from(new Set(offerings.map(o => o.category)));
+  const categories = Array.from(new Set(offerings.map((o) => o.category)));
 
   if (isLoading) {
     return (
@@ -96,7 +101,7 @@ export const BulkOfferingsPanel: React.FC<BulkOfferingsProps> = ({ offerings, on
             >
               All Categories
             </button>
-            {categories.map(cat => (
+            {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
@@ -115,13 +120,14 @@ export const BulkOfferingsPanel: React.FC<BulkOfferingsProps> = ({ offerings, on
 
       {/* Bulk Offerings Grid */}
       {filteredOfferings.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          No offerings match your search
-        </div>
+        <div className="text-center py-8 text-gray-500">No offerings match your search</div>
       ) : (
         <div className="grid gap-4">
-          {filteredOfferings.map(offering => (
-            <div key={offering.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition">
+          {filteredOfferings.map((offering) => (
+            <div
+              key={offering.id}
+              className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition"
+            >
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
@@ -136,7 +142,9 @@ export const BulkOfferingsPanel: React.FC<BulkOfferingsProps> = ({ offerings, on
                   <p className="text-sm text-gray-600 mt-1">By {offering.sellerName}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-blue-600">KES {offering.pricePerUnit.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-blue-600">
+                    KES {offering.pricePerUnit.toLocaleString()}
+                  </p>
                   <p className="text-xs text-gray-500">per {offering.unit}</p>
                 </div>
               </div>
@@ -191,7 +199,9 @@ export const BulkOfferingsPanel: React.FC<BulkOfferingsProps> = ({ offerings, on
                   <button
                     onClick={() => {
                       const message = `Hi ${offering.sellerName}, I'm interested in your bulk offering: ${offering.title}. Available quantity: ${offering.quantityAvailable} ${offering.unit} at KES ${offering.pricePerUnit}/unit.`;
-                      window.open(`https://wa.me/${offering.sellerPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`);
+                      window.open(
+                        `https://wa.me/${offering.sellerPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
+                      );
                     }}
                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition"
                   >
@@ -216,8 +226,9 @@ export const BulkOfferingsPanel: React.FC<BulkOfferingsProps> = ({ offerings, on
       {filteredOfferings.length > 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
           <p className="text-sm font-bold text-gray-700">
-            Showing {filteredOfferings.length} bulk offering{filteredOfferings.length !== 1 ? 's' : ''} • 
-            Total value: KES {filteredOfferings.reduce((sum, o) => sum + o.totalValue, 0).toLocaleString()}
+            Showing {filteredOfferings.length} bulk offering
+            {filteredOfferings.length !== 1 ? 's' : ''} • Total value: KES{' '}
+            {filteredOfferings.reduce((sum, o) => sum + o.totalValue, 0).toLocaleString()}
           </p>
         </div>
       )}

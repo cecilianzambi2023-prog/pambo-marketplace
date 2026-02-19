@@ -1,7 +1,7 @@
 /**
  * professionalProfileTypes.ts
  * ============================
- * 
+ *
  * Type definitions for professional profiles in the Services Hub.
  * Each professional gets a unique URL: /professionals/:id
  */
@@ -18,22 +18,22 @@ export interface ProfessionalProfile {
   whatsapp?: string;
   avatar_url?: string;
   bio?: string;
-  
+
   // Service Area
   county_id: string;
   service_areas?: string[];
-  
+
   // Subscription & Verification
   subscription_status?: 'active' | 'inactive' | 'expired';
   subscription_tier?: string;
   verification_badge?: 'bronze' | 'silver' | 'gold' | 'platinum';
   is_verified?: boolean;
-  
+
   // Stats
   rating?: number; // 1-5 average
   reviews_count?: number;
   follower_count?: number;
-  
+
   // Timestamps
   created_at?: string;
   updated_at?: string;

@@ -1,5 +1,19 @@
 import { supabase } from '../src/lib/supabaseClient';
 import { PamboListing, PamboHub, ListingStatus } from '../types';
+import { buildPaginationMeta, logServiceTiming } from './serviceObservability';
+
+const DEFAULT_PAGE_SIZE = 20;
+const MAX_PAGE_SIZE = 100;
+
+const clampPageSize = (value?: number) => {
+  const parsed = Number.isFinite(value) ? Number(value) : DEFAULT_PAGE_SIZE;
+  return Math.min(Math.max(parsed, 1), MAX_PAGE_SIZE);
+};
+
+const normalizeOffset = (value?: number) => {
+  const parsed = Number.isFinite(value) ? Number(value) : 0;
+  return Math.max(parsed, 0);
+};
 
 /**
  * Create a new listing across all hubs
@@ -28,18 +42,34 @@ export const createListing = async (listing: Omit<PamboListing, 'id' | 'createdA
  * Get all listings by hub type
  */
 export const getListingsByHub = async (hub: PamboHub, limit = 20, offset = 0) => {
+  const startedAt = Date.now();
   try {
+    const safeLimit = clampPageSize(limit);
+    const safeOffset = normalizeOffset(offset);
+
     const { data, error, count } = await supabase
       .from('listings')
       .select('*', { count: 'exact' })
       .eq('hub', hub)
       .eq('status', 'active')
       .order('createdAt', { ascending: false })
-      .range(offset, offset + limit - 1);
+      .range(safeOffset, safeOffset + safeLimit - 1);
 
     if (error) throw error;
 
-    return { success: true, listings: data || [], total: count || 0 };
+    logServiceTiming('listings.getListingsByHub', startedAt, {
+      hub,
+      limit: safeLimit,
+      offset: safeOffset,
+      resultCount: (data || []).length,
+    });
+
+    return {
+      success: true,
+      listings: data || [],
+      total: count || 0,
+      pagination: buildPaginationMeta(count || 0, safeLimit, safeOffset),
+    };
   } catch (error) {
     console.error('Get listings by hub error:', error);
     return { success: false, error };
@@ -49,22 +79,41 @@ export const getListingsByHub = async (hub: PamboHub, limit = 20, offset = 0) =>
 /**
  * Get listings by seller ID
  */
-export const getSellerListings = async (sellerId: string, status?: ListingStatus) => {
+export const getSellerListings = async (sellerId: string, status?: ListingStatus, limit = 20, offset = 0) => {
+  const startedAt = Date.now();
   try {
+    const safeLimit = clampPageSize(limit);
+    const safeOffset = normalizeOffset(offset);
+
     let query = supabase
       .from('listings')
-      .select('*')
+      .select('*', { count: 'exact' })
       .eq('sellerId', sellerId);
 
     if (status) {
       query = query.eq('status', status);
     }
 
-    const { data, error } = await query.order('createdAt', { ascending: false });
+    const { data, error, count } = await query
+      .order('createdAt', { ascending: false })
+      .range(safeOffset, safeOffset + safeLimit - 1);
 
     if (error) throw error;
 
-    return { success: true, listings: data || [] };
+    logServiceTiming('listings.getSellerListings', startedAt, {
+      sellerId,
+      status,
+      limit: safeLimit,
+      offset: safeOffset,
+      resultCount: (data || []).length,
+    });
+
+    return {
+      success: true,
+      listings: data || [],
+      total: count || 0,
+      pagination: buildPaginationMeta(count || 0, safeLimit, safeOffset),
+    };
   } catch (error) {
     console.error('Get seller listings error:', error);
     return { success: false, error };
@@ -155,7 +204,11 @@ export const searchListings = async (
   limit = 20,
   offset = 0
 ) => {
+  const startedAt = Date.now();
   try {
+    const safeLimit = clampPageSize(limit);
+    const safeOffset = normalizeOffset(offset);
+
     let query = supabase
       .from('listings')
       .select('*', { count: 'exact' })
@@ -205,13 +258,27 @@ export const searchListings = async (
     }
 
     query = query.order(sortColumn, { ascending });
-    query = query.range(offset, offset + limit - 1);
+    query = query.range(safeOffset, safeOffset + safeLimit - 1);
 
     const { data, error, count } = await query;
 
     if (error) throw error;
 
-    return { success: true, listings: data || [], total: count || 0 };
+    logServiceTiming('listings.searchListings', startedAt, {
+      searchTerm,
+      hub: filters?.hub,
+      category: filters?.category,
+      limit: safeLimit,
+      offset: safeOffset,
+      resultCount: (data || []).length,
+    });
+
+    return {
+      success: true,
+      listings: data || [],
+      total: count || 0,
+      pagination: buildPaginationMeta(count || 0, safeLimit, safeOffset),
+    };
   } catch (error) {
     console.error('Search listings error:', error);
     return { success: false, error };
@@ -223,6 +290,8 @@ export const searchListings = async (
  */
 export const getFeaturedListings = async (hub?: PamboHub, limit = 10) => {
   try {
+    const safeLimit = clampPageSize(limit);
+
     let query = supabase
       .from('listings')
       .select('*')
@@ -235,7 +304,7 @@ export const getFeaturedListings = async (hub?: PamboHub, limit = 10) => {
 
     const { data, error } = await query
       .order('rating', { ascending: false })
-      .limit(limit);
+      .limit(safeLimit);
 
     if (error) throw error;
 
@@ -282,14 +351,18 @@ export const toggleFavoriteListing = async (listingId: string, buyerId: string) 
 /**
  * Get listings near a location (within radius)
  */
-export const getListingsNearLocation = async (latitude: number, longitude: number, radiusKm = 50) => {
+export const getListingsNearLocation = async (latitude: number, longitude: number, radiusKm = 50, limit = 50, offset = 0) => {
   try {
+    const safeLimit = clampPageSize(limit);
+    const safeOffset = normalizeOffset(offset);
+
     // This is a simplified approach - for production, use PostGIS
     const { data, error } = await supabase
       .from('listings')
       .select('*')
       .eq('status', 'active')
-      .in('hub', ['farmer', 'marketplace', 'service']);
+      .in('hub', ['farmer', 'marketplace', 'service'])
+      .range(safeOffset, safeOffset + safeLimit - 1);
 
     if (error) throw error;
 
@@ -305,6 +378,8 @@ export const getListingsNearLocation = async (latitude: number, longitude: numbe
  */
 export const getTrendingListings = async (hub?: PamboHub, limit = 10) => {
   try {
+    const safeLimit = clampPageSize(limit);
+
     let query = supabase
       .from('listings')
       .select('*')
@@ -316,7 +391,7 @@ export const getTrendingListings = async (hub?: PamboHub, limit = 10) => {
 
     const { data, error } = await query
       .order('viewCount', { ascending: false })
-      .limit(limit);
+      .limit(safeLimit);
 
     if (error) throw error;
 

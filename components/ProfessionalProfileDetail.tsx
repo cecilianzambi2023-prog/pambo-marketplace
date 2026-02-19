@@ -1,10 +1,10 @@
 /**
  * ProfessionalProfileDetail.tsx
  * ==============================
- * 
+ *
  * Professional detail page with dynamic routing.
  * URL: /professionals/:id
- * 
+ *
  * Shows:
  * - Professional info (name, bio, rating, followers)
  * - Verified Pro badge (if subscription active)
@@ -16,11 +16,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProfessionalProfile, followProfessional, unfollowProfessional } from '@/services/professionalProfileService';
+import {
+  getProfessionalProfile,
+  followProfessional,
+  unfollowProfessional
+} from '@/services/professionalProfileService';
 import { ProfessionalDetailView } from '@/types/professionalProfileTypes';
 import { Star, Phone, MessageCircle, Heart, ArrowLeft } from 'lucide-react';
 import ProfessionalPortfolioGallery from './ProfessionalPortfolioGallery';
 import { useAuth } from '@/hooks/useAuth'; // Your auth hook
+import { SmartImage } from './SmartImage';
 
 export const ProfessionalProfileDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -114,7 +119,11 @@ export const ProfessionalProfileDetail: React.FC = () => {
         {/* AVATAR + NAME + VERIFIED BADGE */}
         <div className="pro-header-section">
           {professional.avatar_url && (
-            <img src={professional.avatar_url} alt={professional.full_name} className="pro-avatar" />
+            <SmartImage
+              src={professional.avatar_url}
+              alt={professional.full_name}
+              className="pro-avatar"
+            />
           )}
           <div className="pro-name-section">
             <h1>{professional.full_name}</h1>
@@ -132,7 +141,10 @@ export const ProfessionalProfileDetail: React.FC = () => {
             <div className="rating-item">
               <div className="rating-stars">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className={i < Math.floor(professional.rating || 0) ? 'star filled' : 'star'}>
+                  <span
+                    key={i}
+                    className={i < Math.floor(professional.rating || 0) ? 'star filled' : 'star'}
+                  >
                     ★
                   </span>
                 ))}
@@ -151,9 +163,7 @@ export const ProfessionalProfileDetail: React.FC = () => {
         </div>
 
         {/* BIO */}
-        {professional.bio && (
-          <p className="pro-bio">{professional.bio}</p>
-        )}
+        {professional.bio && <p className="pro-bio">{professional.bio}</p>}
 
         {/* ACTION BUTTONS ROW */}
         <div className="pro-actions">
@@ -168,10 +178,13 @@ export const ProfessionalProfileDetail: React.FC = () => {
           </button>
 
           {/* SHARE BUTTON */}
-          <button className="share-btn" onClick={() => {
-            const url = `${window.location.origin}/professionals/${professional.id}`;
-            navigator.share && navigator.share({ title: professional.full_name, url });
-          }}>
+          <button
+            className="share-btn"
+            onClick={() => {
+              const url = `${window.location.origin}/professionals/${professional.id}`;
+              navigator.share && navigator.share({ title: professional.full_name, url });
+            }}
+          >
             <span>Share</span>
           </button>
         </div>
@@ -230,18 +243,10 @@ export const ProfessionalProfileDetail: React.FC = () => {
       {/* CONTACT INFO CARD */}
       <div className="contact-info-card">
         <h3>Contact & Location</h3>
-        {professional.county_id && (
-          <p>📍 Operating in {professional.county_id}</p>
-        )}
-        {professional.email && (
-          <p>📧 {professional.email}</p>
-        )}
-        {professional.phone && (
-          <p>📱 {professional.phone}</p>
-        )}
-        {professional.whatsapp && (
-          <p>💬 WhatsApp: {professional.whatsapp}</p>
-        )}
+        {professional.county_id && <p>📍 Operating in {professional.county_id}</p>}
+        {professional.email && <p>📧 {professional.email}</p>}
+        {professional.phone && <p>📱 {professional.phone}</p>}
+        {professional.whatsapp && <p>💬 WhatsApp: {professional.whatsapp}</p>}
       </div>
 
       {/* STYLES */}

@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
-/* Alibaba-Style Theme for Pambo */
+/* High-density commerce theme for Pambo */
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   
-  /* Primary Alibaba Orange */
+  /* Primary commerce orange */
   --color-primary: #FF6700;
   --color-primary-dark: #E55100;
   --color-primary-light: #FF8533;
@@ -39,10 +39,10 @@
 }
 
 /* ========================
-   ALIBABA THEME UTILITIES
+  COMMERCE THEME UTILITIES
    ======================== */
 
-/* Primary buttons - Bold Alibaba orange */
+/* Primary buttons - bold commerce orange */
 .btn-primary {
   @apply bg-[#FF6700] text-white font-semibold py-2 px-4 rounded-lg hover:bg-[#E55100] transition-colors duration-200 shadow-md hover:shadow-lg;
 }
@@ -87,17 +87,17 @@
   @apply inline-block bg-[#F6FFED] text-[#52C41A] px-3 py-1 rounded-full text-sm font-medium;
 }
 
-/* Links - Alibaba style */
+/* Links - commerce style */
 .link-primary {
   @apply text-[#FF6700] font-medium hover:text-[#E55100] transition-colors duration-200;
 }
 
-/* Product grid - Optimized for Alibaba-style display */
+/* Product grid - optimized for dense commerce display */
 .product-grid {
   @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4;
 }
 
-/* Centralized styles for consistent Alibaba look */
+/* Centralized styles for consistent commerce look */
 
 .hero-overlay {
     @apply absolute inset-0 bg-gradient-to-r from-[#212121]/80 via-[#212121]/60 to-transparent;
@@ -127,7 +127,7 @@
   filter: none !important;
 }
 
-/* Alibaba-style hover effects */
+/* Commerce-style hover effects */
 .hover-lift {
   @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
 }
@@ -150,6 +150,19 @@
 /* Navigation bar - Clean and minimal */
 .navbar-alibaba {
   @apply bg-white border-b border-[#EEEEEE] shadow-sm sticky top-0 z-40;
+}
+
+.navbar-alibaba .search-bar-alibaba {
+  @apply rounded-md;
+}
+
+.footer-commerce {
+  @apply border-t border-[#303030];
+}
+
+.footer-commerce button,
+.footer-commerce a {
+  @apply leading-tight;
 }
 
 /* Section background - Light gray for contrast */

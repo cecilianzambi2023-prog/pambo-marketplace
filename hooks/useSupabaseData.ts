@@ -15,9 +15,15 @@ import {
   fetchAllSellers,
   fetchFarmerProfiles,
   fetchLiveStreams,
-  fetchBuyingRequests,
+  fetchBuyingRequests
 } from '../services/supabaseService';
-import { DatabaseListing, DatabaseUser, DatabaseFarmerProfile, DatabaseLiveStream, DatabaseBuyingRequest } from '../types/database';
+import {
+  DatabaseListing,
+  DatabaseUser,
+  DatabaseFarmerProfile,
+  DatabaseLiveStream,
+  DatabaseBuyingRequest
+} from '../types/database';
 
 // ============================================
 // TYPES
@@ -40,20 +46,20 @@ interface CacheEntry<T> {
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 const cacheStore = new Map<string, CacheEntry<any>>();
 
-const getCachedData = <T,>(key: string): T | null => {
+const getCachedData = <T>(key: string): T | null => {
   const entry = cacheStore.get(key);
   if (!entry) return null;
-  
+
   const now = Date.now();
   if (now - entry.timestamp > CACHE_TTL) {
     cacheStore.delete(key);
     return null;
   }
-  
+
   return entry.data;
 };
 
-const setCachedData = <T,>(key: string, data: T): void => {
+const setCachedData = <T>(key: string, data: T): void => {
   cacheStore.set(key, { data, timestamp: Date.now() });
 };
 
@@ -62,7 +68,7 @@ const invalidateCache = (pattern?: string): void => {
     cacheStore.clear();
     return;
   }
-  
+
   cacheStore.forEach((_, key) => {
     if (key.includes(pattern)) {
       cacheStore.delete(key);
@@ -101,7 +107,7 @@ export const useListingsByHub = (
       abortControllerRef.current = new AbortController();
 
       const listings = await fetchListingsByHub(hub);
-      
+
       if (listings) {
         setCachedData(cacheKey, listings);
         setData(listings);
@@ -128,7 +134,7 @@ export const useListingsByHub = (
     data,
     loading,
     error,
-    refetch: fetchData,
+    refetch: fetchData
   };
 };
 
@@ -186,20 +192,23 @@ export const useSearchListings = (
   const [error, setError] = useState<string | null>(null);
   const debounceTimerRef = useRef<NodeJS.Timeout>();
 
-  const fetchData = useCallback(async (query: string) => {
-    try {
-      setLoading(true);
-      setError(null);
+  const fetchData = useCallback(
+    async (query: string) => {
+      try {
+        setLoading(true);
+        setError(null);
 
-      const listings = await searchListings(query, hub);
-      setData(listings || []);
-    } catch (err: any) {
-      setError(err.message || 'Search failed');
-      console.error('Error searching listings:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, [hub]);
+        const listings = await searchListings(query, hub);
+        setData(listings || []);
+      } catch (err: any) {
+        setError(err.message || 'Search failed');
+        console.error('Error searching listings:', err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [hub]
+  );
 
   useEffect(() => {
     if (!keyword.trim()) {
@@ -227,7 +236,7 @@ export const useSearchListings = (
     data,
     loading,
     error,
-    refetch: () => fetchData(keyword),
+    refetch: () => fetchData(keyword)
   };
 };
 
@@ -443,7 +452,9 @@ export const useFarmerProfiles = (): UseDataReturn<DatabaseFarmerProfile[]> => {
 /**
  * Fetch live streams
  */
-export const useLiveStreams = (status?: 'live' | 'upcoming' | 'ended'): UseDataReturn<DatabaseLiveStream[]> => {
+export const useLiveStreams = (
+  status?: 'live' | 'upcoming' | 'ended'
+): UseDataReturn<DatabaseLiveStream[]> => {
   const [data, setData] = useState<DatabaseLiveStream[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -527,5 +538,5 @@ export const useBuyingRequests = (status?: string): UseDataReturn<DatabaseBuying
 // ============================================
 export const useCache = () => ({
   invalidate: invalidateCache,
-  clear: () => cacheStore.clear(),
+  clear: () => cacheStore.clear()
 });

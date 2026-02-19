@@ -22,7 +22,7 @@ export const SecondhandListingModal: React.FC<SecondhandListingModalProps> = ({
   isOpen,
   categories,
   onClose,
-  onSubmit,
+  onSubmit
 }) => {
   const [formData, setFormData] = useState({
     title: '',
@@ -33,17 +33,19 @@ export const SecondhandListingModal: React.FC<SecondhandListingModalProps> = ({
     county: '',
     city: '',
     photoUrls: '',
-    videoUrls: '',
+    videoUrls: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'price' ? Number(value) : value,
+      [name]: name === 'price' ? Number(value) : value
     }));
   };
 
@@ -78,7 +80,7 @@ export const SecondhandListingModal: React.FC<SecondhandListingModalProps> = ({
         county: formData.county || undefined,
         city: formData.city || undefined,
         photos,
-        videos,
+        videos
       });
 
       setFormData({
@@ -90,7 +92,7 @@ export const SecondhandListingModal: React.FC<SecondhandListingModalProps> = ({
         county: '',
         city: '',
         photoUrls: '',
-        videoUrls: '',
+        videoUrls: ''
       });
     } finally {
       setIsSubmitting(false);
@@ -137,7 +139,9 @@ export const SecondhandListingModal: React.FC<SecondhandListingModalProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Price (KES) *</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Price (KES) *
+              </label>
               <div className="flex items-center gap-2">
                 <DollarSign size={18} className="text-gray-500" />
                 <input
@@ -178,7 +182,9 @@ export const SecondhandListingModal: React.FC<SecondhandListingModalProps> = ({
               >
                 <option value="">Select category</option>
                 {categories.map((cat) => (
-                  <option key={cat.slug} value={cat.slug}>{cat.name}</option>
+                  <option key={cat.slug} value={cat.slug}>
+                    {cat.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -226,7 +232,13 @@ export const SecondhandListingModal: React.FC<SecondhandListingModalProps> = ({
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
               />
               <p className="text-xs text-gray-500 mt-1">
-                {formData.photoUrls.split('\n').map((v) => v.trim()).filter(Boolean).length}/10
+                {
+                  formData.photoUrls
+                    .split('\n')
+                    .map((v) => v.trim())
+                    .filter(Boolean).length
+                }
+                /10
               </p>
             </div>
             <div>
@@ -242,13 +254,23 @@ export const SecondhandListingModal: React.FC<SecondhandListingModalProps> = ({
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
               />
               <p className="text-xs text-gray-500 mt-1">
-                {formData.videoUrls.split('\n').map((v) => v.trim()).filter(Boolean).length}/2
+                {
+                  formData.videoUrls
+                    .split('\n')
+                    .map((v) => v.trim())
+                    .filter(Boolean).length
+                }
+                /2
               </p>
             </div>
           </div>
 
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50"
+            >
               Cancel
             </button>
             <button

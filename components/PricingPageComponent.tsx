@@ -9,7 +9,9 @@ export const PricingPageComponent: React.FC = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: { user }
+        } = await supabase.auth.getUser();
         if (user) {
           setUserId(user.id);
         } else {
@@ -47,7 +49,8 @@ export const PricingPageComponent: React.FC = () => {
             Simple, Transparent Pricing
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Choose the perfect plan for your business. 0% commission on all sales, direct payments to your account.
+            Choose the perfect plan for your business. 0% commission on all sales, direct payments
+            to your account.
           </p>
         </div>
 
@@ -69,9 +72,7 @@ export const PricingPageComponent: React.FC = () => {
       </div>
 
       {/* Pricing Grid */}
-      <div className="max-w-7xl mx-auto">
-        {userId && <PricingGrid userId={userId} />}
-      </div>
+      <div className="max-w-7xl mx-auto">{userId && <PricingGrid userId={userId} />}</div>
 
       {/* FAQ Section */}
       <div className="max-w-4xl mx-auto mt-20 bg-white rounded-lg p-8">
@@ -82,7 +83,8 @@ export const PricingPageComponent: React.FC = () => {
               Can I upgrade or downgrade my plan?
             </h3>
             <p className="text-gray-600">
-              Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.
+              Yes! You can upgrade or downgrade your plan at any time. Changes take effect
+              immediately.
             </p>
           </div>
           <div>
@@ -94,19 +96,17 @@ export const PricingPageComponent: React.FC = () => {
             </p>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              What happens after I pay?
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">What happens after I pay?</h3>
             <p className="text-gray-600">
-              Your subscription activates immediately after payment confirmation. You'll receive an SMS and can start using all features.
+              Your subscription activates immediately after payment confirmation. You'll receive an
+              SMS and can start using all features.
             </p>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              Is there a free trial?
-            </h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">Is there a free trial?</h3>
             <p className="text-gray-600">
-              We don't offer a free trial, but you can start with the Mkulima Starter plan (KES 1,500 yearly) with minimal commitment.
+              We don't offer a free trial, but you can start with the Mkulima Starter plan (KES
+              1,500 yearly) with minimal commitment.
             </p>
           </div>
         </div>

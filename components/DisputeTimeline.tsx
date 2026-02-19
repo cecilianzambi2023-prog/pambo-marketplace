@@ -1,7 +1,7 @@
 /**
  * Dispute Timeline Chat Component - KENYA ONLY
  * Shows real-time chat timeline for dispute resolution
- * 
+ *
  * Features:
  * - Real-time messaging
  * - Role-based views (buyer/seller/admin)
@@ -25,7 +25,7 @@ import {
   User,
   Shield,
   X,
-  MessageSquare,
+  MessageSquare
 } from 'lucide-react';
 import { getDisputeDetails, addDisputeMessage } from '../services/disputeService';
 
@@ -50,7 +50,7 @@ export const DisputeTimeline: React.FC<DisputeTimelineProps> = ({
   dispute_id,
   user_id,
   user_role,
-  onResolve,
+  onResolve
 }) => {
   const [messages, setMessages] = useState<DisputeMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -126,7 +126,7 @@ export const DisputeTimeline: React.FC<DisputeTimelineProps> = ({
       if (result.success) {
         setNewMessage('');
         setAttachment(null);
-        
+
         // Reload messages
         await loadDisputeDetails();
       } else {
@@ -204,11 +204,11 @@ export const DisputeTimeline: React.FC<DisputeTimelineProps> = ({
               Dispute opened {new Date(dispute.created_at).toLocaleDateString()}
             </p>
           </div>
-          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-            isResolved
-              ? 'bg-green-100 text-green-700'
-              : 'bg-blue-100 text-blue-700'
-          }`}>
+          <span
+            className={`px-3 py-1 rounded-full text-xs font-semibold ${
+              isResolved ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+            }`}
+          >
             {isResolved ? '✅ Resolved' : dispute.status.replace('_', ' ')}
           </span>
         </div>
@@ -224,7 +224,7 @@ export const DisputeTimeline: React.FC<DisputeTimelineProps> = ({
             </div>
           </div>
         ) : (
-          messages.map(msg => {
+          messages.map((msg) => {
             const isOwnMessage = msg.sender_id === user_id;
             return (
               <div
@@ -236,14 +236,16 @@ export const DisputeTimeline: React.FC<DisputeTimelineProps> = ({
                     isOwnMessage
                       ? 'bg-orange-100 text-orange-900 border border-orange-300'
                       : msg.sender_role === 'admin'
-                      ? 'bg-red-50 text-red-900 border border-red-200'
-                      : 'bg-gray-100 text-gray-900 border border-gray-200'
+                        ? 'bg-red-50 text-red-900 border border-red-200'
+                        : 'bg-gray-100 text-gray-900 border border-gray-200'
                   }`}
                 >
                   {/* Sender Badge */}
-                  <div className={`text-xs font-semibold mb-1 flex items-center gap-1 ${
-                    getRoleColor(msg.sender_role)
-                  }`}>
+                  <div
+                    className={`text-xs font-semibold mb-1 flex items-center gap-1 ${getRoleColor(
+                      msg.sender_role
+                    )}`}
+                  >
                     {getRoleIcon(msg.sender_role)}
                     {getRoleLabel(msg.sender_role)}
                   </div>
@@ -267,9 +269,7 @@ export const DisputeTimeline: React.FC<DisputeTimelineProps> = ({
                   )}
 
                   {/* Timestamp */}
-                  <p className={`text-xs mt-2 opacity-70`}>
-                    {formatTime(msg.created_at)}
-                  </p>
+                  <p className={`text-xs mt-2 opacity-70`}>{formatTime(msg.created_at)}</p>
                 </div>
               </div>
             );
@@ -301,7 +301,7 @@ export const DisputeTimeline: React.FC<DisputeTimelineProps> = ({
             <div className="flex gap-2">
               <textarea
                 value={newMessage}
-                onChange={e => setNewMessage(e.target.value)}
+                onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Type your message..."
                 maxLength={500}
                 rows={2}

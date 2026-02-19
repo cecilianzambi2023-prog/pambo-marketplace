@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": false
+  },
+  "files": [
+    "index.tsx",
+    "App.tsx",
+    "vite.config.ts",
+    "capacitor.config.ts"
+  ],
+  "include": [
+    "vite-env.d.ts",
+    "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "backend/**",
+    "dist/**",
+    "node_modules/**",
+    "android/**",
+    "ios/**",
+    "App.example.tsx",
+    "APP_INTEGRATION_EXAMPLE.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "services/supabase/**",
+    "supabase/**"
+  ]
+}

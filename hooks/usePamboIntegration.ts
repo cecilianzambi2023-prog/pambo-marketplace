@@ -9,7 +9,7 @@ import {
   getUserProfile,
   getSellerProfile,
   followSeller,
-  unfollowSeller,
+  unfollowSeller
 } from '../services/authService';
 import {
   getListingsByHub,
@@ -17,16 +17,10 @@ import {
   getListing,
   searchListings,
   getFeaturedListings,
-  getTrendingListings,
+  getTrendingListings
 } from '../services/listingsService';
-import {
-  getBuyerOrders,
-  getSellerOrders,
-} from '../services/ordersService';
-import {
-  getListingReviews,
-  getSellerReviews,
-} from '../services/reviewsService';
+import { getBuyerOrders, getSellerOrders } from '../services/ordersService';
+import { getListingReviews, getSellerReviews } from '../services/reviewsService';
 import { User, PamboListing, PamboOrder, PamboReview, PamboHub } from '../types';
 
 // ============================================
@@ -183,10 +177,7 @@ export const useTrendingListings = (hub?: PamboHub, limit = 10) => {
 // ============================================
 // SEARCH HOOK
 // ============================================
-export const useSearchListings = (
-  searchTerm: string,
-  filters?: any,
-) => {
+export const useSearchListings = (searchTerm: string, filters?: any) => {
   const [listings, setListings] = useState<PamboListing[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [total, setTotal] = useState(0);
@@ -199,10 +190,7 @@ export const useSearchListings = (
 
     const fetchResults = async () => {
       setIsLoading(true);
-      const { success, listings: data, total: count } = await searchListings(
-        searchTerm,
-        filters
-      );
+      const { success, listings: data, total: count } = await searchListings(searchTerm, filters);
       if (success) {
         setListings(data);
         setTotal(count);
@@ -448,5 +436,5 @@ export default {
   useSellerProfile,
   useListingReviews,
   useSellerReviews,
-  useFollowSeller,
+  useFollowSeller
 };

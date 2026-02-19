@@ -1,10 +1,10 @@
 /**
  * ProfessionalPortfolioGallery.tsx
  * ==================================
- * 
+ *
  * Gallery component for professional's portfolio.
  * Displays up to 10 high-resolution images and videos.
- * 
+ *
  * FEATURES:
  * - Masonry grid layout (mobile-responsive)
  * - Lightbox modal for full view
@@ -24,7 +24,7 @@ interface ProfessionalPortfolioGalleryProps {
 
 export const ProfessionalPortfolioGallery: React.FC<ProfessionalPortfolioGalleryProps> = ({
   media,
-  professionalName,
+  professionalName
 }) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -58,11 +58,7 @@ export const ProfessionalPortfolioGallery: React.FC<ProfessionalPortfolioGallery
       {/* GALLERY GRID */}
       <div className="portfolio-gallery">
         {media.map((item, index) => (
-          <div
-            key={item.id}
-            className="gallery-item"
-            onClick={() => openLightbox(index)}
-          >
+          <div key={item.id} className="gallery-item" onClick={() => openLightbox(index)}>
             {item.media_type === 'image' ? (
               <>
                 <img src={item.media_url} alt={item.title} loading="lazy" />
@@ -96,7 +92,11 @@ export const ProfessionalPortfolioGallery: React.FC<ProfessionalPortfolioGallery
             {/* MAIN CONTENT */}
             <div className="lightbox-content">
               {currentMedia.media_type === 'image' ? (
-                <img src={currentMedia.media_url} alt={currentMedia.title} className="lightbox-image" />
+                <img
+                  src={currentMedia.media_url}
+                  alt={currentMedia.title}
+                  className="lightbox-image"
+                />
               ) : (
                 <div className="lightbox-video-container">
                   <video

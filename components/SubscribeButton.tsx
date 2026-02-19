@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { CreditCard, Loader2, CheckCircle, AlertCircle, Phone } from 'lucide-react';
-import { initiateMPesaSTKPush, SUBSCRIPTION_TIERS, getTierPrice, getTierName, formatPhoneForMPesa, isValidMPesaPhone } from '../services/mpesaService';
+import {
+  initiateMPesaSTKPush,
+  SUBSCRIPTION_TIERS,
+  getTierPrice,
+  getTierName,
+  formatPhoneForMPesa,
+  isValidMPesaPhone
+} from '../services/mpesaService';
 
 interface SubscribeButtonProps {
   tier: string; // 'mkulima' | 'starter' | 'pro' | 'enterprise'
@@ -21,7 +28,7 @@ export const SubscribeButton: React.FC<SubscribeButtonProps> = ({
   onError,
   size = 'md',
   variant = 'primary',
-  fullWidth = false,
+  fullWidth = false
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -56,7 +63,9 @@ export const SubscribeButton: React.FC<SubscribeButtonProps> = ({
 
     // Validate phone
     if (!isValidMPesaPhone(phoneNumber)) {
-      setErrorMessage('Please enter a valid Kenyan phone number (e.g., 0712345678 or 254712345678)');
+      setErrorMessage(
+        'Please enter a valid Kenyan phone number (e.g., 0712345678 or 254712345678)'
+      );
       return;
     }
 
@@ -75,13 +84,16 @@ export const SubscribeButton: React.FC<SubscribeButtonProps> = ({
         phone_number: formattedPhone,
         amount: price,
         tier: tier,
-        user_id: userId,
+        user_id: userId
       });
 
       console.log('✅ STK Push response:', response);
 
       if (response.success && response.data) {
-        console.log('🎉 Payment initiated successfully! Merchant Request ID:', response.data.merchantRequestId);
+        console.log(
+          '🎉 Payment initiated successfully! Merchant Request ID:',
+          response.data.merchantRequestId
+        );
         // Payment initiated successfully
         setMerchantRequestId(response.data.merchantRequestId);
         setStep('success');
@@ -120,16 +132,18 @@ export const SubscribeButton: React.FC<SubscribeButtonProps> = ({
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg',
+    lg: 'px-6 py-3 text-lg'
   };
 
   const variantClasses = {
-    primary: 'bg-gradient-to-r from-orange-600 to-amber-600 text-white hover:shadow-lg hover:from-orange-700 hover:to-amber-700',
+    primary:
+      'bg-gradient-to-r from-orange-600 to-amber-600 text-white hover:shadow-lg hover:from-orange-700 hover:to-amber-700',
     secondary: 'bg-blue-600 text-white hover:bg-blue-700',
-    outline: 'border-2 border-orange-600 text-orange-600 hover:bg-orange-50',
+    outline: 'border-2 border-orange-600 text-orange-600 hover:bg-orange-50'
   };
 
-  const baseClasses = 'font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 justify-center';
+  const baseClasses =
+    'font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 justify-center';
   const widthClass = fullWidth ? 'w-full' : '';
 
   return (
@@ -181,7 +195,10 @@ export const SubscribeButton: React.FC<SubscribeButtonProps> = ({
                         M-Pesa Phone Number
                       </label>
                       <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                        <Phone
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                          size={18}
+                        />
                         <input
                           type="tel"
                           placeholder="0712345678 or 254712345678"
@@ -195,7 +212,8 @@ export const SubscribeButton: React.FC<SubscribeButtonProps> = ({
                         Enter your M-Pesa registered phone number
                       </p>
                       <p className="text-xs text-gray-600 mt-3 p-2 bg-blue-50 rounded border border-blue-200">
-                        📱 Please keep your phone unlocked. You will receive an M-Pesa prompt to enter your PIN.
+                        📱 Please keep your phone unlocked. You will receive an M-Pesa prompt to
+                        enter your PIN.
                       </p>
                     </div>
 
@@ -232,9 +250,7 @@ export const SubscribeButton: React.FC<SubscribeButtonProps> = ({
                 <div className="text-center py-8">
                   <Loader2 className="animate-spin text-orange-600 mx-auto mb-4" size={48} />
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">Processing Payment</h3>
-                  <p className="text-gray-600">
-                    Check your phone for the M-Pesa payment prompt
-                  </p>
+                  <p className="text-gray-600">Check your phone for the M-Pesa payment prompt</p>
                   <p className="text-sm text-gray-500 mt-3">
                     Enter your M-Pesa PIN to complete payment
                   </p>
@@ -250,12 +266,11 @@ export const SubscribeButton: React.FC<SubscribeButtonProps> = ({
                   </p>
                   <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 text-left text-sm">
                     <p className="text-gray-700">
-                      <span className="font-semibold">Your subscription will activate</span> once you complete the M-Pesa payment on your phone
+                      <span className="font-semibold">Your subscription will activate</span> once
+                      you complete the M-Pesa payment on your phone
                     </p>
                   </div>
-                  <p className="text-xs text-gray-500 mt-4">
-                    Closing in 3 seconds...
-                  </p>
+                  <p className="text-xs text-gray-500 mt-4">Closing in 3 seconds...</p>
                 </div>
               )}
 

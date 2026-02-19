@@ -13,22 +13,10 @@ interface LoadingStateProps {
 }
 
 const SkeletonCard: React.FC = () => (
-  <div
-    className="p-4 rounded-lg animate-pulse"
-    style={{ background: COLORS.gray[100] }}
-  >
-    <div
-      className="h-48 rounded-md mb-4"
-      style={{ background: COLORS.gray[200] }}
-    />
-    <div
-      className="h-4 rounded mb-2"
-      style={{ background: COLORS.gray[200], width: '70%' }}
-    />
-    <div
-      className="h-4 rounded"
-      style={{ background: COLORS.gray[200], width: '40%' }}
-    />
+  <div className="p-4 rounded-lg animate-pulse" style={{ background: COLORS.gray[100] }}>
+    <div className="h-48 rounded-md mb-4" style={{ background: COLORS.gray[200] }} />
+    <div className="h-4 rounded mb-2" style={{ background: COLORS.gray[200], width: '70%' }} />
+    <div className="h-4 rounded" style={{ background: COLORS.gray[200], width: '40%' }} />
   </div>
 );
 
@@ -54,7 +42,7 @@ const SkeletonListItem: React.FC = () => (
 export const LoadingState: React.FC<LoadingStateProps> = ({
   message = LOADING_COPY.loading,
   count = 6,
-  variant = 'grid',
+  variant = 'grid'
 }) => {
   const items = Array.from({ length: count });
 
@@ -69,7 +57,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
               borderTop: `2px solid ${COLORS.primary[500]}`,
               borderRight: `2px solid ${COLORS.gray[200]}`,
               borderBottom: `2px solid ${COLORS.gray[200]}`,
-              borderLeft: `2px solid ${COLORS.gray[200]}`,
+              borderLeft: `2px solid ${COLORS.gray[200]}`
             }}
           />
           <p style={{ color: COLORS.gray[600] }}>{message}</p>

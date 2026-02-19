@@ -10,8 +10,14 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const readEnv = (key: string): string => {
+  const viteEnv = (typeof import.meta !== 'undefined' ? import.meta.env : undefined) as Record<string, string | undefined> | undefined;
+  const processEnv = typeof process !== 'undefined' ? process.env : undefined;
+  return viteEnv?.[key] || processEnv?.[key] || '';
+};
+
+const supabaseUrl = readEnv('VITE_SUPABASE_URL') || readEnv('SUPABASE_URL');
+const supabaseAnonKey = readEnv('VITE_SUPABASE_ANON_KEY') || readEnv('SUPABASE_ANON_KEY');
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -160,7 +166,12 @@ export const liquidityCronHandler = async () => {
 };
 
 // For local testing
-if (require.main === module) {
+const canRunAsMain =
+  typeof require !== 'undefined' &&
+  typeof module !== 'undefined' &&
+  require.main === module;
+
+if (canRunAsMain) {
   liquidityCronHandler().then((result) => {
     console.log('\nFinal Result:', result);
     process.exit(result.success ? 0 : 1);

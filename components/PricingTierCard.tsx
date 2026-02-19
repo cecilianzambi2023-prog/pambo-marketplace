@@ -9,7 +9,11 @@ interface PricingTierCardProps {
   isPopular?: boolean;
 }
 
-export const PricingTierCard: React.FC<PricingTierCardProps> = ({ tier, userId, isPopular = false }) => {
+export const PricingTierCard: React.FC<PricingTierCardProps> = ({
+  tier,
+  userId,
+  isPopular = false
+}) => {
   const tierInfo = SUBSCRIPTION_TIERS[tier as keyof typeof SUBSCRIPTION_TIERS];
   const price = getTierPrice(tier);
   const hubs = getTierHubs(tier);
@@ -22,7 +26,7 @@ export const PricingTierCard: React.FC<PricingTierCardProps> = ({ tier, userId, 
     { label: 'Tier level', value: tierInfo.name },
     { label: 'Support', value: tier === 'enterprise' ? 'Priority' : 'Standard' },
     { label: 'Direct connect', value: 'Yes' },
-    { label: 'Commission', value: '0%' },
+    { label: 'Commission', value: '0%' }
   ];
 
   return (
@@ -65,9 +69,14 @@ export const PricingTierCard: React.FC<PricingTierCardProps> = ({ tier, userId, 
       <div className={`px-6 py-6 space-y-3 ${isPopular ? 'text-orange-50' : 'text-gray-600'}`}>
         {features.map((feature, idx) => (
           <div key={idx} className="flex items-start gap-3">
-            <Check className={`${isPopular ? 'text-orange-200' : 'text-orange-500'} shrink-0 mt-1`} size={18} />
+            <Check
+              className={`${isPopular ? 'text-orange-200' : 'text-orange-500'} shrink-0 mt-1`}
+              size={18}
+            />
             <div>
-              <div className={`text-sm font-medium ${isPopular ? 'text-orange-100' : 'text-gray-700'}`}>
+              <div
+                className={`text-sm font-medium ${isPopular ? 'text-orange-100' : 'text-gray-700'}`}
+              >
                 {feature.label}
               </div>
               <div className={`text-xs ${isPopular ? 'text-orange-200' : 'text-gray-500'}`}>
@@ -122,12 +131,7 @@ export const PricingGrid: React.FC<PricingGridProps> = ({ userId }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-12">
       {tiers.map((tier) => (
-        <PricingTierCard
-          key={tier}
-          tier={tier}
-          userId={userId}
-          isPopular={tier === popularTier}
-        />
+        <PricingTierCard key={tier} tier={tier} userId={userId} isPopular={tier === popularTier} />
       ))}
     </div>
   );

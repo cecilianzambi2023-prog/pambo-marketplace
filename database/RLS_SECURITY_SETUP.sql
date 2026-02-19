@@ -150,6 +150,17 @@ CREATE POLICY "Buyers can update own reviews"
 ON reviews FOR UPDATE
 USING (buyerId = auth.uid());
 
+-- Only admins can delete reviews (sellers/buyers cannot delete)
+CREATE POLICY "Admins can delete reviews"
+ON reviews FOR DELETE
+USING (
+  EXISTS (
+    SELECT 1 FROM users
+    WHERE users.id = auth.uid()
+    AND users.role = 'admin'
+  )
+);
+
 /**
  * =====================================================
  * 6. PAYMENTS TABLE POLICIES (CRITICAL - NEVER EXPOSE TO FRONTEND)

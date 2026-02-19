@@ -1,7 +1,7 @@
 /**
  * Seller KYC Form Component - KENYA ONLY
  * Allows Kenyan sellers to upload identity & business verification documents
- * 
+ *
  * Features:
  * - Kenyan National ID verification
  * - KRA PIN & Business License upload
@@ -13,7 +13,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { Upload, Check, AlertCircle, FileText, Loader2, X, CheckCircle, Clock } from 'lucide-react';
-import { uploadKYCDocument, getSellerKYCStatus, SellerKYCStatus, KENYA_DOCUMENT_TYPES } from '../services/kycService';
+import {
+  uploadKYCDocument,
+  getSellerKYCStatus,
+  SellerKYCStatus,
+  KENYA_DOCUMENT_TYPES
+} from '../services/kycService';
 
 interface SellerKYCFormProps {
   seller_id: string;
@@ -25,7 +30,11 @@ type DocumentType = 'national_id' | 'kra_pin' | 'cr_certificate' | 'business_lic
 
 const DOCUMENT_TYPES = KENYA_DOCUMENT_TYPES;
 
-export const SellerKYCForm: React.FC<SellerKYCFormProps> = ({ seller_id, onClose, onSubmitSuccess }) => {
+export const SellerKYCForm: React.FC<SellerKYCFormProps> = ({
+  seller_id,
+  onClose,
+  onSubmitSuccess
+}) => {
   // Form state
   const [selectedDocType, setSelectedDocType] = useState<DocumentType>('national_id');
   const [file, setFile] = useState<File | null>(null);
@@ -99,7 +108,7 @@ export const SellerKYCForm: React.FC<SellerKYCFormProps> = ({ seller_id, onClose
 
       // Simulate progress
       setUploadProgress(30);
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setUploadProgress(60);
 
       // Upload
@@ -148,7 +157,8 @@ export const SellerKYCForm: React.FC<SellerKYCFormProps> = ({ seller_id, onClose
           🛡️ Kenya Seller Verification
         </h2>
         <p className="text-gray-600 text-sm mt-1">
-          Verify your identity as a Kenyan seller. Upload documents to build trust with buyers. Verified sellers get a trust badge ✅
+          Verify your identity as a Kenyan seller. Upload documents to build trust with buyers.
+          Verified sellers get a trust badge ✅
         </p>
       </div>
 
@@ -160,11 +170,15 @@ export const SellerKYCForm: React.FC<SellerKYCFormProps> = ({ seller_id, onClose
               <p className="font-semibold text-blue-900">Your Kenya Verification Status</p>
               <div className="mt-2 grid grid-cols-3 gap-4 text-sm">
                 <div>
-                  <span className="font-semibold text-blue-700">{kycStatus.verified_documents_count}</span>
+                  <span className="font-semibold text-blue-700">
+                    {kycStatus.verified_documents_count}
+                  </span>
                   <p className="text-blue-600">Approved Doc</p>
                 </div>
                 <div>
-                  <span className="font-semibold text-blue-700">{kycStatus.pending_review_count}</span>
+                  <span className="font-semibold text-blue-700">
+                    {kycStatus.pending_review_count}
+                  </span>
                   <p className="text-blue-600">Under Review</p>
                 </div>
                 <div>
@@ -188,15 +202,15 @@ export const SellerKYCForm: React.FC<SellerKYCFormProps> = ({ seller_id, onClose
         <div className="mb-6">
           <h3 className="font-semibold text-gray-900 mb-3">Your Documents</h3>
           <div className="space-y-2">
-            {kycStatus.documents.map(doc => (
+            {kycStatus.documents.map((doc) => (
               <div
                 key={doc.id}
                 className={`p-3 rounded-lg border-2 flex items-center justify-between ${
                   doc.status === 'approved'
                     ? 'bg-green-50 border-green-200'
                     : doc.status === 'rejected'
-                    ? 'bg-red-50 border-red-200'
-                    : 'bg-yellow-50 border-yellow-200'
+                      ? 'bg-red-50 border-red-200'
+                      : 'bg-yellow-50 border-yellow-200'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -228,9 +242,7 @@ export const SellerKYCForm: React.FC<SellerKYCFormProps> = ({ seller_id, onClose
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Document Type Selector */}
         <div>
-          <label className="block text-sm font-semibold text-gray-900 mb-3">
-            Document Type *
-          </label>
+          <label className="block text-sm font-semibold text-gray-900 mb-3">Document Type *</label>
           <div className="grid grid-cols-2 gap-3">
             {Object.entries(DOCUMENT_TYPES).map(([type, info]) => (
               <button
@@ -245,9 +257,7 @@ export const SellerKYCForm: React.FC<SellerKYCFormProps> = ({ seller_id, onClose
               >
                 <p className="text-xl mb-1">{info.icon}</p>
                 <p className="font-semibold text-sm text-gray-900">{info.label}</p>
-                {info.isRequired && (
-                  <p className="text-xs text-red-600 font-semibold">Required</p>
-                )}
+                {info.isRequired && <p className="text-xs text-red-600 font-semibold">Required</p>}
               </button>
             ))}
           </div>
@@ -295,19 +305,19 @@ export const SellerKYCForm: React.FC<SellerKYCFormProps> = ({ seller_id, onClose
             <input
               type="text"
               value={documentNumber}
-              onChange={e => setDocumentNumber(e.target.value)}
-              placeholder={selectedDocType === 'national_id' ? 'e.g., 12345678-0001-01' : 'e.g., 12345678'}
+              onChange={(e) => setDocumentNumber(e.target.value)}
+              placeholder={
+                selectedDocType === 'national_id' ? 'e.g., 12345678-0001-01' : 'e.g., 12345678'
+              }
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-900 mb-2">
-              Issued Date *
-            </label>
+            <label className="block text-sm font-semibold text-gray-900 mb-2">Issued Date *</label>
             <input
               type="date"
               value={issuedDate}
-              onChange={e => setIssuedDate(e.target.value)}
+              onChange={(e) => setIssuedDate(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             />
           </div>
@@ -321,7 +331,7 @@ export const SellerKYCForm: React.FC<SellerKYCFormProps> = ({ seller_id, onClose
           <input
             type="date"
             value={expiryDate}
-            onChange={e => setExpiryDate(e.target.value)}
+            onChange={(e) => setExpiryDate(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
           />
         </div>
@@ -391,8 +401,9 @@ export const SellerKYCForm: React.FC<SellerKYCFormProps> = ({ seller_id, onClose
       {/* Info Box */}
       <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
         <p className="text-sm text-blue-900">
-          <strong>⏱️ What happens next?</strong> Our admin team reviews uploaded documents within 24-48 hours.
-          Once approved, you'll get a trust badge on your profile and get more visibility! 🚀
+          <strong>⏱️ What happens next?</strong> Our admin team reviews uploaded documents within
+          24-48 hours. Once approved, you'll get a trust badge on your profile and get more
+          visibility! 🚀
         </p>
       </div>
     </div>

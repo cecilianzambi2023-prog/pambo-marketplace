@@ -4,12 +4,13 @@
  * Handles loading, error, and empty states with professional branding
  */
 
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { Star, MapPin, Zap } from 'lucide-react';
 import { DatabaseListing } from '../types/database';
 import { COLORS, EMPTY_STATES, CTA_COPY } from '../config/brand';
 import EmptyState from './EmptyState';
 import LoadingState from './LoadingState';
+import { SmartImage } from './SmartImage';
 
 interface ListingsGridProps {
   listings: DatabaseListing[];
@@ -30,12 +31,14 @@ interface ListingCardProps {
 /**
  * Listing Card Component
  */
-const ListingCard: React.FC<ListingCardProps> = ({ listing, onClick }) => {
-  const imageUrl = listing.images?.[0] || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400&auto=format&fit=crop';
-  
+const ListingCard: React.FC<ListingCardProps> = memo(({ listing, onClick }) => {
+  const imageUrl =
+    listing.images?.[0] ||
+    'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400&auto=format&fit=crop';
+
   // Fallback to generic products image if none provided
-  const displayImage = imageUrl.startsWith('http') 
-    ? imageUrl 
+  const displayImage = imageUrl.startsWith('http')
+    ? imageUrl
     : 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400&auto=format&fit=crop';
 
   return (
@@ -44,21 +47,13 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onClick }) => {
       onClick={onClick}
       style={{
         background: 'white',
-        border: `1px solid ${COLORS.gray[200]}`,
+        border: `1px solid ${COLORS.gray[200]}`
       }}
     >
       {/* Image */}
       <div className="relative w-full h-48 overflow-hidden bg-gray-100">
-        <img
-          src={displayImage}
-          alt={listing.title}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src = 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400&auto=format&fit=crop';
-          }}
-        />
-        
+        <SmartImage src={displayImage} alt={listing.title} className="w-full h-full object-cover" />
+
         {/* Badge - Hub Type */}
         <div
           className="absolute top-2 left-2 px-2 py-1 rounded-full text-xs font-semibold text-white"
@@ -79,7 +74,10 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onClick }) => {
 
         {/* Live Indicator */}
         {listing.isLiveNow && (
-          <div className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold text-white" style={{ background: COLORS.danger }}>
+          <div
+            className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold text-white"
+            style={{ background: COLORS.danger }}
+          >
             <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
             LIVE
           </div>
@@ -102,7 +100,10 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onClick }) => {
         )}
 
         {/* Category */}
-        <div className="text-xs mb-3 px-2 py-1 rounded-full inline-block" style={{ background: COLORS.primary[50], color: COLORS.primary[600] }}>
+        <div
+          className="text-xs mb-3 px-2 py-1 rounded-full inline-block"
+          style={{ background: COLORS.primary[50], color: COLORS.primary[600] }}
+        >
           {listing.category}
         </div>
 
@@ -120,7 +121,10 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onClick }) => {
 
         {/* Service Type Indicator */}
         {listing.serviceType && (
-          <div className="flex items-center gap-1 text-xs mb-3" style={{ color: COLORS.secondary[600] }}>
+          <div
+            className="flex items-center gap-1 text-xs mb-3"
+            style={{ color: COLORS.secondary[600] }}
+          >
             <Zap size={14} />
             {listing.serviceType}
           </div>
@@ -129,7 +133,9 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onClick }) => {
         {/* CTA Button */}
         <button
           className="w-full py-2 rounded-lg font-semibold text-white transition-all hover:shadow-md"
-          style={{ background: `linear-gradient(135deg, ${COLORS.primary[500]} 0%, ${COLORS.secondary[500]} 100%)` }}
+          style={{
+            background: `linear-gradient(135deg, ${COLORS.primary[500]} 0%, ${COLORS.secondary[500]} 100%)`
+          }}
           onClick={onClick}
         >
           {CTA_COPY.viewDetails}
@@ -137,7 +143,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onClick }) => {
       </div>
     </div>
   );
-};
+});
 
 /**
  * Main Listings Grid Component
@@ -149,10 +155,61 @@ export const ListingsGrid: React.FC<ListingsGridProps> = ({
   onListingClick,
   onRefetch,
   variant = 'grid',
-  emptyStateType = 'listings',
+  emptyStateType = 'listings'
 }) => {
   const isEmpty = !loading && (!listings || listings.length === 0);
   const hasError = !loading && error;
+  const renderedGrid = useMemo(
+    () =>
+      listings.map((listing) => (
+        <ListingCard key={listing.id} listing={listing} onClick={() => onListingClick?.(listing)} />
+      )),
+    [listings, onListingClick]
+  );
+
+  const renderedList = useMemo(
+    () =>
+      listings.map((listing) => (
+        <div
+          key={listing.id}
+          className="flex gap-4 p-4 rounded-lg cursor-pointer transition-all hover:shadow-md"
+          style={{
+            background: 'white',
+            border: `1px solid ${COLORS.gray[200]}`
+          }}
+          onClick={() => onListingClick?.(listing)}
+        >
+          <SmartImage
+            src={
+              listing.images?.[0] ||
+              'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=100&auto=format&fit=crop'
+            }
+            alt={listing.title}
+            className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+          />
+
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold mb-1" style={{ color: COLORS.gray[900] }}>
+              {listing.title}
+            </h3>
+            <p className="text-sm mb-2" style={{ color: COLORS.gray[600] }}>
+              {listing.category} • {listing.hub}
+            </p>
+            <p className="text-lg font-bold" style={{ color: COLORS.primary[600] }}>
+              {listing.currency} {listing.price.toLocaleString()}
+            </p>
+          </div>
+
+          {listing.rating > 0 && (
+            <div className="flex items-center gap-1">
+              <Star size={16} style={{ color: COLORS.warning }} />
+              <span className="font-semibold">{listing.rating.toFixed(1)}</span>
+            </div>
+          )}
+        </div>
+      )),
+    [listings, onListingClick]
+  );
 
   return (
     <div>
@@ -186,71 +243,18 @@ export const ListingsGrid: React.FC<ListingsGridProps> = ({
       {loading && <LoadingState variant={variant} count={variant === 'list' ? 5 : 6} />}
 
       {/* Empty State */}
-      {isEmpty && (
-        <EmptyState
-          type={emptyStateType}
-          actionLabel={CTA_COPY.browseNow}
-        />
-      )}
+      {isEmpty && <EmptyState type={emptyStateType} actionLabel={CTA_COPY.browseNow} />}
 
       {/* Listings Grid */}
       {!loading && !hasError && !isEmpty && (
         <>
           {variant === 'grid' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
-              {listings.map((listing) => (
-                <ListingCard
-                  key={listing.id}
-                  listing={listing}
-                  onClick={() => onListingClick?.(listing)}
-                />
-              ))}
+              {renderedGrid}
             </div>
           )}
 
-          {variant === 'list' && (
-            <div className="space-y-2 p-4">
-              {listings.map((listing) => (
-                <div
-                  key={listing.id}
-                  className="flex gap-4 p-4 rounded-lg cursor-pointer transition-all hover:shadow-md"
-                  style={{
-                    background: 'white',
-                    border: `1px solid ${COLORS.gray[200]}`,
-                  }}
-                  onClick={() => onListingClick?.(listing)}
-                >
-                  {/* Image */}
-                  <img
-                    src={listing.images?.[0] || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=100&auto=format&fit=crop'}
-                    alt={listing.title}
-                    className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
-                  />
-
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold mb-1" style={{ color: COLORS.gray[900] }}>
-                      {listing.title}
-                    </h3>
-                    <p className="text-sm mb-2" style={{ color: COLORS.gray[600] }}>
-                      {listing.category} • {listing.hub}
-                    </p>
-                    <p className="text-lg font-bold" style={{ color: COLORS.primary[600] }}>
-                      {listing.currency} {listing.price.toLocaleString()}
-                    </p>
-                  </div>
-
-                  {/* Rating */}
-                  {listing.rating > 0 && (
-                    <div className="flex items-center gap-1">
-                      <Star size={16} style={{ color: COLORS.warning }} />
-                      <span className="font-semibold">{listing.rating.toFixed(1)}</span>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+          {variant === 'list' && <div className="space-y-2 p-4">{renderedList}</div>}
         </>
       )}
     </div>

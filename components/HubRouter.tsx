@@ -2,32 +2,32 @@
  * HubRouter.tsx
  * =============
  * Main Hub Routing Component - ROUTING WITH HUB AWARENESS
- * 
+ *
  * ARCHITECTURE: HUB SEGREGATION WITH SHARED USERS
  * ═══════════════════════════════════════════════════════════
- * 
+ *
  * Manages navigation and layout across segregated hubs while
  * maintaining shared user context. Bridge between URL routing and
  * hub segregation logic.
- * 
+ *
  * ROUTING AWARENESS:
  * ├─ URL format: /hub/:hubId/listings
  * ├─ Reads hubId from URL and switches context to that hub
  * ├─ Preserves hub across reloads (localStorage in HubContext)
  * └─ Updates URL when user switches hubs
- * 
+ *
  * SHARED CONTEXT IN ROUTING:
  * ├─ Header shows current user (same everywhere)
  * ├─ Header shows subscription tier (same everywhere)
  * └─ These preserved as user navigates between hubs
- * 
+ *
  * SEGREGATED CONTEXT IN ROUTING:
  * ├─ Listings view shows current hub's listings only
  * ├─ Analytics dashboard shows current hub's stats only
  * ├─ Forms show hub-specific fields (hub_id saved with listing)
  * ├─ Navigation highlights current hub
  * └─ Refetch on hub change: WHERE hub_id = currentHub
- * 
+ *
  * EXPORTED COMPONENTS (10 total):
  * • HubHeader: Shows hub (segregated) + user (shared)
  * • HubBreadcrumb: Navigation path with hub context
@@ -36,12 +36,12 @@
  * • HubActivityFeed: Shows current hub's activity
  * • HubSwitcher: Switch between 6 hubs
  * (and 4 more for layout, tabs, etc.)
- * 
+ *
  * EXAMPLE:
  * <HubRouter>
  *   <Route path="/hub/:hubId/listings" element={<MyListings />} />
  * </HubRouter>
- * 
+ *
  * MyListings automatically segregates:
  * useHubListings() → fetches WHERE hub_id = currentHub
  */
@@ -67,7 +67,7 @@ export const HubRouter: React.FC<HubRouterProps> = ({ children }) => {
     <div
       className="min-h-screen w-full"
       style={{
-        background: `linear-gradient(135deg, ${accent} 0%, white 100%)`,
+        background: `linear-gradient(135deg, ${accent} 0%, white 100%)`
       }}
     >
       {/* Hub Header with Branding */}
@@ -75,9 +75,7 @@ export const HubRouter: React.FC<HubRouterProps> = ({ children }) => {
 
       {/* Main Content Area */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <Suspense fallback={<HubLoadingState />}>
-          {children}
-        </Suspense>
+        <Suspense fallback={<HubLoadingState />}>{children}</Suspense>
       </main>
     </div>
   );
@@ -102,7 +100,7 @@ const HubHeader: React.FC<HubHeaderProps> = ({ hub, hubId }) => {
       className="sticky top-0 z-40 border-b-2"
       style={{
         backgroundColor: primary,
-        borderColor: primary,
+        borderColor: primary
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -155,7 +153,9 @@ const HubHeader: React.FC<HubHeaderProps> = ({ hub, hubId }) => {
                         <p className="font-semibold text-gray-900">{availableHub.displayName}</p>
                         <p className="text-xs text-gray-600 mt-1">{availableHub.description}</p>
                       </div>
-                      {availableHub.id === hubId && <Check size={18} className="text-green-600 mt-1" />}
+                      {availableHub.id === hubId && (
+                        <Check size={18} className="text-green-600 mt-1" />
+                      )}
                     </button>
                   ))}
                 </div>
@@ -200,7 +200,7 @@ export const HubBreadcrumb: React.FC<HubBreadcrumbProps> = ({ items }) => {
 
 export const HubFeatureBanner: React.FC<{ message: string; icon?: React.ReactNode }> = ({
   message,
-  icon = <Zap size={20} />,
+  icon = <Zap size={20} />
 }) => {
   const { primary } = useHubBranding();
 
@@ -238,15 +238,9 @@ export const HubSwitcher: React.FC = () => {
           key={hub.id}
           onClick={() => switchHub(hub.id)}
           className={`px-4 py-2 rounded-lg font-semibold whitespace-nowrap transition ${
-            hub.id === currentHubId
-              ? 'text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-100'
+            hub.id === currentHubId ? 'text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}
-          style={
-            hub.id === currentHubId
-              ? { backgroundColor: hub.color.primary }
-              : {}
-          }
+          style={hub.id === currentHubId ? { backgroundColor: hub.color.primary } : {}}
         >
           {hub.icon} {hub.displayName}
         </button>
@@ -296,7 +290,7 @@ export const HubFeatureShowcase: React.FC<HubFeatureShowcaseProps> = ({ title })
     .filter(([, feature]) => feature.enabled)
     .map(([key, feature]) => ({
       name: key.replace(/([A-Z])/g, ' $1').trim(),
-      description: feature.description,
+      description: feature.description
     }));
 
   return (
@@ -304,7 +298,11 @@ export const HubFeatureShowcase: React.FC<HubFeatureShowcaseProps> = ({ title })
       {title && <h2 className="text-2xl font-bold mb-4">{title}</h2>}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {features.map((feature) => (
-          <div key={feature.name} className="p-4 bg-white rounded-lg border-l-4" style={{borderColor: hub.color.primary}}>
+          <div
+            key={feature.name}
+            className="p-4 bg-white rounded-lg border-l-4"
+            style={{ borderColor: hub.color.primary }}
+          >
             <p className="font-semibold capitalize">{feature.name}</p>
             <p className="text-sm text-gray-600 mt-1">{feature.description}</p>
           </div>
@@ -345,7 +343,12 @@ interface HubEmptyStateProps {
   };
 }
 
-export const HubEmptyState: React.FC<HubEmptyStateProps> = ({ icon, title, description, action }) => {
+export const HubEmptyState: React.FC<HubEmptyStateProps> = ({
+  icon,
+  title,
+  description,
+  action
+}) => {
   const { primary } = useHubBranding();
 
   return (

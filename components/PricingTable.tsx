@@ -7,10 +7,10 @@ interface PricingTableProps {
   isLoading?: boolean;
 }
 
-export const PricingTable: React.FC<PricingTableProps> = ({ 
-  onSelectPlan, 
+export const PricingTable: React.FC<PricingTableProps> = ({
+  onSelectPlan,
   currentPlan,
-  isLoading = false 
+  isLoading = false
 }) => {
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
 
@@ -33,13 +33,13 @@ export const PricingTable: React.FC<PricingTableProps> = ({
         'Direct buyer connections',
         'Dedicated farmer support',
         'Annual subscription (365 days)',
-        '100% of your sales',
+        '100% of your sales'
       ],
       isSpecial: true,
       color: 'green',
       buttonColor: 'bg-green-600 hover:bg-green-700',
       borderColor: 'border-green-500',
-      bgColor: 'bg-green-50',
+      bgColor: 'bg-green-50'
     },
     {
       id: 'starter',
@@ -59,13 +59,13 @@ export const PricingTable: React.FC<PricingTableProps> = ({
         'Email support',
         'Monthly renewal',
         'Access to all 6 marketplace hubs',
-        '100% of your sales',
+        '100% of your sales'
       ],
       isSpecial: false,
       color: 'blue',
       buttonColor: 'bg-blue-600 hover:bg-blue-700',
       borderColor: 'border-blue-300',
-      bgColor: 'bg-blue-50',
+      bgColor: 'bg-blue-50'
     },
     {
       id: 'pro',
@@ -85,14 +85,14 @@ export const PricingTable: React.FC<PricingTableProps> = ({
         'Priority support (24-48hrs)',
         'Custom storefront branding',
         'Bulk upload tools',
-        '100% of your sales',
+        '100% of your sales'
       ],
       isSpecial: false,
       color: 'purple',
       buttonColor: 'bg-purple-600 hover:bg-purple-700',
       borderColor: 'border-purple-500',
       bgColor: 'bg-purple-50',
-      isPopular: true,
+      isPopular: true
     },
     {
       id: 'enterprise',
@@ -112,14 +112,14 @@ export const PricingTable: React.FC<PricingTableProps> = ({
         '24/7 dedicated account manager',
         'Custom API access',
         'Advanced integrations',
-        '100% of your sales',
+        '100% of your sales'
       ],
       isSpecial: false,
       color: 'amber',
       buttonColor: 'bg-amber-600 hover:bg-amber-700',
       borderColor: 'border-amber-500',
-      bgColor: 'bg-amber-50',
-    },
+      bgColor: 'bg-amber-50'
+    }
   ];
 
   const handleSelectPlan = (tier: 'mkulima' | 'starter' | 'pro' | 'enterprise', amount: number) => {
@@ -135,10 +135,8 @@ export const PricingTable: React.FC<PricingTableProps> = ({
         <h2 className="text-4xl font-bold text-gray-900 mb-2">
           Offspring Decor Limited Marketplace
         </h2>
-        <p className="text-xl text-gray-600 mb-4">
-          Simple, transparent pricing for all sellers
-        </p>
-        
+        <p className="text-xl text-gray-600 mb-4">Simple, transparent pricing for all sellers</p>
+
         {/* Commission Notice */}
         <div className="inline-flex items-center gap-3 bg-green-100 border border-green-400 rounded-full px-6 py-3 mb-8">
           <Check size={20} className="text-green-600" />
@@ -146,7 +144,7 @@ export const PricingTable: React.FC<PricingTableProps> = ({
             Sellers keep 100% of their sales — No Commissions!
           </span>
         </div>
-        
+
         <p className="text-gray-600">
           Choose the plan that fits your business. Upgrade or downgrade anytime.
         </p>
@@ -157,7 +155,7 @@ export const PricingTable: React.FC<PricingTableProps> = ({
         {plans.map((plan) => {
           const Icon = plan.icon;
           const isSelected = selectedTier === plan.id;
-          
+
           return (
             <div
               key={plan.id}
@@ -165,11 +163,9 @@ export const PricingTable: React.FC<PricingTableProps> = ({
                 plan.isSpecial
                   ? `${plan.borderColor} ${plan.bgColor} shadow-2xl transform scale-105`
                   : plan.isPopular
-                  ? `${plan.borderColor} ${plan.bgColor} shadow-lg transform scale-[1.02]`
-                  : `border-gray-200 bg-white shadow-md`
-              } ${
-                isSelected ? 'ring-2 ring-offset-2 ring-orange-500' : ''
-              }`}
+                    ? `${plan.borderColor} ${plan.bgColor} shadow-lg transform scale-[1.02]`
+                    : `border-gray-200 bg-white shadow-md`
+              } ${isSelected ? 'ring-2 ring-offset-2 ring-orange-500' : ''}`}
             >
               {/* Badge */}
               {plan.badge && (
@@ -178,8 +174,8 @@ export const PricingTable: React.FC<PricingTableProps> = ({
                     plan.isSpecial
                       ? 'bg-green-600'
                       : plan.isPopular
-                      ? 'bg-purple-600'
-                      : 'bg-gray-600'
+                        ? 'bg-purple-600'
+                        : 'bg-gray-600'
                   }`}
                 >
                   {plan.badge}
@@ -193,28 +189,26 @@ export const PricingTable: React.FC<PricingTableProps> = ({
                     plan.isSpecial
                       ? 'bg-green-200 text-green-700'
                       : plan.isPopular
-                      ? 'bg-purple-200 text-purple-700'
-                      : plan.color === 'blue'
-                      ? 'bg-blue-200 text-blue-700'
-                      : 'bg-amber-200 text-amber-700'
+                        ? 'bg-purple-200 text-purple-700'
+                        : plan.color === 'blue'
+                          ? 'bg-blue-200 text-blue-700'
+                          : 'bg-amber-200 text-amber-700'
                   }`}
                 >
                   <Icon size={24} />
                 </div>
 
                 {/* Title & Description */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-1">
-                  {plan.name}
-                </h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  {plan.description}
-                </p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-1">{plan.name}</h3>
+                <p className="text-sm text-gray-600 mb-4">{plan.description}</p>
 
                 {/* Tagline */}
                 {plan.tagline && (
-                  <p className={`text-sm font-semibold mb-4 ${
-                    plan.isSpecial ? 'text-green-700' : 'text-gray-700'
-                  }`}>
+                  <p
+                    className={`text-sm font-semibold mb-4 ${
+                      plan.isSpecial ? 'text-green-700' : 'text-gray-700'
+                    }`}
+                  >
                     {plan.tagline}
                   </p>
                 )}
@@ -225,9 +219,7 @@ export const PricingTable: React.FC<PricingTableProps> = ({
                     <span className="text-4xl font-bold text-gray-900">
                       KES {plan.price.toLocaleString()}
                     </span>
-                    <span className="text-gray-600 text-sm">
-                      /{plan.period}
-                    </span>
+                    <span className="text-gray-600 text-sm">/{plan.period}</span>
                   </div>
                   <p className="text-xs text-gray-500">{plan.periodLabel}</p>
                 </div>
@@ -236,24 +228,29 @@ export const PricingTable: React.FC<PricingTableProps> = ({
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <div className={`mt-1 rounded-full p-0.5 ${
-                        plan.isSpecial
-                          ? 'bg-green-200'
-                          : plan.isPopular
-                          ? 'bg-purple-200'
-                          : plan.color === 'blue'
-                          ? 'bg-blue-200'
-                          : 'bg-amber-200'
-                      }`}>
-                        <Check size={14} className={`${
+                      <div
+                        className={`mt-1 rounded-full p-0.5 ${
                           plan.isSpecial
-                            ? 'text-green-700'
+                            ? 'bg-green-200'
                             : plan.isPopular
-                            ? 'text-purple-700'
-                            : plan.color === 'blue'
-                            ? 'text-blue-700'
-                            : 'text-amber-700'
-                        }`} />
+                              ? 'bg-purple-200'
+                              : plan.color === 'blue'
+                                ? 'bg-blue-200'
+                                : 'bg-amber-200'
+                        }`}
+                      >
+                        <Check
+                          size={14}
+                          className={`${
+                            plan.isSpecial
+                              ? 'text-green-700'
+                              : plan.isPopular
+                                ? 'text-purple-700'
+                                : plan.color === 'blue'
+                                  ? 'text-blue-700'
+                                  : 'text-amber-700'
+                          }`}
+                        />
                       </div>
                       <span className="text-sm text-gray-700">{feature}</span>
                     </li>
@@ -274,9 +271,7 @@ export const PricingTable: React.FC<PricingTableProps> = ({
                     disabled={isLoading}
                     className={`w-full py-3 px-4 rounded-lg font-bold text-white transition-all duration-200 flex items-center justify-center gap-2 ${
                       plan.buttonColor
-                    } ${
-                      isLoading ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
+                    } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {isLoading && isSelected ? (
                       <>
@@ -308,15 +303,23 @@ export const PricingTable: React.FC<PricingTableProps> = ({
           <div className="flex gap-3 mb-4">
             <AlertCircle size={20} className="text-blue-600 flex-shrink-0 mt-0.5" />
             <div>
-              <h4 className="font-bold text-blue-900 mb-2">
-                Why Offspring Decor Limited?
-              </h4>
+              <h4 className="font-bold text-blue-900 mb-2">Why Offspring Decor Limited?</h4>
               <ul className="text-sm text-blue-800 space-y-1">
-                <li>✓ <strong>No hidden commissions</strong> — We believe in transparency</li>
-                <li>✓ <strong>Seller-first platform</strong> — Your success is our success</li>
-                <li>✓ <strong>Flexible plans</strong> — Change anytime without penalties</li>
-                <li>✓ <strong>Mkulima support</strong> — Special pricing for farmers (1,500 KES/year)</li>
-                <li>✓ <strong>24/7 support</strong> — Pro and Enterprise get dedicated help</li>
+                <li>
+                  ✓ <strong>No hidden commissions</strong> — We believe in transparency
+                </li>
+                <li>
+                  ✓ <strong>Seller-first platform</strong> — Your success is our success
+                </li>
+                <li>
+                  ✓ <strong>Flexible plans</strong> — Change anytime without penalties
+                </li>
+                <li>
+                  ✓ <strong>Mkulima support</strong> — Special pricing for farmers (1,500 KES/year)
+                </li>
+                <li>
+                  ✓ <strong>24/7 support</strong> — Pro and Enterprise get dedicated help
+                </li>
               </ul>
             </div>
           </div>
@@ -345,7 +348,8 @@ export const PricingTable: React.FC<PricingTableProps> = ({
           <div>
             <h4 className="font-bold text-gray-900 mb-2">What payment methods?</h4>
             <p className="text-gray-600">
-              M-Pesa, bank transfer, and card payments. We support all major payment methods in Kenya.
+              M-Pesa, bank transfer, and card payments. We support all major payment methods in
+              Kenya.
             </p>
           </div>
         </div>

@@ -1,7 +1,7 @@
 /**
  * Admin KYC Review Queue Component - KENYA ONLY
  * Displays pending Kenya seller documents for admin review and approval/rejection
- * 
+ *
  * Features:
  * - List pending Kenyan seller documents
  * - Document preview
@@ -21,9 +21,15 @@ import {
   Eye,
   EyeOff,
   Filter,
-  Clock,
+  Clock
 } from 'lucide-react';
-import { getPendingKYCDocuments, approveKYCDocument, rejectKYCDocument, KENYA_DOCUMENT_TYPES } from '../services/kycService';
+import {
+  getPendingKYCDocuments,
+  approveKYCDocument,
+  rejectKYCDocument,
+  KENYA_DOCUMENT_TYPES
+} from '../services/kycService';
+import { SmartImage } from './SmartImage';
 
 interface PendingDocument {
   id: string;
@@ -82,7 +88,7 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
       const result = await approveKYCDocument(selectedDoc.id, adminId, approvalNotes);
       if (result.success) {
         setSuccessMessage(`✅ Document approved for ${selectedDoc.seller?.full_name}`);
-        setDocuments(docs => docs.filter(d => d.id !== selectedDoc.id));
+        setDocuments((docs) => docs.filter((d) => d.id !== selectedDoc.id));
         setSelectedDoc(null);
         setApprovalNotes('');
         setTimeout(() => setSuccessMessage(''), 3000);
@@ -104,7 +110,7 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
       const result = await rejectKYCDocument(selectedDoc.id, adminId, rejectionNotes);
       if (result.success) {
         setSuccessMessage(`❌ Document rejected for ${selectedDoc.seller?.full_name}`);
-        setDocuments(docs => docs.filter(d => d.id !== selectedDoc.id));
+        setDocuments((docs) => docs.filter((d) => d.id !== selectedDoc.id));
         setSelectedDoc(null);
         setRejectionNotes('');
         setTimeout(() => setSuccessMessage(''), 3000);
@@ -116,9 +122,8 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
     }
   };
 
-  const filteredDocs = filterType === 'all'
-    ? documents
-    : documents.filter(d => d.document_type === filterType);
+  const filteredDocs =
+    filterType === 'all' ? documents : documents.filter((d) => d.document_type === filterType);
 
   return (
     <div className="w-full max-w-6xl mx-auto p-6">
@@ -133,9 +138,7 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
             <Clock size={16} className="inline mr-1" />
             {totalPending} Pending Review (Kenya)
           </span>
-          <span className="text-gray-600">
-            Avg review time: &lt;2 hours
-          </span>
+          <span className="text-gray-600">Avg review time: &lt;2 hours</span>
         </div>
       </div>
 
@@ -153,7 +156,7 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
             <Filter size={18} className="text-gray-600" />
             <select
               value={filterType}
-              onChange={e => setFilterType(e.target.value)}
+              onChange={(e) => setFilterType(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
             >
               <option value="all">All Kenya Documents</option>
@@ -162,9 +165,7 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
               <option value="cr_certificate">CR Certificate</option>
               <option value="business_license">Business License</option>
             </select>
-            <span className="text-sm text-gray-600 ml-auto">
-              {filteredDocs.length} documents
-            </span>
+            <span className="text-sm text-gray-600 ml-auto">{filteredDocs.length} documents</span>
           </div>
 
           {isLoading ? (
@@ -179,7 +180,7 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
             </div>
           ) : (
             <div className="space-y-2">
-              {filteredDocs.map(doc => (
+              {filteredDocs.map((doc) => (
                 <button
                   key={doc.id}
                   onClick={() => setSelectedDoc(doc)}
@@ -195,18 +196,26 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
                         <p className="font-semibold text-gray-900">
                           {doc.seller?.full_name || 'Unknown Seller'}
                         </p>
-                        <span className={`text-xs px-2 py-1 rounded-full ${
-                          doc.document_type === 'national_id' ? 'bg-blue-100 text-blue-700' :
-                          doc.document_type === 'kra_pin' ? 'bg-purple-100 text-purple-700' :
-                          doc.document_type === 'cr_certificate' ? 'bg-green-100 text-green-700' :
-                          'bg-orange-100 text-orange-700'
-                        }`}>
-                          {KENYA_DOCUMENT_TYPES[doc.document_type as keyof typeof KENYA_DOCUMENT_TYPES]?.label || doc.document_type}
+                        <span
+                          className={`text-xs px-2 py-1 rounded-full ${
+                            doc.document_type === 'national_id'
+                              ? 'bg-blue-100 text-blue-700'
+                              : doc.document_type === 'kra_pin'
+                                ? 'bg-purple-100 text-purple-700'
+                                : doc.document_type === 'cr_certificate'
+                                  ? 'bg-green-100 text-green-700'
+                                  : 'bg-orange-100 text-orange-700'
+                          }`}
+                        >
+                          {KENYA_DOCUMENT_TYPES[
+                            doc.document_type as keyof typeof KENYA_DOCUMENT_TYPES
+                          ]?.label || doc.document_type}
                         </span>
                       </div>
                       <p className="text-sm text-gray-600">{doc.seller?.email}</p>
                       <p className="text-xs text-gray-500 mt-1">
-                        Doc: {doc.document_number} • Submitted {new Date(doc.created_at).toLocaleDateString()}
+                        Doc: {doc.document_number} • Submitted{' '}
+                        {new Date(doc.created_at).toLocaleDateString()}
                       </p>
                     </div>
                     <ChevronRight
@@ -241,7 +250,7 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
                   </a>
                 </div>
               ) : (
-                <img
+                <SmartImage
                   src={selectedDoc.document_url}
                   alt="Document preview"
                   className="w-full h-full object-cover"
@@ -262,7 +271,10 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
                 </p>
                 <p>
                   <span className="text-gray-600">Phone:</span>
-                  <a href={`tel:${selectedDoc.seller?.phone_number}`} className="text-orange-600 ml-1">
+                  <a
+                    href={`tel:${selectedDoc.seller?.phone_number}`}
+                    className="text-orange-600 ml-1"
+                  >
                     {selectedDoc.seller?.phone_number}
                   </a>
                 </p>
@@ -282,7 +294,7 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
                 </label>
                 <textarea
                   value={approvalNotes}
-                  onChange={e => setApprovalNotes(e.target.value)}
+                  onChange={(e) => setApprovalNotes(e.target.value)}
                   placeholder="e.g., Document clearly shows valid ID..."
                   className="w-full p-2 border border-gray-300 rounded text-sm resize-none focus:ring-2 focus:ring-orange-500"
                   rows={3}
@@ -296,7 +308,7 @@ export const AdminKYCQueue: React.FC<AdminKYCQueueProps> = ({ adminId }) => {
                 </label>
                 <textarea
                   value={rejectionNotes}
-                  onChange={e => setRejectionNotes(e.target.value)}
+                  onChange={(e) => setRejectionNotes(e.target.value)}
                   placeholder="e.g., Document is blurry, please re-upload..."
                   className="w-full p-2 border border-gray-300 rounded text-sm resize-none focus:ring-2 focus:ring-orange-500"
                   rows={3}

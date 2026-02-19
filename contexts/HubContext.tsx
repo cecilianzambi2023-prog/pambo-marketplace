@@ -2,25 +2,25 @@
  * HubContext.tsx
  * ==============
  * Global Hub State Management - THE HEART OF HUB SEGREGATION
- * 
+ *
  * ARCHITECTURE: HUB SEGREGATION WITH SHARED USERS
  * ═══════════════════════════════════════════════════════════
- * 
+ *
  * This context manages dual state:
- * 
+ *
  * SHARED STATE (same for all 6 hubs):
  * ├─ currentUser (from profiles table, user_id)
  * ├─ userSubscriptionTier (applies to all hubs)
  * ├─ userVerificationBadge (applies to all hubs)
  * └─ userPaymentMethod (M-Pesa for all hubs)
- * 
+ *
  * SEGREGATED STATE (switches per hub):
  * ├─ currentHub (which of 6 hubs user is in)
  * ├─ hubListings (listings for current hub only, filtered by hub_id)
  * ├─ hubAnalytics (GMV/stats for current hub only)
  * ├─ hubSearchState (search within current hub only)
  * └─ hubPreferences (per-hub user preferences)
- * 
+ *
  * HUB SWITCHING LOGIC:
  * 1. User clicks "Switch to Mkulima"
  * 2. Update currentHub = 'mkulima'
@@ -28,7 +28,7 @@
  * 4. Refetch analytics: WHERE hub_id = 'mkulima'
  * 5. Preserve: subscription_tier, userProfile (shared across hubs)
  * 6. Update UI with Mkulima-specific forms/features
- * 
+ *
  * PROVIDED HOOKS (9 total, all segregation-aware):
  * • useHub() → current hub id, user (shared), tier (shared)
  * • useHubSwitch() → switch between hubs
@@ -39,16 +39,22 @@
  * • useHubAnalytics() → get analytics for current hub ONLY [segregated]
  * • useHubBranding() → get colors, icons, names for current hub
  * • useHubPreferences() → manage per-hub user preferences
- * 
+ *
  * KEY QUERIES:
  * Segregated: SELECT * FROM listings WHERE hub_id = 'marketplace' AND created_by = userId
  * Shared:    SELECT subscription_tier FROM profiles WHERE id = userId [NO hub_id]
- * 
+ *
  * Enables seamless hub switching while segregating data correctly.
  */
 
 import React, { createContext, useState, useCallback, useEffect, ReactNode } from 'react';
-import { HubId, HubContextValue, HubConfig, HubSearchState, HubNavigation } from '../types/HubArchitecture';
+import {
+  HubId,
+  HubContextValue,
+  HubConfig,
+  HubSearchState,
+  HubNavigation
+} from '../types/HubArchitecture';
 import { HUB_CONFIGS, getAllHubs, getHub } from '../config/HubConfig';
 
 // Create context
@@ -63,7 +69,10 @@ interface HubProviderProps {
   initialHubId?: HubId;
 }
 
-export const HubProvider: React.FC<HubProviderProps> = ({ children, initialHubId = 'marketplace' }) => {
+export const HubProvider: React.FC<HubProviderProps> = ({
+  children,
+  initialHubId = 'marketplace'
+}) => {
   // Current hub state
   const [hubId, setHubId] = useState<HubId>(initialHubId);
   const [isChangingHub, setIsChangingHub] = useState(false);
@@ -81,62 +90,59 @@ export const HubProvider: React.FC<HubProviderProps> = ({ children, initialHubId
   // HUB SWITCHING
   // ===================================
 
-  const switchHub = useCallback(async (newHubId: HubId) => {
-    // Validate hub exists and is active
-    const newHub = getHub(newHubId);
-    if (!newHub || !newHub.isActive) {
-      console.error(`Hub ${newHubId} is not available`);
-      return;
-    }
+  const switchHub = useCallback(
+    async (newHubId: HubId) => {
+      // Validate hub exists and is active
+      const newHub = getHub(newHubId);
+      if (!newHub || !newHub.isActive) {
+        console.error(`Hub ${newHubId} is not available`);
+        return;
+      }
 
-    setIsChangingHub(true);
+      setIsChangingHub(true);
 
-    try {
-      // Simulate any async operations (auth checks, data prefetch, etc)
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      try {
+        // Simulate any async operations (auth checks, data prefetch, etc)
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-      // Update current hub
-      setHubId(newHubId);
+        // Update current hub
+        setHubId(newHubId);
 
-      // Store hub switch in analytics
-      console.log(`[Hub] Switched from ${hubId} to ${newHubId}`);
-    } finally {
-      setIsChangingHub(false);
-    }
-  }, [hubId]);
+        // Store hub switch in analytics
+        console.log(`[Hub] Switched from ${hubId} to ${newHubId}`);
+      } finally {
+        setIsChangingHub(false);
+      }
+    },
+    [hubId]
+  );
 
   // ===================================
   // HUB NAVIGATION
   // ===================================
 
-  const goToHub = useCallback(
-    (newHubId: HubId, path?: string) => {
-      const hub = getHub(newHubId);
-      if (!hub) return;
+  const goToHub = useCallback((newHubId: HubId, path?: string) => {
+    const hub = getHub(newHubId);
+    if (!hub) return;
 
-      const url = path ? `${hub.routePath}${path}` : hub.routePath;
-      window.location.href = url;
-    },
-    []
-  );
+    const url = path ? `${hub.routePath}${path}` : hub.routePath;
+    window.location.href = url;
+  }, []);
 
   // ===================================
   // HUB PREFERENCES
   // ===================================
 
-  const updateHubPreference = useCallback(
-    (hubId: HubId, preferences: any) => {
-      setHubPreferences((prev) => ({
-        ...prev,
-        [hubId]: {
-          ...prev[hubId],
-          ...preferences,
-          lastVisited: new Date().toISOString(),
-        },
-      }));
-    },
-    []
-  );
+  const updateHubPreference = useCallback((hubId: HubId, preferences: any) => {
+    setHubPreferences((prev) => ({
+      ...prev,
+      [hubId]: {
+        ...prev[hubId],
+        ...preferences,
+        lastVisited: new Date().toISOString()
+      }
+    }));
+  }, []);
 
   // ===================================
   // HUB SEARCH STATE
@@ -145,7 +151,7 @@ export const HubProvider: React.FC<HubProviderProps> = ({ children, initialHubId
   const updateHubSearchState = useCallback((newSearchState: HubSearchState) => {
     setHubSearchStates((prev) => ({
       ...prev,
-      [newSearchState.hubId]: newSearchState,
+      [newSearchState.hubId]: newSearchState
     }));
   }, []);
 
@@ -153,18 +159,15 @@ export const HubProvider: React.FC<HubProviderProps> = ({ children, initialHubId
   // HUB ACCESS CHECKING
   // ===================================
 
-  const isHubAccessible = useCallback(
-    (checkHubId: HubId, userTier?: string): boolean => {
-      const hub = getHub(checkHubId);
-      if (!hub) return false;
-      if (!hub.isActive) return false;
+  const isHubAccessible = useCallback((checkHubId: HubId, userTier?: string): boolean => {
+    const hub = getHub(checkHubId);
+    if (!hub) return false;
+    if (!hub.isActive) return false;
 
-      // For now, all active hubs are accessible
-      // In production, check user subscription tier against hub.rules.minimumTier
-      return true;
-    },
-    []
-  );
+    // For now, all active hubs are accessible
+    // In production, check user subscription tier against hub.rules.minimumTier
+    return true;
+  }, []);
 
   // ===================================
   // GET HUB BY ID
@@ -195,7 +198,7 @@ export const HubProvider: React.FC<HubProviderProps> = ({ children, initialHubId
     hubPreferences,
     getHub: getHubById,
     getActiveHubs,
-    isHubAccessible,
+    isHubAccessible
   };
 
   return <HubContext.Provider value={value}>{children}</HubContext.Provider>;
@@ -227,7 +230,7 @@ export const useHub = () => {
     hub: currentHub,
     name: currentHub.displayName,
     features: currentHub.features,
-    rules: currentHub.rules,
+    rules: currentHub.rules
   };
 };
 
@@ -240,7 +243,7 @@ export const useHubSwitch = () => {
     switchHub,
     goToHub,
     isChangingHub,
-    availableHubs: getActiveHubs(),
+    availableHubs: getActiveHubs()
   };
 };
 
@@ -264,7 +267,7 @@ export const useHubFeatures = () => {
     // Get feature by name
     hasFeature: (featureName: keyof typeof currentHub.features) => {
       return currentHub.features[featureName].enabled;
-    },
+    }
   };
 };
 
@@ -284,7 +287,7 @@ export const useHubRules = () => {
       return currentHub.rules.allowedCategories.includes(category);
     },
     requiresVerification: currentHub.rules.requiresVerification,
-    requiredDocuments: currentHub.rules.requiredDocuments,
+    requiredDocuments: currentHub.rules.requiredDocuments
   };
 };
 
@@ -296,13 +299,13 @@ export const useHubNavigation = () => {
 
   const hubs: HubNavigation[] = getActiveHubs().map((hub) => ({
     hub,
-    isActive: hub.id === currentHub.id,
+    isActive: hub.id === currentHub.id
   }));
 
   return {
     currentHub,
     hubs,
-    navItems: hubs.sort((a, b) => a.hub.navigationPriority - b.hub.navigationPriority),
+    navItems: hubs.sort((a, b) => a.hub.navigationPriority - b.hub.navigationPriority)
   };
 };
 
@@ -314,7 +317,7 @@ export const useHubSearch = () => {
 
   // In a real implementation, this would track per-hub search state
   return {
-    hubId,
+    hubId
     // Methods to update search state would go here
   };
 };
@@ -331,7 +334,7 @@ export const useHubBranding = () => {
     accent: currentHub.color.accent,
     icon: currentHub.icon,
     displayName: currentHub.displayName,
-    routePath: currentHub.routePath,
+    routePath: currentHub.routePath
   };
 };
 
@@ -344,6 +347,6 @@ export const useAllHubs = () => {
   return {
     hubs: getActiveHubs(),
     currentHubId: currentHub.id,
-    currentHubName: currentHub.displayName,
+    currentHubName: currentHub.displayName
   };
 };

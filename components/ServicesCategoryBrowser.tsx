@@ -1,9 +1,9 @@
 /**
  * ServicesCategoryBrowser.tsx
  * ============================
- * 
+ *
  * Data-driven services category browser.
- * 
+ *
  * ARCHITECTURE:
  * - Loads 40+ categories from database (not hardcoded)
  * - Mobile-first design for low-end Android phones
@@ -14,7 +14,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getServiceCategoriesCached, getServicesByCategory, getCategoryStats } from '../services/servicesCategoryService';
+import {
+  getServiceCategoriesCached,
+  getServicesByCategory,
+  getCategoryStats
+} from '../services/servicesCategoryService';
 import { ServiceCategory } from '../types/servicesCategoryTypes';
 import { Search, MapPin, Star, Phone, MessageCircle } from 'lucide-react';
 
@@ -46,7 +50,7 @@ export const ServicesCategoryGrid: React.FC = () => {
   }, []);
 
   // Filter categories by search
-  const filteredCategories = categories.filter(cat =>
+  const filteredCategories = categories.filter((cat) =>
     cat.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -73,14 +77,14 @@ export const ServicesCategoryGrid: React.FC = () => {
           type="text"
           placeholder="Search services..."
           value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
+          onChange={(e) => setSearchQuery(e.target.value)}
           className="search-input"
         />
       </div>
 
       {/* CATEGORIES GRID (MOBILE-FIRST) */}
       <div className="categories-grid">
-        {filteredCategories.map(category => (
+        {filteredCategories.map((category) => (
           <div
             key={category.id}
             className="category-card"
@@ -290,7 +294,7 @@ export const ServiceCategoryDetail: React.FC = () => {
         setLoading(true);
         const response = await getServicesByCategory(slug, {
           county_id: selectedCounty,
-          per_page: 50,
+          per_page: 50
         });
         setListings(response.listings);
 
@@ -332,7 +336,7 @@ export const ServiceCategoryDetail: React.FC = () => {
             <p>No services found in your area</p>
           </div>
         ) : (
-          listings.map(listing => (
+          listings.map((listing) => (
             <div key={listing.id} className="service-listing-card">
               {/* HEADER */}
               <div className="listing-header">
@@ -353,9 +357,7 @@ export const ServiceCategoryDetail: React.FC = () => {
               </div>
 
               {/* DESCRIPTION */}
-              {listing.description && (
-                <p className="listing-description">{listing.description}</p>
-              )}
+              {listing.description && <p className="listing-description">{listing.description}</p>}
 
               {/* SELLER INFO */}
               {listing.profiles && (

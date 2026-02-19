@@ -11,7 +11,7 @@ export const WholesaleProductCard: React.FC<WholesaleProductCardProps> = ({ prod
     { min: 1, max: 10, unit: basePrice, discount: 0 },
     { min: 11, max: 50, unit: Math.round(basePrice * 0.9), discount: 10 },
     { min: 51, max: 100, unit: Math.round(basePrice * 0.8), discount: 20 },
-    { min: 101, max: Infinity, unit: Math.round(basePrice * 0.7), discount: 30 },
+    { min: 101, max: Infinity, unit: Math.round(basePrice * 0.7), discount: 30 }
   ];
 
   const tiers = getPricingTiers(product.price);
@@ -40,17 +40,13 @@ export const WholesaleProductCard: React.FC<WholesaleProductCardProps> = ({ prod
 
       {/* Product Info */}
       <div className="p-4">
-        <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2">
-          {product.title}
-        </h3>
+        <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2">{product.title}</h3>
 
         {/* Category & Location */}
         <div className="flex items-center justify-between mb-3 text-sm text-gray-600">
           <span className="bg-gray-100 px-2 py-1 rounded">{product.category}</span>
           {product.location && (
-            <span className="flex items-center gap-1">
-              📍 {product.location}
-            </span>
+            <span className="flex items-center gap-1">📍 {product.location}</span>
           )}
         </div>
 

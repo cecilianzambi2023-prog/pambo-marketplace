@@ -17,7 +17,7 @@ export const PricingPaymentModal: React.FC<PricingPaymentModalProps> = ({
   amount,
   userId,
   onClose,
-  onSuccess,
+  onSuccess
 }) => {
   const [phone, setPhone] = useState('');
   const [step, setStep] = useState<'form' | 'processing' | 'success' | 'error'>('form');
@@ -33,7 +33,7 @@ export const PricingPaymentModal: React.FC<PricingPaymentModalProps> = ({
       tier,
       amount,
       phone,
-      userId,
+      userId
     });
 
     if (result.success) {
@@ -51,7 +51,7 @@ export const PricingPaymentModal: React.FC<PricingPaymentModalProps> = ({
     // Auto-format phone number as user types
     let cleaned = value.replace(/\D/g, '');
     if (cleaned.length > 12) cleaned = cleaned.slice(0, 12);
-    
+
     // Add +254 prefix if starting with 0
     if (cleaned.startsWith('0') && cleaned.length > 1) {
       cleaned = '254' + cleaned.slice(1);
@@ -72,9 +72,7 @@ export const PricingPaymentModal: React.FC<PricingPaymentModalProps> = ({
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white">
-            Complete Your Payment
-          </h2>
+          <h2 className="text-xl font-bold text-white">Complete Your Payment</h2>
           <button
             onClick={onClose}
             className="text-white hover:bg-green-700 p-1 rounded-lg transition"
@@ -109,7 +107,10 @@ export const PricingPaymentModal: React.FC<PricingPaymentModalProps> = ({
                     M-Pesa Phone Number
                   </label>
                   <div className="relative">
-                    <Phone size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                    <Phone
+                      size={18}
+                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    />
                     <input
                       type="tel"
                       value={phone}
@@ -119,8 +120,8 @@ export const PricingPaymentModal: React.FC<PricingPaymentModalProps> = ({
                         isPhoneValid
                           ? 'border-green-500 bg-green-50'
                           : phone && !isPhoneValid
-                          ? 'border-red-500 bg-red-50'
-                          : 'border-gray-300'
+                            ? 'border-red-500 bg-red-50'
+                            : 'border-gray-300'
                       }`}
                       disabled={loading}
                     />
@@ -137,9 +138,7 @@ export const PricingPaymentModal: React.FC<PricingPaymentModalProps> = ({
 
                 {/* Instructions */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-blue-900 mb-2 text-sm">
-                    How it works:
-                  </h4>
+                  <h4 className="font-semibold text-blue-900 mb-2 text-sm">How it works:</h4>
                   <ol className="text-sm text-blue-800 space-y-1">
                     <li>1. Click "Pay with M-Pesa" below</li>
                     <li>2. You'll receive an M-Pesa prompt on your phone</li>
@@ -172,9 +171,7 @@ export const PricingPaymentModal: React.FC<PricingPaymentModalProps> = ({
                       Processing...
                     </>
                   ) : (
-                    <>
-                      💳 Pay with M-Pesa
-                    </>
+                    <>💳 Pay with M-Pesa</>
                   )}
                 </button>
 
@@ -199,27 +196,17 @@ export const PricingPaymentModal: React.FC<PricingPaymentModalProps> = ({
           {step === 'processing' && (
             <div className="text-center py-12">
               <Loader2 size={48} className="text-green-600 animate-spin mx-auto mb-4" />
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
-                Processing Payment...
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Please check your phone for the M-Pesa prompt.
-              </p>
-              <p className="text-sm text-gray-500">
-                Phone: {phone}
-              </p>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Processing Payment...</h3>
+              <p className="text-gray-600 mb-4">Please check your phone for the M-Pesa prompt.</p>
+              <p className="text-sm text-gray-500">Phone: {phone}</p>
             </div>
           )}
 
           {step === 'success' && (
             <div className="text-center py-12">
               <CheckCircle size={48} className="text-green-600 mx-auto mb-4" />
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
-                Payment Successful!
-              </h3>
-              <p className="text-gray-600 mb-2">
-                Welcome to {tierName}
-              </p>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Payment Successful!</h3>
+              <p className="text-gray-600 mb-2">Welcome to {tierName}</p>
               <p className="text-sm text-gray-500">
                 Your subscription is now active. You can start selling immediately.
               </p>
@@ -234,9 +221,7 @@ export const PricingPaymentModal: React.FC<PricingPaymentModalProps> = ({
           {step === 'error' && (
             <div className="text-center py-12">
               <AlertCircle size={48} className="text-red-600 mx-auto mb-4" />
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
-                Payment Failed
-              </h3>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Payment Failed</h3>
               <p className="text-gray-600 mb-4">
                 {hookError || 'There was an error processing your payment.'}
               </p>

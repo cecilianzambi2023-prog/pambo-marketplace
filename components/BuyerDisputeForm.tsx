@@ -1,7 +1,7 @@
 /**
  * Buyer Dispute Form Component - KENYA ONLY
  * Allows Kenyan buyers to file disputes against sellers
- * 
+ *
  * Features:
  * - Dispute category selector
  * - Evidence file upload (multiple)
@@ -22,7 +22,7 @@ import {
   Shield,
   FileText,
   Camera,
-  X,
+  X
 } from 'lucide-react';
 import { createDispute, KENYA_DISPUTE_CATEGORIES } from '../services/disputeService';
 
@@ -47,7 +47,7 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
   seller_id,
   order_amount,
   onClose,
-  onSubmitSuccess,
+  onSubmitSuccess
 }) => {
   // Form state
   const [category, setCategory] = useState<DisputeCategory>('product_not_received');
@@ -64,7 +64,7 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []) as File[];
-    
+
     // Validation
     if (evidenceFiles.length + files.length > 5) {
       setErrorMessage('Maximum 5 files allowed');
@@ -88,7 +88,7 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!showReview) {
       // Validate form
       if (!title.trim()) {
@@ -131,9 +131,9 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
       if (result.success) {
         setSuccessMessage(
           '✅ Dispute filed successfully! ' +
-          'Seller has 7 days to respond. We\'ll notify you of any updates.'
+            "Seller has 7 days to respond. We'll notify you of any updates."
         );
-        
+
         setTimeout(() => {
           onSubmitSuccess?.();
         }, 2000);
@@ -177,10 +177,7 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
             ⚖️ Kenya Dispute Resolution
           </h2>
           {onClose && (
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600"
-            >
+            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
               <X size={24} />
             </button>
           )}
@@ -248,7 +245,7 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
             <input
               type="text"
               value={title}
-              onChange={e => setTitle(e.target.value)}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g., Item arrived damaged - cracked screen"
               maxLength={100}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
@@ -263,7 +260,7 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
             </label>
             <textarea
               value={description}
-              onChange={e => setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="Explain what happened and how it affects you. Include dates, delivery timeline, communications, etc."
               maxLength={1000}
               rows={5}
@@ -291,7 +288,9 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
                   <div className="text-center">
                     <Upload size={32} className="mx-auto text-gray-400 mb-2" />
                     <p className="font-semibold text-gray-700">Click to upload evidence</p>
-                    <p className="text-sm text-gray-500 mt-1">Photos of damage, unboxing videos, receipt, etc.</p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      Photos of damage, unboxing videos, receipt, etc.
+                    </p>
                   </div>
                 ) : (
                   <div className="text-center text-sm text-gray-600">
@@ -314,7 +313,9 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
                       <FileText size={18} className="text-orange-600" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-gray-900 truncate">{file.name}</p>
-                        <p className="text-xs text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                        <p className="text-xs text-gray-500">
+                          {(file.size / 1024 / 1024).toFixed(2)} MB
+                        </p>
                       </div>
                     </div>
                     <button
@@ -334,10 +335,22 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
           <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
             <p className="text-sm font-semibold text-amber-900 mb-2">📋 Possible Resolutions</p>
             <div className="space-y-1 text-xs text-amber-800">
-              <p>• <span className="font-semibold">Full Refund:</span> KES {order_amount.toLocaleString()} returned to M-Pesa</p>
-              <p>• <span className="font-semibold">Partial Refund:</span> Partial compensation agreed between parties</p>
-              <p>• <span className="font-semibold">Replacement:</span> New item sent without additional payment</p>
-              <p>• <span className="font-semibold">Rejected:</span> Dispute resolved in seller's favor</p>
+              <p>
+                • <span className="font-semibold">Full Refund:</span> KES{' '}
+                {order_amount.toLocaleString()} returned to M-Pesa
+              </p>
+              <p>
+                • <span className="font-semibold">Partial Refund:</span> Partial compensation agreed
+                between parties
+              </p>
+              <p>
+                • <span className="font-semibold">Replacement:</span> New item sent without
+                additional payment
+              </p>
+              <p>
+                • <span className="font-semibold">Rejected:</span> Dispute resolved in seller's
+                favor
+              </p>
             </div>
           </div>
 
@@ -412,7 +425,7 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
         <div className="space-y-5">
           <div className="p-4 rounded-lg bg-blue-50 border border-blue-200">
             <p className="text-sm font-semibold text-blue-900 mb-3">📋 Review Your Dispute</p>
-            
+
             <div className="space-y-3">
               <div className="border-b border-blue-200 pb-3">
                 <p className="text-xs text-blue-700 font-semibold">ISSUE TYPE</p>
@@ -444,7 +457,9 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
               <div>
                 <p className="text-xs text-blue-700 font-semibold">REFUND ELIGIBLE</p>
                 <p className="text-sm font-semibold text-blue-900">
-                  {allowsRefund ? `✅ Yes - Up to KES ${order_amount.toLocaleString()}` : '❌ Not refundable for this type'}
+                  {allowsRefund
+                    ? `✅ Yes - Up to KES ${order_amount.toLocaleString()}`
+                    : '❌ Not refundable for this type'}
                 </p>
               </div>
             </div>
@@ -453,8 +468,9 @@ export const BuyerDisputeForm: React.FC<BuyerDisputeFormProps> = ({
           <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
             <p className="text-xs font-semibold text-amber-900 mb-2">⚠️ Important Notice</p>
             <p className="text-xs text-amber-800">
-              By submitting this dispute, you confirm that the information provided is accurate and truthful. 
-              Filing false disputes may result in account suspension. Seller will be notified and can respond within 7 days.
+              By submitting this dispute, you confirm that the information provided is accurate and
+              truthful. Filing false disputes may result in account suspension. Seller will be
+              notified and can respond within 7 days.
             </p>
           </div>
 

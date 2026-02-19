@@ -1,16 +1,30 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const defaultAllowedOrigins = [
+const productionAllowedOrigins = ["https://pambo.biz", "https://www.pambo.biz"];
+
+const developmentAllowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5173",
-  "https://pambo.biz",
-  "https://www.pambo.biz",
+  ...productionAllowedOrigins,
 ];
+
+function isProductionRuntime(): boolean {
+  const runtimeHints = [
+    Deno.env.get("ENVIRONMENT"),
+    Deno.env.get("NODE_ENV"),
+    Deno.env.get("SUPABASE_ENV"),
+    Deno.env.get("DENO_ENV"),
+  ];
+
+  return runtimeHints.some((value) => value?.trim().toLowerCase() === "production");
+}
 
 function getAllowedOrigins(): string[] {
   const configured = Deno.env.get("CORS_ALLOWED_ORIGINS");
-  if (!configured) return defaultAllowedOrigins;
+  if (!configured) {
+    return isProductionRuntime() ? productionAllowedOrigins : developmentAllowedOrigins;
+  }
 
   return configured
     .split(",")

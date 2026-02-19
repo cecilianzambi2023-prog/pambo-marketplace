@@ -2,19 +2,19 @@
  * HubConfig.ts
  * ============
  * Concrete configuration for all 6 hubs
- * 
+ *
  * ARCHITECTURE: HUB SEGREGATION WITH SHARED USERS
  * ═══════════════════════════════════════════════════════════
- * 
+ *
  * This is the SOURCE OF TRUTH for how each hub operates.
  * Changes here cascade to UI, routing, business logic, and payments.
- * 
+ *
  * SHARED CONFIG (same for all users, all hubs):
  * └─ User authentication (one login)
  * └─ Subscription tier (upgrade once = all hubs)
  * └─ Verification badge (verified once = everywhere)
  * └─ Payment account (M-Pesa connected for all hubs)
- * 
+ *
  * SEGREGATED CONFIG (different per hub):
  * ├─ Listing limits (Mkulima: 50, Marketplace: 200)
  * ├─ Commission rates (0% direct-connect everywhere)
@@ -22,12 +22,12 @@
  * ├─ Form fields (6 variants for 6 hub types)
  * ├─ Business rules (verification required, etc.)
  * └─ Analytics (independent GMV per hub)
- * 
+ *
  * USAGE EXAMPLES:
  * • getHub('marketplace') → marketplace-specific config
  * • getHubListingLimit('mkulima', 'starter') → 50 listings
  * • isHubAccessible('wholesale', 'starter') → true/false
- * 
+ *
  * DATABASE IMPLICATIONS:
  * • Query hub listings: WHERE hub_id = 'mkulima' AND created_by = userId
  * • Query user subscription: WHERE id = userId [NO hub_id filter]
@@ -49,9 +49,9 @@ export const MARKETPLACE_CONFIG: HubConfig = {
     'The general marketplace where millions of traders sell thousands of product categories from household items to fresh produce.',
 
   color: {
-    primary: '#3b82f6',   // Blue
+    primary: '#3b82f6', // Blue
     secondary: '#1e40af',
-    accent: '#dbeafe',
+    accent: '#dbeafe'
   },
   icon: 'ShoppingBag',
   bannerImage: '/images/hubs/marketplace-banner.jpg',
@@ -68,15 +68,15 @@ export const MARKETPLACE_CONFIG: HubConfig = {
     servicesBooking: { enabled: false, description: 'Use Services hub for services' },
     shippingIntegration: { enabled: true, description: 'Arrange shipping' },
     analytics: { enabled: true, description: 'View sales analytics' },
-    api: { enabled: false, description: 'Available for Pro+ tiers' },
+    api: { enabled: false, description: 'Available for Pro+ tiers' }
   },
 
   rules: {
     listingLimits: {
       mkulima: 50,
       starter: 200,
-      pro: -1,        // -1 = unlimited
-      enterprise: -1,
+      pro: -1, // -1 = unlimited
+      enterprise: -1
     },
     allowedCategories: [
       'Electronics',
@@ -88,13 +88,13 @@ export const MARKETPLACE_CONFIG: HubConfig = {
       'Furniture',
       'Beauty',
       'Food & Beverages',
-      'Other',
+      'Other'
     ],
     minimumTier: 'mkulima',
-    commissionPercentage: 0,  // Direct-Connect: 0% commission
+    commissionPercentage: 0, // Direct-Connect: 0% commission
     requiresVerification: false,
     requiredDocuments: [],
-    allowedCountries: ['KE'],
+    allowedCountries: ['KE']
   },
 
   routePath: '/hub/marketplace',
@@ -105,8 +105,8 @@ export const MARKETPLACE_CONFIG: HubConfig = {
   metrics: {
     monthlyActiveUsers: 500000,
     totalListings: 2500000,
-    gmv: 15000000000,  // 15B KES
-  },
+    gmv: 15000000000 // 15B KES
+  }
 };
 
 // ===================================
@@ -121,9 +121,9 @@ export const WHOLESALE_CONFIG: HubConfig = {
     'For businesses buying in bulk. Wholesalers list catalogs with volume discounts. Retailers find suppliers.',
 
   color: {
-    primary: '#8b5cf6',   // Purple
+    primary: '#8b5cf6', // Purple
     secondary: '#6d28d9',
-    accent: '#ede9fe',
+    accent: '#ede9fe'
   },
   icon: 'Package',
   bannerImage: '/images/hubs/wholesale-banner.jpg',
@@ -140,7 +140,7 @@ export const WHOLESALE_CONFIG: HubConfig = {
     servicesBooking: { enabled: false, description: 'Use Services hub' },
     shippingIntegration: { enabled: true, description: 'Bulk shipping' },
     analytics: { enabled: true, description: 'Detailed sales analytics' },
-    api: { enabled: true, description: 'Available for Pro+ tiers' },
+    api: { enabled: true, description: 'Available for Pro+ tiers' }
   },
 
   rules: {
@@ -148,7 +148,7 @@ export const WHOLESALE_CONFIG: HubConfig = {
       mkulima: 10,
       starter: 50,
       pro: -1,
-      enterprise: -1,
+      enterprise: -1
     },
     allowedCategories: [
       'Electronics',
@@ -157,13 +157,13 @@ export const WHOLESALE_CONFIG: HubConfig = {
       'Chemicals',
       'Machinery',
       'Raw Materials',
-      'Other',
+      'Other'
     ],
     minimumTier: 'starter',
     commissionPercentage: 0,
     requiresVerification: true,
     requiredDocuments: ['national_id', 'business_permit'],
-    allowedCountries: ['KE'],
+    allowedCountries: ['KE']
   },
 
   routePath: '/hub/wholesale',
@@ -174,8 +174,8 @@ export const WHOLESALE_CONFIG: HubConfig = {
   metrics: {
     monthlyActiveUsers: 50000,
     totalListings: 150000,
-    gmv: 5000000000,  // 5B KES
-  },
+    gmv: 5000000000 // 5B KES
+  }
 };
 
 // ===================================
@@ -190,9 +190,9 @@ export const DIGITAL_CONFIG: HubConfig = {
     'Sell and buy digital products: software, courses, templates, e-books, music, art, and more.',
 
   color: {
-    primary: '#ec4899',   // Pink
+    primary: '#ec4899', // Pink
     secondary: '#be185d',
-    accent: '#fce7f3',
+    accent: '#fce7f3'
   },
   icon: 'Cloud',
   bannerImage: '/images/hubs/digital-banner.jpg',
@@ -209,7 +209,7 @@ export const DIGITAL_CONFIG: HubConfig = {
     servicesBooking: { enabled: false, description: 'Use Services hub' },
     shippingIntegration: { enabled: false, description: 'Digital only' },
     analytics: { enabled: true, description: 'Download and conversion tracking' },
-    api: { enabled: true, description: 'Delivery API available' },
+    api: { enabled: true, description: 'Delivery API available' }
   },
 
   rules: {
@@ -217,7 +217,7 @@ export const DIGITAL_CONFIG: HubConfig = {
       mkulima: 20,
       starter: 100,
       pro: -1,
-      enterprise: -1,
+      enterprise: -1
     },
     allowedCategories: [
       'Courses',
@@ -229,13 +229,13 @@ export const DIGITAL_CONFIG: HubConfig = {
       'Music',
       'Art',
       'Design',
-      'Other',
+      'Other'
     ],
     minimumTier: 'starter',
     commissionPercentage: 0,
     requiresVerification: false,
     requiredDocuments: [],
-    allowedCountries: ['KE'],
+    allowedCountries: ['KE']
   },
 
   routePath: '/hub/digital',
@@ -246,8 +246,8 @@ export const DIGITAL_CONFIG: HubConfig = {
   metrics: {
     monthlyActiveUsers: 25000,
     totalListings: 50000,
-    gmv: 500000000,  // 500M KES
-  },
+    gmv: 500000000 // 500M KES
+  }
 };
 
 // ===================================
@@ -262,9 +262,9 @@ export const MKULIMA_CONFIG: HubConfig = {
     'Special hub for small farmers and agricultural producers. Subsidized pricing (1,500 KES/year). Direct market access without intermediaries.',
 
   color: {
-    primary: '#10b981',   // Green
+    primary: '#10b981', // Green
     secondary: '#047857',
-    accent: '#d1fae5',
+    accent: '#d1fae5'
   },
   icon: 'Leaf',
   logo: '/logos/mkulima-logo.svg',
@@ -282,15 +282,15 @@ export const MKULIMA_CONFIG: HubConfig = {
     servicesBooking: { enabled: false, description: 'Use Services hub' },
     shippingIntegration: { enabled: true, description: 'Find logistics' },
     analytics: { enabled: true, description: 'Simple sales dashboard' },
-    api: { enabled: false, description: 'Not available' },
+    api: { enabled: false, description: 'Not available' }
   },
 
   rules: {
     listingLimits: {
       mkulima: 50,
-      starter: 200,    // If they upgrade to Starter
+      starter: 200, // If they upgrade to Starter
       pro: -1,
-      enterprise: -1,
+      enterprise: -1
     },
     allowedCategories: [
       'Vegetables',
@@ -301,11 +301,11 @@ export const MKULIMA_CONFIG: HubConfig = {
       'Honey',
       'Herbs',
       'Seeds',
-      'Other Agricultural',
+      'Other Agricultural'
     ],
     minimumTier: 'mkulima',
     commissionPercentage: 0,
-    requiresVerification: false,  // Lower barrier for farmers
+    requiresVerification: false, // Lower barrier for farmers
     requiredDocuments: [],
     allowedCountries: ['KE'],
     allowedCities: [
@@ -316,13 +316,13 @@ export const MKULIMA_CONFIG: HubConfig = {
       'Mombasa',
       'Kericho',
       'Nyeri',
-      'Kiambu',
-    ],  // Can expand
+      'Kiambu'
+    ] // Can expand
   },
 
   routePath: '/hub/mkulima',
   urlSlug: 'mkulima',
-  navigationPriority: 1,  // Top priority
+  navigationPriority: 1, // Top priority
   isActive: true,
 
   launchDate: '2026-01-15',
@@ -331,8 +331,8 @@ export const MKULIMA_CONFIG: HubConfig = {
   metrics: {
     monthlyActiveUsers: 100000,
     totalListings: 250000,
-    gmv: 2000000000,  // 2B KES
-  },
+    gmv: 2000000000 // 2B KES
+  }
 };
 
 // ===================================
@@ -347,9 +347,9 @@ export const SERVICES_CONFIG: HubConfig = {
     'Find and hire professionals: plumbing, electrical work, cleaning, consulting, design, and more.',
 
   color: {
-    primary: '#f59e0b',   // Amber
+    primary: '#f59e0b', // Amber
     secondary: '#d97706',
-    accent: '#fef3c7',
+    accent: '#fef3c7'
   },
   icon: 'Briefcase',
   bannerImage: '/images/hubs/services-banner.jpg',
@@ -366,7 +366,7 @@ export const SERVICES_CONFIG: HubConfig = {
     servicesBooking: { enabled: true, description: 'Calendar booking' },
     shippingIntegration: { enabled: false, description: 'Not applicable' },
     analytics: { enabled: true, description: 'Booking and rating analytics' },
-    api: { enabled: true, description: 'Available for Pro+ tiers' },
+    api: { enabled: true, description: 'Available for Pro+ tiers' }
   },
 
   rules: {
@@ -374,7 +374,7 @@ export const SERVICES_CONFIG: HubConfig = {
       mkulima: 5,
       starter: 20,
       pro: -1,
-      enterprise: -1,
+      enterprise: -1
     },
     allowedCategories: [
       'Plumbing',
@@ -385,13 +385,13 @@ export const SERVICES_CONFIG: HubConfig = {
       'Photography',
       'Writing',
       'Tutoring',
-      'Other',
+      'Other'
     ],
     minimumTier: 'starter',
     commissionPercentage: 0,
     requiresVerification: true,
     requiredDocuments: ['national_id'],
-    allowedCountries: ['KE'],
+    allowedCountries: ['KE']
   },
 
   routePath: '/hub/services',
@@ -402,8 +402,8 @@ export const SERVICES_CONFIG: HubConfig = {
   metrics: {
     monthlyActiveUsers: 30000,
     totalListings: 75000,
-    gmv: 300000000,  // 300M KES
-  },
+    gmv: 300000000 // 300M KES
+  }
 };
 
 // ===================================
@@ -418,9 +418,9 @@ export const LIVE_COMMERCE_CONFIG: HubConfig = {
     'Go live and sell in real-time. Broadcast your products, answer questions, and complete sales while streaming.',
 
   color: {
-    primary: '#ef4444',   // Red
+    primary: '#ef4444', // Red
     secondary: '#dc2626',
-    accent: '#fee2e2',
+    accent: '#fee2e2'
   },
   icon: 'Radio',
   bannerImage: '/images/hubs/live-commerce-banner.jpg',
@@ -437,30 +437,22 @@ export const LIVE_COMMERCE_CONFIG: HubConfig = {
     servicesBooking: { enabled: false, description: 'Not applicable' },
     shippingIntegration: { enabled: true, description: 'Arrange during stream' },
     analytics: { enabled: true, description: 'Live viewer and conversion metrics' },
-    api: { enabled: true, description: 'Streaming API available' },
+    api: { enabled: true, description: 'Streaming API available' }
   },
 
   rules: {
     listingLimits: {
-      mkulima: 0,         // Requires Pro minimum
-      starter: 0,         // Requires Pro minimum
-      pro: 5,             // 5 concurrent streams
-      enterprise: -1,     // Unlimited
+      mkulima: 0, // Requires Pro minimum
+      starter: 0, // Requires Pro minimum
+      pro: 5, // 5 concurrent streams
+      enterprise: -1 // Unlimited
     },
-    allowedCategories: [
-      'Electronics',
-      'Fashion',
-      'Food',
-      'Beauty',
-      'Home',
-      'Handmade',
-      'Other',
-    ],
-    minimumTier: 'pro',   // Requires Pro subscription minimum
+    allowedCategories: ['Electronics', 'Fashion', 'Food', 'Beauty', 'Home', 'Handmade', 'Other'],
+    minimumTier: 'pro', // Requires Pro subscription minimum
     commissionPercentage: 0,
     requiresVerification: true,
     requiredDocuments: ['national_id', 'business_permit'],
-    allowedCountries: ['KE'],
+    allowedCountries: ['KE']
   },
 
   routePath: '/hub/live-commerce',
@@ -474,8 +466,8 @@ export const LIVE_COMMERCE_CONFIG: HubConfig = {
   metrics: {
     monthlyActiveUsers: 10000,
     totalListings: 5000,
-    gmv: 200000000,  // 200M KES
-  },
+    gmv: 200000000 // 200M KES
+  }
 };
 
 // ===================================
@@ -488,7 +480,7 @@ export const HUB_CONFIGS: Record<HubId, HubConfig> = {
   [HUB_IDS.DIGITAL]: DIGITAL_CONFIG,
   [HUB_IDS.MKULIMA]: MKULIMA_CONFIG,
   [HUB_IDS.SERVICES]: SERVICES_CONFIG,
-  [HUB_IDS.LIVE_COMMERCE]: LIVE_COMMERCE_CONFIG,
+  [HUB_IDS.LIVE_COMMERCE]: LIVE_COMMERCE_CONFIG
 };
 
 // ===================================
@@ -515,7 +507,10 @@ export function getHubBySlug(slug: string): HubConfig | null {
   return Object.values(HUB_CONFIGS).find((hub) => hub.urlSlug === slug) || null;
 }
 
-export function getHubListingLimit(hubId: HubId, tier: 'mkulima' | 'starter' | 'pro' | 'enterprise'): number {
+export function getHubListingLimit(
+  hubId: HubId,
+  tier: 'mkulima' | 'starter' | 'pro' | 'enterprise'
+): number {
   const hub = getHub(hubId);
   if (!hub) return 0;
   const limit = hub.rules.listingLimits[tier];
@@ -535,7 +530,7 @@ export function isHubAccessible(hubId: HubId, userTier?: string): boolean {
     mkulima: 0,
     starter: 1,
     pro: 2,
-    enterprise: 3,
+    enterprise: 3
   };
 
   const userTierLevel = tierOrder[userTier] ?? -1;

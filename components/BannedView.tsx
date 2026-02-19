@@ -14,22 +14,23 @@ export const BannedView: React.FC<BannedViewProps> = ({ onLogout }) => {
         </div>
         <h1 className="text-3xl font-bold text-white mb-3">Account Suspended</h1>
         <p className="text-gray-400 mb-8">
-          This account has been suspended due to a violation of our Community Standards.
-          You no longer have access to the Pambo marketplace, and any pending payouts may be held for review.
+          This account has been suspended due to a violation of our Community Standards. You no
+          longer have access to the Pambo marketplace, and any pending payouts may be held for
+          review.
         </p>
         <div className="space-y-4">
-           <a 
-             href="mailto:support@pambo.com"
-             className="w-full bg-gray-700 text-white font-bold py-3 rounded-lg hover:bg-gray-600 transition flex items-center justify-center gap-2"
-           >
-              <Mail size={18} /> Contact Support
-           </a>
-           <button 
-             onClick={onLogout}
-             className="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2"
-           >
-              <LogOut size={18} /> Logout
-           </button>
+          <a
+            href="mailto:support@pambo.com"
+            className="w-full bg-gray-700 text-white font-bold py-3 rounded-lg hover:bg-gray-600 transition flex items-center justify-center gap-2"
+          >
+            <Mail size={18} /> Contact Support
+          </a>
+          <button
+            onClick={onLogout}
+            className="w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2"
+          >
+            <LogOut size={18} /> Logout
+          </button>
         </div>
       </div>
     </div>

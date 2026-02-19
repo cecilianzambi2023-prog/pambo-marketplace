@@ -1,12 +1,12 @@
 /**
  * SUPER ADMIN PANEL - COMMAND CENTRE FOR OFFSPRING DECOR LIMITED
- * 
+ *
  * Private admin dashboard with:
  * - Revenue analytics by subscription tier
  * - User management & security controls
  * - Seller verification queue
  * - Live subscriber map
- * 
+ *
  * SECURITY: Role-based access (admin only via Supabase Auth)
  */
 
@@ -21,12 +21,13 @@ import {
   AlertCircle,
   TrendingUp,
   LogOut,
-  Sparkles,
+  Sparkles
 } from 'lucide-react';
 import { supabase } from '../src/lib/supabaseClient';
 import { COLORS, OFFSPRING_BRAND } from '../config/brand';
 import { DatabaseUser } from '../types/database';
 import { FeaturedListingsAnalyticsTab } from './FeaturedListingsAnalyticsTab';
+import { SmartImage } from './SmartImage';
 
 // ============================================
 // TYPES
@@ -55,7 +56,9 @@ export const SuperAdminPanel: React.FC = () => {
   const [user, setUser] = useState<DatabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
-  const [activeTab, setActiveTab] = useState<'revenue' | 'users' | 'verification' | 'map' | 'featured'>('revenue');
+  const [activeTab, setActiveTab] = useState<
+    'revenue' | 'users' | 'verification' | 'map' | 'featured'
+  >('revenue');
   const [users, setUsers] = useState<DatabaseUser[]>([]);
   const [verificationQueue, setVerificationQueue] = useState<VerificationRequest[]>([]);
   const [revenue, setRevenue] = useState<RevenueData[]>([]);
@@ -74,8 +77,11 @@ export const SuperAdminPanel: React.FC = () => {
 
   const checkAdminAccess = async () => {
     try {
-      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
-      
+      const {
+        data: { user: authUser },
+        error: authError
+      } = await supabase.auth.getUser();
+
       if (authError || !authUser) {
         setAuthorized(false);
         setLoading(false);
@@ -140,14 +146,14 @@ export const SuperAdminPanel: React.FC = () => {
       mkulima: { label: 'Mkulima Special', price: 1500, users: [] as DatabaseUser[], period: 365 },
       starter: { label: 'Starter', price: 3500, users: [] as DatabaseUser[], period: 30 },
       pro: { label: 'Pro', price: 5000, users: [] as DatabaseUser[], period: 30 },
-      enterprise: { label: 'Enterprise', price: 9000, users: [] as DatabaseUser[], period: 30 },
+      enterprise: { label: 'Enterprise', price: 9000, users: [] as DatabaseUser[], period: 30 }
     };
 
     // Categorize users by subscription status
     const now = Date.now();
-    const activeUsers = allUsers.filter(u => u.subscriptionExpiry && u.subscriptionExpiry > now);
+    const activeUsers = allUsers.filter((u) => u.subscriptionExpiry && u.subscriptionExpiry > now);
 
-    activeUsers.forEach(u => {
+    activeUsers.forEach((u) => {
       if (u.subscriptionExpiry) {
         // Estimate which tier based on expiry pattern
         // This is simplified - in production, store subscription tier in users table
@@ -171,7 +177,7 @@ export const SuperAdminPanel: React.FC = () => {
         label: tier.label,
         totalKES,
         subscriberCount: tier.users.length,
-        monthlyRecurring,
+        monthlyRecurring
       };
     });
 
@@ -189,13 +195,15 @@ export const SuperAdminPanel: React.FC = () => {
       .limit(10);
 
     if (pendingSellers) {
-      const queue = pendingSellers.map(seller => ({
+      const queue = pendingSellers.map((seller) => ({
         id: seller.id,
         userId: seller.id,
         userName: seller.businessName || seller.name,
-        idPhotoUrl: seller.avatar || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400',
+        idPhotoUrl:
+          seller.avatar ||
+          'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400',
         submittedAt: new Date().toISOString(),
-        status: 'pending' as const,
+        status: 'pending' as const
       }));
       setVerificationQueue(queue);
     }
@@ -239,7 +247,7 @@ export const SuperAdminPanel: React.FC = () => {
       }
 
       alert('✅ Seller verified and approved!');
-      setVerificationQueue(prev => prev.filter(v => v.userId !== userId));
+      setVerificationQueue((prev) => prev.filter((v) => v.userId !== userId));
       fetchAllData();
     } catch (error) {
       console.error('Approval error:', error);
@@ -259,7 +267,7 @@ export const SuperAdminPanel: React.FC = () => {
       if (error) throw error;
 
       alert('❌ Verification rejected.');
-      setVerificationQueue(prev => prev.filter(v => v.userId !== userId));
+      setVerificationQueue((prev) => prev.filter((v) => v.userId !== userId));
       fetchAllData();
     } catch (error) {
       console.error('Rejection error:', error);
@@ -277,7 +285,10 @@ export const SuperAdminPanel: React.FC = () => {
   // ============================================
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen" style={{ background: COLORS.gray[50] }}>
+      <div
+        className="flex items-center justify-center h-screen"
+        style={{ background: COLORS.gray[50] }}
+      >
         <div className="text-center">
           <div
             className="w-12 h-12 rounded-full animate-spin mx-auto mb-4"
@@ -285,7 +296,7 @@ export const SuperAdminPanel: React.FC = () => {
               borderTop: `3px solid ${COLORS.primary[500]}`,
               borderRight: `3px solid ${COLORS.gray[200]}`,
               borderBottom: `3px solid ${COLORS.gray[200]}`,
-              borderLeft: `3px solid ${COLORS.gray[200]}`,
+              borderLeft: `3px solid ${COLORS.gray[200]}`
             }}
           />
           <p style={{ color: COLORS.gray[600] }}>Verifying admin access...</p>
@@ -299,8 +310,14 @@ export const SuperAdminPanel: React.FC = () => {
   // ============================================
   if (!authorized) {
     return (
-      <div className="flex items-center justify-center h-screen" style={{ background: COLORS.gray[50] }}>
-        <div className="text-center p-8 rounded-lg bg-white" style={{ boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
+      <div
+        className="flex items-center justify-center h-screen"
+        style={{ background: COLORS.gray[50] }}
+      >
+        <div
+          className="text-center p-8 rounded-lg bg-white"
+          style={{ boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}
+        >
           <AlertCircle size={48} style={{ color: COLORS.danger, margin: '0 auto 16px' }} />
           <h1 className="text-2xl font-bold mb-2" style={{ color: COLORS.gray[900] }}>
             Access Denied
@@ -309,7 +326,7 @@ export const SuperAdminPanel: React.FC = () => {
             This admin panel is only accessible to administrators.
           </p>
           <a
-            href="/"
+            href="#/"
             className="px-6 py-2 rounded-lg font-semibold text-white transition-all hover:shadow-lg"
             style={{ background: COLORS.primary[500] }}
           >
@@ -359,15 +376,15 @@ export const SuperAdminPanel: React.FC = () => {
             { id: 'users', label: '👥 Users', icon: Users },
             { id: 'verification', label: '✔️ Verification', icon: ShieldCheck },
             { id: 'featured', label: '⭐ Featured Listings', icon: Sparkles },
-            { id: 'map', label: '🗺️ Map', icon: Map },
-          ].map(tab => (
+            { id: 'map', label: '🗺️ Map', icon: Map }
+          ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className="px-4 py-4 font-medium border-b-2 transition-all"
               style={{
                 borderColor: activeTab === tab.id ? COLORS.primary[500] : 'transparent',
-                color: activeTab === tab.id ? COLORS.primary[600] : COLORS.gray[600],
+                color: activeTab === tab.id ? COLORS.primary[600] : COLORS.gray[600]
               }}
             >
               {tab.label}
@@ -382,9 +399,7 @@ export const SuperAdminPanel: React.FC = () => {
         {activeTab === 'revenue' && <RevenueTab revenue={revenue} />}
 
         {/* USERS TAB */}
-        {activeTab === 'users' && (
-          <UsersTab users={users} onBlockUser={blockUser} />
-        )}
+        {activeTab === 'users' && <UsersTab users={users} onBlockUser={blockUser} />}
 
         {/* VERIFICATION TAB */}
         {activeTab === 'verification' && (
@@ -460,8 +475,12 @@ const RevenueTab: React.FC<{ revenue: RevenueData[] }> = ({ revenue }) => {
           Revenue by Subscription Tier
         </h3>
         <div className="space-y-4">
-          {revenue.map(tier => (
-            <div key={tier.tier} className="flex items-center justify-between p-4 rounded-lg" style={{ background: COLORS.gray[50] }}>
+          {revenue.map((tier) => (
+            <div
+              key={tier.tier}
+              className="flex items-center justify-between p-4 rounded-lg"
+              style={{ background: COLORS.gray[50] }}
+            >
               <div>
                 <p className="font-semibold" style={{ color: COLORS.gray[900] }}>
                   {tier.label}
@@ -504,7 +523,9 @@ const UsersTab: React.FC<{
         style={{ background: 'white', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
       >
         <table className="w-full">
-          <thead style={{ background: COLORS.gray[100], borderBottom: `1px solid ${COLORS.gray[200]}` }}>
+          <thead
+            style={{ background: COLORS.gray[100], borderBottom: `1px solid ${COLORS.gray[200]}` }}
+          >
             <tr>
               <th className="px-6 py-4 text-left font-semibold" style={{ color: COLORS.gray[700] }}>
                 Name
@@ -524,14 +545,11 @@ const UsersTab: React.FC<{
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
-              <tr
-                key={user.id}
-                style={{ borderBottom: `1px solid ${COLORS.gray[200]}` }}
-              >
+            {users.map((user) => (
+              <tr key={user.id} style={{ borderBottom: `1px solid ${COLORS.gray[200]}` }}>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <img
+                    <SmartImage
                       src={user.avatar || 'https://via.placeholder.com/40'}
                       alt={user.name}
                       className="w-10 h-10 rounded-full"
@@ -552,14 +570,14 @@ const UsersTab: React.FC<{
                         user.role === 'admin'
                           ? `${COLORS.danger}20`
                           : user.role === 'seller'
-                          ? `${COLORS.primary[500]}20`
-                          : `${COLORS.gray[200]}`,
+                            ? `${COLORS.primary[500]}20`
+                            : `${COLORS.gray[200]}`,
                       color:
                         user.role === 'admin'
                           ? COLORS.danger
                           : user.role === 'seller'
-                          ? COLORS.primary[600]
-                          : COLORS.gray[700],
+                            ? COLORS.primary[600]
+                            : COLORS.gray[700]
                     }}
                   >
                     {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
@@ -573,10 +591,7 @@ const UsersTab: React.FC<{
                         user.accountStatus === 'active'
                           ? `${COLORS.success}20`
                           : `${COLORS.danger}20`,
-                      color:
-                        user.accountStatus === 'active'
-                          ? COLORS.success
-                          : COLORS.danger,
+                      color: user.accountStatus === 'active' ? COLORS.success : COLORS.danger
                     }}
                   >
                     {user.accountStatus.charAt(0).toUpperCase() + user.accountStatus.slice(1)}
@@ -593,9 +608,7 @@ const UsersTab: React.FC<{
                     </button>
                   )}
                   {user.accountStatus === 'suspended' && (
-                    <span style={{ color: COLORS.gray[500], fontSize: '0.875rem' }}>
-                      Blocked
-                    </span>
+                    <span style={{ color: COLORS.gray[500], fontSize: '0.875rem' }}>Blocked</span>
                   )}
                 </td>
               </tr>
@@ -641,10 +654,7 @@ const VerificationTab: React.FC<{
           className="rounded-lg p-12 text-center"
           style={{ background: 'white', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
         >
-          <CheckCircle
-            size={48}
-            style={{ color: COLORS.success, margin: '0 auto 16px' }}
-          />
+          <CheckCircle size={48} style={{ color: COLORS.success, margin: '0 auto 16px' }} />
           <p className="text-lg font-medium" style={{ color: COLORS.gray[900] }}>
             No pending verifications
           </p>
@@ -652,7 +662,7 @@ const VerificationTab: React.FC<{
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {queue.map(request => (
+          {queue.map((request) => (
             <div
               key={request.id}
               className="rounded-lg overflow-hidden"
@@ -660,7 +670,7 @@ const VerificationTab: React.FC<{
             >
               {/* ID Photo */}
               <div className="relative h-48 bg-gray-100">
-                <img
+                <SmartImage
                   src={request.idPhotoUrl}
                   alt="ID Photo"
                   className="w-full h-full object-cover"
@@ -710,7 +720,9 @@ const VerificationTab: React.FC<{
 // MAP TAB COMPONENT
 // ============================================
 const MapTab: React.FC<{ users: DatabaseUser[] }> = ({ users }) => {
-  const activeSubscribers = users.filter(u => u.subscriptionExpiry && u.subscriptionExpiry > Date.now());
+  const activeSubscribers = users.filter(
+    (u) => u.subscriptionExpiry && u.subscriptionExpiry > Date.now()
+  );
 
   return (
     <div>
@@ -731,7 +743,7 @@ const MapTab: React.FC<{ users: DatabaseUser[] }> = ({ users }) => {
             Map integration with Leaflet coming soon
           </p>
           <div className="space-y-2">
-            {activeSubscribers.slice(0, 5).map(sub => (
+            {activeSubscribers.slice(0, 5).map((sub) => (
               <p key={sub.id} style={{ color: COLORS.gray[600], fontSize: '0.875rem' }}>
                 📍 {sub.name}
               </p>

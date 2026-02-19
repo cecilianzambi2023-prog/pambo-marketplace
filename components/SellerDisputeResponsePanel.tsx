@@ -1,7 +1,7 @@
 /**
  * Seller Dispute Response Panel - KENYA ONLY
  * Allows sellers to respond to buyer disputes
- * 
+ *
  * Features:
  * - View pending disputes
  * - Upload counter-evidence
@@ -25,7 +25,7 @@ import {
   Trash2,
   Shield,
   Calendar,
-  MessageSquare,
+  MessageSquare
 } from 'lucide-react';
 import { getSellerDisputes, getDisputeDetails, sellerRespond } from '../services/disputeService';
 
@@ -52,7 +52,9 @@ interface SellerDisputeResponsePanelProps {
   seller_id: string;
 }
 
-export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProps> = ({ seller_id }) => {
+export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProps> = ({
+  seller_id
+}) => {
   const [disputes, setDisputes] = useState<DisputeWithDetails[]>([]);
   const [selectedDispute, setSelectedDispute] = useState<DisputeWithDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,11 +79,13 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
 
         // Check if seller has more than 3 unresolved disputes
         const unresolvedDisputes = result.disputes.filter(
-          d => d.status === 'seller_response_pending' || d.status === 'in_negotiation'
+          (d) => d.status === 'seller_response_pending' || d.status === 'in_negotiation'
         );
 
         if (unresolvedDisputes.length > 3) {
-          setErrorMessage(`⚠️ Account suspended: You have ${unresolvedDisputes.length} unresolved disputes (max 3 allowed). Contact support to appeal.`);
+          setErrorMessage(
+            `⚠️ Account suspended: You have ${unresolvedDisputes.length} unresolved disputes (max 3 allowed). Contact support to appeal.`
+          );
         }
       }
     } catch (error) {
@@ -171,7 +175,7 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
 
     // Get buyer's phone number from dispute data
     const buyerPhone = (selectedDispute as any).buyer_phone;
-    
+
     if (!buyerPhone) {
       setErrorMessage('Buyer phone number not available. Please respond here first.');
       return;
@@ -179,11 +183,11 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
 
     // Format phone number (assuming Kenyan format, remove +254 if present)
     const cleanPhone = buyerPhone.replace('+', '').replace(/\s/g, '');
-    
+
     // Create WhatsApp message
     const message = `Hi ${selectedDispute.buyer?.full_name || 'there'}, I'd like to discuss the dispute regarding order ${selectedDispute.order_id} (KES ${selectedDispute.amount}). Let's resolve this together. #DisputeRef${selectedDispute.id}`;
     const encodedMessage = encodeURIComponent(message);
-    
+
     // Open WhatsApp (works on web and mobile)
     const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
@@ -227,7 +231,7 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
         <div className="p-4 rounded-lg bg-green-50 border border-green-200">
           <p className="text-xs text-green-700 font-semibold">RESOLVED</p>
           <p className="text-2xl font-bold text-green-700 mt-1">
-            {disputes.filter(d => d.status === 'resolved').length}
+            {disputes.filter((d) => d.status === 'resolved').length}
           </p>
           <p className="text-xs text-green-600 mt-1">Successfully closed</p>
         </div>
@@ -246,7 +250,7 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
             </div>
           ) : (
             <div className="space-y-2">
-              {disputes.map(dispute => {
+              {disputes.map((dispute) => {
                 const daysRemaining = calculateDaysRemaining(dispute.created_at);
                 const isUrgent = daysRemaining <= 3 && dispute.status === 'seller_response_pending';
 
@@ -265,18 +269,20 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
                         <p className="font-semibold text-sm text-gray-900 line-clamp-1">
                           {dispute.title}
                         </p>
-                        <p className="text-xs text-gray-600 mt-1">
-                          {dispute.buyer?.full_name}
-                        </p>
+                        <p className="text-xs text-gray-600 mt-1">{dispute.buyer?.full_name}</p>
                         <div className="flex items-center gap-2 mt-2">
-                          <span className={`text-xs px-2 py-1 rounded-full ${
-                            dispute.status === 'seller_response_pending'
-                              ? 'bg-red-100 text-red-700 font-semibold'
-                              : dispute.status === 'in_negotiation'
-                              ? 'bg-yellow-100 text-yellow-700'
-                              : 'bg-green-100 text-green-700'
-                          }`}>
-                            {dispute.status === 'seller_response_pending' ? '⏳ Respond Now' : dispute.status.replace('_', ' ')}
+                          <span
+                            className={`text-xs px-2 py-1 rounded-full ${
+                              dispute.status === 'seller_response_pending'
+                                ? 'bg-red-100 text-red-700 font-semibold'
+                                : dispute.status === 'in_negotiation'
+                                  ? 'bg-yellow-100 text-yellow-700'
+                                  : 'bg-green-100 text-green-700'
+                            }`}
+                          >
+                            {dispute.status === 'seller_response_pending'
+                              ? '⏳ Respond Now'
+                              : dispute.status.replace('_', ' ')}
                           </span>
                           {isUrgent && (
                             <span className="text-xs font-bold text-red-600">
@@ -285,9 +291,7 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
                           )}
                         </div>
                       </div>
-                      <p className="text-xs text-gray-500 shrink-0">
-                        KES {dispute.amount}
-                      </p>
+                      <p className="text-xs text-gray-500 shrink-0">KES {dispute.amount}</p>
                     </div>
                   </button>
                 );
@@ -308,7 +312,9 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
                 </div>
                 <div className="text-right shrink-0">
                   <p className="text-sm text-gray-600">Dispute Amount</p>
-                  <p className="text-2xl font-bold text-orange-600">KES {selectedDispute.amount.toLocaleString()}</p>
+                  <p className="text-2xl font-bold text-orange-600">
+                    KES {selectedDispute.amount.toLocaleString()}
+                  </p>
                 </div>
               </div>
 
@@ -316,7 +322,9 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
               <div className="grid grid-cols-3 gap-3 text-sm">
                 <div>
                   <span className="text-gray-600">Category</span>
-                  <p className="font-semibold text-gray-900">{selectedDispute.category.replace('_', ' ')}</p>
+                  <p className="font-semibold text-gray-900">
+                    {selectedDispute.category.replace('_', ' ')}
+                  </p>
                 </div>
                 <div>
                   <span className="text-gray-600">Filed</span>
@@ -325,14 +333,22 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
                   </p>
                 </div>
                 <div>
-                  <span className={`text-gray-600 ${
-                    calculateDaysRemaining(selectedDispute.created_at) <= 3 ? 'text-red-600 font-bold' : ''
-                  }`}>
+                  <span
+                    className={`text-gray-600 ${
+                      calculateDaysRemaining(selectedDispute.created_at) <= 3
+                        ? 'text-red-600 font-bold'
+                        : ''
+                    }`}
+                  >
                     Response Deadline
                   </span>
-                  <p className={`font-semibold ${
-                    calculateDaysRemaining(selectedDispute.created_at) <= 3 ? 'text-red-600' : 'text-gray-900'
-                  }`}>
+                  <p
+                    className={`font-semibold ${
+                      calculateDaysRemaining(selectedDispute.created_at) <= 3
+                        ? 'text-red-600'
+                        : 'text-gray-900'
+                    }`}
+                  >
                     {calculateDaysRemaining(selectedDispute.created_at)} days left
                   </p>
                 </div>
@@ -342,7 +358,9 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
             {/* Buyer's Evidence */}
             {selectedDispute.evidence_urls && selectedDispute.evidence_urls.length > 0 && (
               <div className="p-5 border-b border-gray-200">
-                <p className="text-sm font-semibold text-gray-900 mb-3">📸 Buyer's Evidence ({selectedDispute.evidence_urls.length} files)</p>
+                <p className="text-sm font-semibold text-gray-900 mb-3">
+                  📸 Buyer's Evidence ({selectedDispute.evidence_urls.length} files)
+                </p>
                 <div className="grid grid-cols-2 gap-3">
                   {selectedDispute.evidence_urls.map((url, idx) => (
                     <a
@@ -383,7 +401,7 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
                   </label>
                   <textarea
                     value={response}
-                    onChange={e => setResponse(e.target.value)}
+                    onChange={(e) => setResponse(e.target.value)}
                     placeholder="Explain your side of the story. What happened? How do you want to resolve this?"
                     maxLength={800}
                     rows={4}
@@ -411,7 +429,9 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
                         <div className="text-center">
                           <Upload size={24} className="mx-auto text-gray-400 mb-1" />
                           <p className="text-sm text-gray-700">Upload counter-evidence</p>
-                          <p className="text-xs text-gray-500">Receipts, messages, proof of delivery, etc.</p>
+                          <p className="text-xs text-gray-500">
+                            Receipts, messages, proof of delivery, etc.
+                          </p>
                         </div>
                       ) : (
                         <div className="text-center text-sm text-gray-600">
@@ -447,7 +467,9 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
 
                 {/* Info Box */}
                 <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
-                  <p className="text-xs font-semibold text-blue-900 mb-2">💡 Tips for Better Response</p>
+                  <p className="text-xs font-semibold text-blue-900 mb-2">
+                    💡 Tips for Better Response
+                  </p>
                   <ul className="text-xs text-blue-800 space-y-1">
                     <li>✅ Be honest and professional</li>
                     <li>✅ Provide specific details with dates</li>
@@ -510,7 +532,9 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
               <div className="p-5 text-center">
                 <CheckCircle size={40} className="text-green-600 mx-auto mb-2" />
                 <p className="font-bold text-gray-900">Dispute Resolved</p>
-                <p className="text-sm text-gray-600 mt-1">This dispute has been closed and resolved</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  This dispute has been closed and resolved
+                </p>
               </div>
             )}
           </div>
@@ -518,7 +542,9 @@ export const SellerDisputeResponsePanel: React.FC<SellerDisputeResponsePanelProp
           <div className="col-span-2 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
             <MessageSquare size={40} className="mx-auto text-gray-400 mb-3" />
             <p className="text-gray-600 font-semibold">Select a dispute to respond</p>
-            <p className="text-sm text-gray-500 mt-1">Your response helps resolve issues quickly and fairly</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Your response helps resolve issues quickly and fairly
+            </p>
           </div>
         )}
       </div>

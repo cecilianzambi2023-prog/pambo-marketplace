@@ -1,7 +1,7 @@
 /**
  * Admin Dispute Review Queue - KENYA ONLY
  * Allows Kenya admins to review and arbitrate unresolved disputes
- * 
+ *
  * Features:
  * - View all admin_review disputes
  * - Evidence review (buyer & seller)
@@ -24,13 +24,13 @@ import {
   Clock,
   User,
   FileText,
-  ArrowRight,
+  ArrowRight
 } from 'lucide-react';
-import { 
-  getPendingAdminDisputes, 
-  getDisputeDetails, 
+import {
+  getPendingAdminDisputes,
+  getDisputeDetails,
   adminDecide,
-  processMpesaRefund 
+  processMpesaRefund
 } from '../services/disputeService';
 
 interface AdminDisputeDetail {
@@ -131,7 +131,10 @@ export const AdminDisputeQueue: React.FC<AdminDisputeQueueProps> = ({ admin_id }
 
       if (result.success) {
         // Process M-Pesa refund if needed
-        if ((decision === 'full_refund' || decision === 'partial_refund') && selectedDispute.buyer?.phone_number) {
+        if (
+          (decision === 'full_refund' || decision === 'partial_refund') &&
+          selectedDispute.buyer?.phone_number
+        ) {
           await processMpesaRefund(
             selectedDispute.id,
             selectedDispute.buyer.phone_number,
@@ -217,7 +220,7 @@ export const AdminDisputeQueue: React.FC<AdminDisputeQueueProps> = ({ admin_id }
             </div>
           ) : (
             <div className="space-y-2">
-              {disputes.map(dispute => (
+              {disputes.map((dispute) => (
                 <button
                   key={dispute.id}
                   onClick={() => setSelectedDispute(dispute)}
@@ -264,7 +267,9 @@ export const AdminDisputeQueue: React.FC<AdminDisputeQueueProps> = ({ admin_id }
                 </div>
                 <div className="text-right">
                   <p className="text-xs text-gray-600">Dispute ID</p>
-                  <p className="text-sm font-mono text-gray-900">{selectedDispute.id.slice(0, 8)}</p>
+                  <p className="text-sm font-mono text-gray-900">
+                    {selectedDispute.id.slice(0, 8)}
+                  </p>
                 </div>
               </div>
 
@@ -277,7 +282,10 @@ export const AdminDisputeQueue: React.FC<AdminDisputeQueueProps> = ({ admin_id }
                   <p className="font-semibold text-gray-900 mt-1">
                     {selectedDispute.buyer?.full_name}
                   </p>
-                  <a href={`mailto:${selectedDispute.buyer?.email}`} className="text-xs text-orange-600 mt-1">
+                  <a
+                    href={`mailto:${selectedDispute.buyer?.email}`}
+                    className="text-xs text-orange-600 mt-1"
+                  >
                     {selectedDispute.buyer?.email}
                   </a>
                 </div>
@@ -293,7 +301,10 @@ export const AdminDisputeQueue: React.FC<AdminDisputeQueueProps> = ({ admin_id }
                   <p className="font-semibold text-gray-900 mt-1">
                     {selectedDispute.seller?.full_name}
                   </p>
-                  <a href={`mailto:${selectedDispute.seller?.email}`} className="text-xs text-orange-600 mt-1">
+                  <a
+                    href={`mailto:${selectedDispute.seller?.email}`}
+                    className="text-xs text-orange-600 mt-1"
+                  >
                     {selectedDispute.seller?.email}
                   </a>
                 </div>
@@ -349,12 +360,28 @@ export const AdminDisputeQueue: React.FC<AdminDisputeQueueProps> = ({ admin_id }
                 </label>
                 <div className="space-y-2">
                   {[
-                    { value: 'full_refund', label: '✅ Full Refund', desc: 'Buyer wins - full refund' },
-                    { value: 'partial_refund', label: '⚖️ Partial Refund', desc: 'Partial resolution' },
-                    { value: 'replacement', label: '🔄 Replacement', desc: 'Seller sends replacement' },
+                    {
+                      value: 'full_refund',
+                      label: '✅ Full Refund',
+                      desc: 'Buyer wins - full refund'
+                    },
+                    {
+                      value: 'partial_refund',
+                      label: '⚖️ Partial Refund',
+                      desc: 'Partial resolution'
+                    },
+                    {
+                      value: 'replacement',
+                      label: '🔄 Replacement',
+                      desc: 'Seller sends replacement'
+                    },
                     { value: 'rejected', label: '❌ Rejected', desc: 'Dispute not valid' },
-                    { value: 'mutual_agreement', label: '🤝 Mutual Agreement', desc: 'Both parties agreed' },
-                  ].map(opt => (
+                    {
+                      value: 'mutual_agreement',
+                      label: '🤝 Mutual Agreement',
+                      desc: 'Both parties agreed'
+                    }
+                  ].map((opt) => (
                     <button
                       key={opt.value}
                       type="button"
@@ -388,7 +415,14 @@ export const AdminDisputeQueue: React.FC<AdminDisputeQueueProps> = ({ admin_id }
                     <input
                       type="number"
                       value={refundAmount}
-                      onChange={e => setRefundAmount(Math.min(selectedDispute.amount, Math.max(0, parseFloat(e.target.value) || 0)))}
+                      onChange={(e) =>
+                        setRefundAmount(
+                          Math.min(
+                            selectedDispute.amount,
+                            Math.max(0, parseFloat(e.target.value) || 0)
+                          )
+                        )
+                      }
                       min="0"
                       max={selectedDispute.amount}
                       className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500"
@@ -407,7 +441,7 @@ export const AdminDisputeQueue: React.FC<AdminDisputeQueueProps> = ({ admin_id }
                 </label>
                 <textarea
                   value={reasoning}
-                  onChange={e => setReasoning(e.target.value)}
+                  onChange={(e) => setReasoning(e.target.value)}
                   placeholder="Explain your decision based on evidence. This is shown to both parties."
                   maxLength={500}
                   rows={4}
@@ -418,7 +452,9 @@ export const AdminDisputeQueue: React.FC<AdminDisputeQueueProps> = ({ admin_id }
 
               {/* Important Notes */}
               <div className="p-3 rounded-lg bg-blue-50 border border-blue-200">
-                <p className="text-xs font-semibold text-blue-900 mb-2">⚖️ Kenya Arbitration Standards</p>
+                <p className="text-xs font-semibold text-blue-900 mb-2">
+                  ⚖️ Kenya Arbitration Standards
+                </p>
                 <ul className="text-xs text-blue-800 space-y-1">
                   <li>✅ Base decision on available evidence</li>
                   <li>✅ Consider seller reputation history</li>
@@ -468,7 +504,9 @@ export const AdminDisputeQueue: React.FC<AdminDisputeQueueProps> = ({ admin_id }
           <div className="col-span-2 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
             <Scale size={40} className="mx-auto text-gray-400 mb-3" />
             <p className="text-gray-600 font-semibold">Select a dispute to review</p>
-            <p className="text-sm text-gray-500 mt-1">Review evidence and make an admin arbitration decision</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Review evidence and make an admin arbitration decision
+            </p>
           </div>
         )}
       </div>

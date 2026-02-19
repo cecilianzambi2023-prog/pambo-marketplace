@@ -2,34 +2,34 @@
  * HubArchitecture.ts
  * ==================
  * Pambo.com 6-in-1 Hub Infrastructure Types
- * 
+ *
  * ARCHITECTURE: HUB SEGREGATION WITH SHARED USERS
  * ═══════════════════════════════════════════════════════════
- * 
+ *
  * SHARED ACROSS ALL HUBS (in profiles table, NO hub_id):
  * ├── User ID (one login = access to all 6 hubs)
  * ├── Email (single identity)
  * ├── Subscription Tier (applies everywhere)
  * └── Verification Badge (trust level across all hubs)
- * 
+ *
  * SEGREGATED BY HUB (hub_id column in listings table):
  * ├── Listings (each hub has own inventory)
  * ├── Analytics (each hub has own GMV/stats)
  * ├── Reviews (each hub has own ratings)
  * └── Messages (each hub has own conversations)
- * 
+ *
  * DATA MODEL:
  * • profiles: { id, email, subscription_tier, verification_badge } [NO hub_id]
  * • listings: { id, hub_id, title, created_by, ... } [WITH hub_id]
  * • Query: WHERE hub_id = 'marketplace' AND created_by = userId
- * 
+ *
  * This enables:
  * ✅ One auth session across all 6 hubs
  * ✅ One subscription tier for all hubs
  * ✅ Independent listing management per hub
  * ✅ Hub-specific business rules and features
  * ✅ Billion-dollar scale with trillion items
- * 
+ *
  * Every type here reflects this segregation model.
  */
 
@@ -37,7 +37,13 @@
 // HUB DEFINITIONS
 // ===================================
 
-export type HubId = 'marketplace' | 'wholesale' | 'digital' | 'mkulima' | 'services' | 'live_commerce';
+export type HubId =
+  | 'marketplace'
+  | 'wholesale'
+  | 'digital'
+  | 'mkulima'
+  | 'services'
+  | 'live_commerce';
 
 export const HUB_IDS = {
   MARKETPLACE: 'marketplace' as const,
@@ -45,7 +51,7 @@ export const HUB_IDS = {
   DIGITAL: 'digital' as const,
   MKULIMA: 'mkulima' as const,
   SERVICES: 'services' as const,
-  LIVE_COMMERCE: 'live_commerce' as const,
+  LIVE_COMMERCE: 'live_commerce' as const
 } as const;
 
 // ===================================
@@ -72,9 +78,9 @@ export interface HubFeatures {
 export interface HubRules {
   // Listing limits per tier
   listingLimits: {
-    mkulima: number;    // 50
-    starter: number;    // 200
-    pro: number;        // Unlimited
+    mkulima: number; // 50
+    starter: number; // 200
+    pro: number; // Unlimited
     enterprise: number; // Unlimited
   };
 
@@ -105,16 +111,16 @@ export interface HubConfig {
 
   // Branding
   color: {
-    primary: string;      // e.g. "#10b981" for green
+    primary: string; // e.g. "#10b981" for green
     secondary: string;
     accent: string;
   };
-  icon: string;              // SVG or icon name
-  logo?: string;             // URL to logo (optional)
-  bannerImage?: string;      // URL to hub banner
+  icon: string; // SVG or icon name
+  logo?: string; // URL to logo (optional)
+  bannerImage?: string; // URL to hub banner
 
   // Audience
-  targetAudience: string;    // e.g. "Farmers and small traders"
+  targetAudience: string; // e.g. "Farmers and small traders"
   audienceDescription: string;
 
   // Features available in this hub
@@ -124,8 +130,8 @@ export interface HubConfig {
   rules: HubRules;
 
   // URL and routing
-  routePath: string;         // e.g. "/hub/marketplace"
-  urlSlug: string;           // e.g. "marketplace"
+  routePath: string; // e.g. "/hub/marketplace"
+  urlSlug: string; // e.g. "marketplace"
 
   // Priority for UI navigation (lower = higher priority)
   navigationPriority: number;
@@ -137,11 +143,11 @@ export interface HubConfig {
   metrics?: {
     monthlyActiveUsers?: number;
     totalListings?: number;
-    gmv?: number;             // Gross Merchandise Value
+    gmv?: number; // Gross Merchandise Value
   };
 
   // Coming soon?
-  launchDate?: string;       // ISO timestamp
+  launchDate?: string; // ISO timestamp
   isComingSoon?: boolean;
 }
 
@@ -162,7 +168,7 @@ export interface HubContextValue {
   // Hub-specific preferences
   hubPreferences: {
     [K in HubId]?: {
-      lastVisited: string;      // ISO timestamp
+      lastVisited: string; // ISO timestamp
       searchFilters?: Record<string, any>;
       viewPreference?: 'grid' | 'list';
     };
@@ -195,7 +201,7 @@ export interface HubSearchState {
   hubId: HubId;
   query: string;
   filters: HubListingFilters;
-  results: any[];          // Listing type
+  results: any[]; // Listing type
   isLoading: boolean;
   error?: string;
 }
@@ -243,7 +249,7 @@ export interface HubAnalytics {
   avgListingsPerSeller: number;
 
   // Financial metrics
-  gmv: number;                // Gross Merchandise Value
+  gmv: number; // Gross Merchandise Value
   avgOrderValue: number;
   conversionRate: number;
 
@@ -341,7 +347,7 @@ export interface HubMigration {
   toHub: HubId;
   reason?: string;
   migratedListings?: number;
-  preserveRating: boolean;  // Should rating transfer to new hub?
+  preserveRating: boolean; // Should rating transfer to new hub?
   timestamp: string;
 }
 
@@ -373,7 +379,7 @@ export const HUB_QUICK_ACTIONS: Record<HubId, HubQuickAction[]> = {
       icon: 'Plus',
       href: '/hub/marketplace/create',
       order: 1,
-      onlyForRoles: ['seller'],
+      onlyForRoles: ['seller']
     },
     {
       id: 'browse',
@@ -381,8 +387,8 @@ export const HUB_QUICK_ACTIONS: Record<HubId, HubQuickAction[]> = {
       label: 'Browse',
       icon: 'Search',
       href: '/hub/marketplace/browse',
-      order: 2,
-    },
+      order: 2
+    }
   ],
   wholesale: [
     {
@@ -392,7 +398,7 @@ export const HUB_QUICK_ACTIONS: Record<HubId, HubQuickAction[]> = {
       icon: 'ShoppingCart',
       href: '/hub/wholesale/create',
       order: 1,
-      onlyForRoles: ['seller'],
+      onlyForRoles: ['seller']
     },
     {
       id: 'browse-wholesale',
@@ -400,8 +406,8 @@ export const HUB_QUICK_ACTIONS: Record<HubId, HubQuickAction[]> = {
       label: 'Find Wholesalers',
       icon: 'TrendingUp',
       href: '/hub/wholesale/browse',
-      order: 2,
-    },
+      order: 2
+    }
   ],
   digital: [
     {
@@ -411,8 +417,8 @@ export const HUB_QUICK_ACTIONS: Record<HubId, HubQuickAction[]> = {
       icon: 'Cloud',
       href: '/hub/digital/upload',
       order: 1,
-      onlyForRoles: ['seller'],
-    },
+      onlyForRoles: ['seller']
+    }
   ],
   mkulima: [
     {
@@ -422,8 +428,8 @@ export const HUB_QUICK_ACTIONS: Record<HubId, HubQuickAction[]> = {
       icon: 'Leaf',
       href: '/hub/mkulima/create',
       order: 1,
-      onlyForRoles: ['seller'],
-    },
+      onlyForRoles: ['seller']
+    }
   ],
   services: [
     {
@@ -433,8 +439,8 @@ export const HUB_QUICK_ACTIONS: Record<HubId, HubQuickAction[]> = {
       icon: 'Briefcase',
       href: '/hub/services/create',
       order: 1,
-      onlyForRoles: ['seller'],
-    },
+      onlyForRoles: ['seller']
+    }
   ],
   live_commerce: [
     {
@@ -445,48 +451,51 @@ export const HUB_QUICK_ACTIONS: Record<HubId, HubQuickAction[]> = {
       href: '/hub/live-commerce/stream',
       order: 1,
       onlyForRoles: ['seller'],
-      requiresSubscription: 'pro',
-    },
-  ],
+      requiresSubscription: 'pro'
+    }
+  ]
 };
 
 // ===================================
 // HUB CONSTANTS
 // ===================================
 
-export const HUB_METADATA: Record<HubId, {
-  title: string;
-  emoji: string;
-  description: string;
-}> = {
+export const HUB_METADATA: Record<
+  HubId,
+  {
+    title: string;
+    emoji: string;
+    description: string;
+  }
+> = {
   marketplace: {
     title: 'Marketplace',
     emoji: '🏪',
-    description: 'General marketplace for products and goods',
+    description: 'General marketplace for products and goods'
   },
   wholesale: {
     title: 'Wholesale',
     emoji: '🏭',
-    description: 'Bulk buying and selling for businesses',
+    description: 'Bulk buying and selling for businesses'
   },
   digital: {
     title: 'Digital Hub',
     emoji: '💻',
-    description: 'Digital products, courses, and software',
+    description: 'Digital products, courses, and software'
   },
   mkulima: {
     title: 'Mkulima Mdogo',
     emoji: '🌾',
-    description: 'Farmer-focused hub with special pricing',
+    description: 'Farmer-focused hub with special pricing'
   },
   services: {
     title: 'Services Hub',
     emoji: '🛠️',
-    description: 'Professional services and freelance work',
+    description: 'Professional services and freelance work'
   },
   live_commerce: {
     title: 'Live Commerce',
     emoji: '🎥',
-    description: 'Real-time streaming sales',
-  },
+    description: 'Real-time streaming sales'
+  }
 };

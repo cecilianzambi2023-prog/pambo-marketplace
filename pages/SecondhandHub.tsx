@@ -13,7 +13,7 @@ import {
   ChevronRight,
   Plus,
   UserCircle,
-  Sparkles,
+  Sparkles
 } from 'lucide-react';
 import { secondhandService } from '../services/secondhandService';
 import { SecondhandListingModal } from '../components/SecondhandListingModal';
@@ -73,7 +73,7 @@ const conditionLabels: Record<string, string> = {
   new: 'New',
   like_new: 'Like New',
   used: 'Used',
-  fair: 'Fair',
+  fair: 'Fair'
 };
 
 export const SecondhandHub: React.FC<SecondhandHubProps> = ({
@@ -81,7 +81,7 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
   isAdmin,
   onFollowToggle,
   isFollowing,
-  onLoginRequired,
+  onLoginRequired
 }) => {
   const [listings, setListings] = useState<Listing[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -116,8 +116,8 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
           category: selectedCategory || undefined,
           condition: selectedCondition || undefined,
           county: selectedCounty || undefined,
-          search: searchTerm || undefined,
-        }),
+          search: searchTerm || undefined
+        })
       ]);
       setCategories(catData || []);
       setListings(listingData || []);
@@ -179,7 +179,7 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
     await secondhandService.addComment({
       listingId,
       userId: user.id,
-      content,
+      content
     });
 
     const comments = await secondhandService.getComments(listingId);
@@ -220,7 +220,7 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
       sellerName: user.name,
       sellerPhone: user.phone || undefined,
       sellerWhatsapp: user.phone || undefined,
-      sellerEmail: user.email || undefined,
+      sellerEmail: user.email || undefined
     });
 
     setIsModalOpen(false);
@@ -265,11 +265,13 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
 
     const name = window.prompt('Category name', category.name) || category.name;
     const group = window.prompt('Group name', category.group_name) || category.group_name;
-    const sortOrder = Number(window.prompt('Sort order', String(category.sort_order)) || category.sort_order);
+    const sortOrder = Number(
+      window.prompt('Sort order', String(category.sort_order)) || category.sort_order
+    );
     await secondhandService.updateCategory(category.id, {
       name,
       group_name: group,
-      sort_order: sortOrder,
+      sort_order: sortOrder
     });
     await loadData();
   };
@@ -290,56 +292,63 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
       slug,
       group_name: group,
       sort_order: sortOrder,
-      is_active: true,
+      is_active: true
     });
     await loadData();
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-lime-50">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-lime-50 text-[15px]">
       <section className="relative overflow-hidden bg-gradient-to-r from-emerald-700 via-green-700 to-lime-700 text-white">
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
-        <div className="relative max-w-6xl mx-auto px-4 py-8 md:py-9">
-          <div className="flex flex-col lg:flex-row gap-8 items-start">
+        <div className="relative max-w-6xl mx-auto px-4 py-6 md:py-7">
+          <div className="flex flex-col lg:flex-row gap-6 items-start">
             <div className="flex-1">
               <div className="inline-flex items-center gap-2 bg-emerald-500/20 px-3 py-1 rounded-full text-sm">
                 <Leaf size={16} /> Kenya Secondhand Hub
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold mt-3 leading-tight">
+              <h1 className="text-2xl md:text-3xl font-bold mt-2 leading-tight">
                 Buy &amp; sell secondhand items locally
               </h1>
-              <p className="text-emerald-100 mt-3 text-base max-w-2xl">
-                A C2C marketplace for Kenya. Meet safely, inspect items, and keep cash in your community.
+              <p className="text-emerald-100 mt-2 text-sm md:text-base max-w-2xl">
+                A C2C marketplace for Kenya. Meet safely, inspect items, and keep cash in your
+                community.
               </p>
-              <div className="flex flex-wrap gap-4 mt-6">
+              <div className="flex flex-wrap gap-3 mt-4">
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-2 bg-white text-emerald-700 px-5 py-3 rounded-lg font-semibold shadow hover:bg-emerald-50"
+                  className="flex items-center gap-2 bg-white text-emerald-700 px-4 py-2.5 rounded-lg font-semibold shadow hover:bg-emerald-50"
                 >
                   <Plus size={18} /> Post a listing
                 </button>
-                <button className="flex items-center gap-2 border border-white/40 px-5 py-3 rounded-lg hover:bg-white/10">
+                <button className="flex items-center gap-2 border border-white/40 px-4 py-2.5 rounded-lg hover:bg-white/10">
                   <Shield size={18} /> Safety tips
                 </button>
               </div>
             </div>
-            <div className="flex-1 bg-white/10 p-5 rounded-2xl border border-white/20">
+            <div className="flex-1 bg-white/10 p-4 rounded-2xl border border-white/20">
               <div className="flex items-center gap-3">
                 <Sparkles size={18} />
                 <span className="font-semibold">Trusted peer-to-peer trade</span>
               </div>
               <ul className="mt-3 space-y-2 text-emerald-100 text-sm">
-                <li className="flex items-center gap-2"><ChevronRight size={14} /> Local meetups only, no shipping</li>
-                <li className="flex items-center gap-2"><ChevronRight size={14} /> Inspect items before paying</li>
-                <li className="flex items-center gap-2"><ChevronRight size={14} /> Verified seller badges for trusted profiles</li>
+                <li className="flex items-center gap-2">
+                  <ChevronRight size={14} /> Local meetups only, no shipping
+                </li>
+                <li className="flex items-center gap-2">
+                  <ChevronRight size={14} /> Inspect items before paying
+                </li>
+                <li className="flex items-center gap-2">
+                  <ChevronRight size={14} /> Verified seller badges for trusted profiles
+                </li>
               </ul>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 mt-6">
-        <div className="bg-white rounded-2xl shadow-lg p-6 grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <section className="max-w-6xl mx-auto px-4 mt-4">
+        <div className="bg-white rounded-2xl shadow-lg p-4 grid grid-cols-1 lg:grid-cols-4 gap-3">
           <div className="lg:col-span-2">
             <label className="text-sm font-semibold text-gray-600">Search</label>
             <div className="mt-2 flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-2">
@@ -360,9 +369,13 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
               className="mt-2 w-full border border-gray-200 rounded-lg px-3 py-2"
             >
               <option value="">All categories</option>
-              {categories.filter((cat) => cat.is_active).map((cat) => (
-                <option key={cat.id} value={cat.slug}>{cat.name}</option>
-              ))}
+              {categories
+                .filter((cat) => cat.is_active)
+                .map((cat) => (
+                  <option key={cat.id} value={cat.slug}>
+                    {cat.name}
+                  </option>
+                ))}
             </select>
           </div>
           <div>
@@ -374,7 +387,9 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
             >
               <option value="">All conditions</option>
               {Object.entries(conditionLabels).map(([value, label]) => (
-                <option key={value} value={value}>{label}</option>
+                <option key={value} value={value}>
+                  {label}
+                </option>
               ))}
             </select>
           </div>
@@ -393,37 +408,39 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <aside className="lg:col-span-1 space-y-6">
-          <div className="bg-white rounded-2xl p-5 shadow">
+      <section className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-4 gap-5">
+        <aside className="lg:col-span-1 space-y-4">
+          <div className="bg-white rounded-2xl p-4 shadow">
             <div className="flex items-center gap-2 text-emerald-700 font-semibold">
               <Filter size={16} /> Category groups
             </div>
             <div className="mt-4 space-y-4 text-sm">
               {Object.entries(groupedCategories).map(([group, items]: [string, Category[]]) => (
-                  <div key={group}>
-                    <p className="font-semibold text-gray-700">{group}</p>
-                    <div className="mt-2 space-y-1">
-                      {items.sort((a, b) => a.sort_order - b.sort_order).map((cat) => (
-                      <button
-                        key={cat.id}
-                        onClick={() => setSelectedCategory(cat.slug)}
-                        className={`block w-full text-left px-3 py-1 rounded-lg ${
-                          selectedCategory === cat.slug
-                            ? 'bg-emerald-100 text-emerald-700 font-semibold'
-                            : 'text-gray-600 hover:bg-gray-50'
-                        }`}
-                      >
-                        {cat.name}
-                      </button>
-                    ))}
+                <div key={group}>
+                  <p className="font-semibold text-gray-700">{group}</p>
+                  <div className="mt-2 space-y-1">
+                    {items
+                      .sort((a, b) => a.sort_order - b.sort_order)
+                      .map((cat) => (
+                        <button
+                          key={cat.id}
+                          onClick={() => setSelectedCategory(cat.slug)}
+                          className={`block w-full text-left px-3 py-1 rounded-lg ${
+                            selectedCategory === cat.slug
+                              ? 'bg-emerald-100 text-emerald-700 font-semibold'
+                              : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                        >
+                          {cat.name}
+                        </button>
+                      ))}
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="bg-emerald-700 text-white rounded-2xl p-5 shadow">
+          <div className="bg-emerald-700 text-white rounded-2xl p-4 shadow">
             <p className="font-semibold">Safety checklist</p>
             <ul className="mt-3 space-y-2 text-sm text-emerald-100">
               <li>Meet in a public place</li>
@@ -434,7 +451,7 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
           </div>
 
           {isAdmin && (
-            <div className="bg-white rounded-2xl p-5 shadow space-y-3">
+            <div className="bg-white rounded-2xl p-4 shadow space-y-3">
               <p className="font-semibold text-emerald-700">Admin: Categories</p>
               <button
                 onClick={handleCreateCategory}
@@ -447,7 +464,9 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
                   <div key={cat.id} className="border border-gray-200 rounded-lg p-2">
                     <div className="flex items-center justify-between">
                       <span className="font-semibold text-gray-700">{cat.name}</span>
-                      <span className={`text-xs px-2 py-0.5 rounded-full ${cat.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+                      <span
+                        className={`text-xs px-2 py-0.5 rounded-full ${cat.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}
+                      >
                         {cat.is_active ? 'Active' : 'Hidden'}
                       </span>
                     </div>
@@ -478,20 +497,26 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
           )}
         </aside>
 
-        <div className="lg:col-span-3 space-y-6">
+        <div className="lg:col-span-3 space-y-4">
           {isLoading ? (
-            <div className="bg-white rounded-2xl p-8 shadow text-center text-gray-500">Loading listings...</div>
+            <div className="bg-white rounded-2xl p-8 shadow text-center text-gray-500">
+              Loading listings...
+            </div>
           ) : listings.length === 0 ? (
             <div className="bg-white rounded-2xl p-8 shadow text-center text-gray-500">
               No listings yet. Be the first to post!
             </div>
           ) : (
             listings.map((listing) => (
-              <article key={listing.id} className="bg-white rounded-2xl p-6 shadow space-y-4">
+              <article key={listing.id} className="bg-white rounded-2xl p-4 shadow space-y-3">
                 <div className="flex flex-col md:flex-row gap-4">
-                  <div className="md:w-56 h-40 bg-emerald-50 rounded-xl flex items-center justify-center overflow-hidden">
+                  <div className="md:w-48 h-36 bg-emerald-50 rounded-xl flex items-center justify-center overflow-hidden">
                     {listing.photos?.[0] ? (
-                      <img src={listing.photos[0]} alt={listing.title} className="w-full h-full object-cover" />
+                      <img
+                        src={listing.photos[0]}
+                        alt={listing.title}
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
                       <Leaf size={32} className="text-emerald-400" />
                     )}
@@ -499,9 +524,10 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
                   <div className="flex-1">
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="text-xl font-semibold text-gray-800">{listing.title}</h3>
+                        <h3 className="text-lg font-semibold text-gray-800">{listing.title}</h3>
                         <p className="text-sm text-gray-500">
-                          {listing.county || 'Kenya'}{listing.city ? ` • ${listing.city}` : ''}
+                          {listing.county || 'Kenya'}
+                          {listing.city ? ` • ${listing.city}` : ''}
                         </p>
                       </div>
                       <button
@@ -511,8 +537,10 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
                         <Heart size={18} fill={favoriteMap[listing.id] ? 'currentColor' : 'none'} />
                       </button>
                     </div>
-                    <p className="text-gray-600 mt-2 line-clamp-3">{listing.description || 'No description provided.'}</p>
-                    <div className="flex flex-wrap gap-3 mt-3 text-sm">
+                    <p className="text-gray-600 mt-1.5 line-clamp-3 text-sm">
+                      {listing.description || 'No description provided.'}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mt-2 text-xs md:text-sm">
                       <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-semibold">
                         {listing.currency} {listing.price.toLocaleString()}
                       </span>
@@ -528,7 +556,7 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
                         </span>
                       )}
                     </div>
-                    <div className="flex flex-wrap gap-3 mt-4">
+                    <div className="flex flex-wrap gap-2 mt-3">
                       <button
                         onClick={() => handleContactSeller('phone', listing)}
                         className="flex items-center gap-2 px-3 py-2 rounded-lg border border-emerald-200 text-emerald-700"
@@ -586,19 +614,28 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
                     </div>
                     <div className="space-y-3">
                       {(commentsMap[listing.id] || []).map((comment) => (
-                        <div key={comment.id} className="bg-white rounded-lg p-3 border border-emerald-100">
+                        <div
+                          key={comment.id}
+                          className="bg-white rounded-lg p-3 border border-emerald-100"
+                        >
                           <div className="flex items-center justify-between">
-                            <p className="text-sm font-semibold text-gray-700">{comment.author_name || 'Anonymous'}</p>
+                            <p className="text-sm font-semibold text-gray-700">
+                              {comment.author_name || 'Anonymous'}
+                            </p>
                             {isAdmin && (
                               <div className="flex gap-2">
                                 <button
-                                  onClick={() => handleModerateComment(comment.id, 'approved', listing.id)}
+                                  onClick={() =>
+                                    handleModerateComment(comment.id, 'approved', listing.id)
+                                  }
                                   className="text-xs text-emerald-600"
                                 >
                                   Approve
                                 </button>
                                 <button
-                                  onClick={() => handleModerateComment(comment.id, 'rejected', listing.id)}
+                                  onClick={() =>
+                                    handleModerateComment(comment.id, 'rejected', listing.id)
+                                  }
                                   className="text-xs text-red-500"
                                 >
                                   Reject
@@ -613,7 +650,9 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
                     <div className="flex gap-2">
                       <input
                         value={commentDraft[listing.id] || ''}
-                        onChange={(e) => setCommentDraft((prev) => ({ ...prev, [listing.id]: e.target.value }))}
+                        onChange={(e) =>
+                          setCommentDraft((prev) => ({ ...prev, [listing.id]: e.target.value }))
+                        }
                         placeholder="Ask a question..."
                         className="flex-1 border border-emerald-200 rounded-lg px-3 py-2"
                       />
@@ -638,7 +677,11 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
             <div className="flex items-center gap-3">
               <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center overflow-hidden">
                 {selectedSeller.avatar_url ? (
-                  <img src={selectedSeller.avatar_url} alt={selectedSeller.display_name} className="w-full h-full object-cover" />
+                  <img
+                    src={selectedSeller.avatar_url}
+                    alt={selectedSeller.display_name}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   <UserCircle size={32} className="text-emerald-500" />
                 )}
@@ -664,7 +707,9 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
               )}
               {selectedSeller.whatsapp && (
                 <button
-                  onClick={() => window.open(`https://wa.me/${selectedSeller.whatsapp.replace(/\D/g, '')}`)}
+                  onClick={() =>
+                    window.open(`https://wa.me/${selectedSeller.whatsapp.replace(/\D/g, '')}`)
+                  }
                   className="px-3 py-2 rounded-lg border border-emerald-200 text-emerald-700"
                 >
                   WhatsApp
@@ -702,7 +747,7 @@ export const SecondhandHub: React.FC<SecondhandHubProps> = ({
         categories={categories.map((cat) => ({
           name: cat.name,
           slug: cat.slug,
-          group_name: cat.group_name,
+          group_name: cat.group_name
         }))}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleCreateListing}

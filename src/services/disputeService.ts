@@ -1,7 +1,7 @@
 /**
  * Dispute Service - Kenya Seller Disputes
  * Handles dispute management, seller responses, and security checks
- * 
+ *
  * SECURITY: All operations validate that the seller owns the dispute
  */
 
@@ -18,7 +18,8 @@ export const getSellerDisputes = async (seller_id: string) => {
     // Fetch all disputes where this seller is the respondent
     const { data: disputes, error } = await supabase
       .from('disputes')
-      .select(`
+      .select(
+        `
         id,
         order_id,
         buyer_id,
@@ -36,7 +37,8 @@ export const getSellerDisputes = async (seller_id: string) => {
           avatar_url,
           phone_number
         )
-      `)
+      `
+      )
       .eq('seller_id', seller_id)
       .order('created_at', { ascending: false });
 
@@ -46,13 +48,14 @@ export const getSellerDisputes = async (seller_id: string) => {
     }
 
     // Count urgent disputes (response pending and less than 3 days left)
-    const urgentCount = disputes?.filter(d => {
-      if (d.status !== 'seller_response_pending') return false;
-      const created = new Date(d.created_at);
-      const deadline = new Date(created.getTime() + 7 * 24 * 60 * 60 * 1000);
-      const daysLeft = (deadline.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
-      return daysLeft <= 3;
-    }).length || 0;
+    const urgentCount =
+      disputes?.filter((d) => {
+        if (d.status !== 'seller_response_pending') return false;
+        const created = new Date(d.created_at);
+        const deadline = new Date(created.getTime() + 7 * 24 * 60 * 60 * 1000);
+        const daysLeft = (deadline.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
+        return daysLeft <= 3;
+      }).length || 0;
 
     return {
       success: true,
@@ -85,7 +88,9 @@ export const getDisputeDetails = async (dispute_id: string, seller_id: string) =
 
     // SECURITY: Verify seller owns this dispute
     if (dispute.seller_id !== seller_id) {
-      console.warn(`SECURITY ALERT: Seller ${seller_id} attempted to access dispute ${dispute_id} that doesn't belong to them`);
+      console.warn(
+        `SECURITY ALERT: Seller ${seller_id} attempted to access dispute ${dispute_id} that doesn't belong to them`
+      );
       return { success: false, error: 'Unauthorized: This dispute does not belong to you' };
     }
 
@@ -140,7 +145,9 @@ export const sellerRespond = async (
 
     // BILLION-DOLLAR SECURITY CHECK: Seller can ONLY respond to their own disputes
     if (dispute.seller_id !== seller_id) {
-      console.error(`🚨 SECURITY VIOLATION: Seller ${seller_id} attempted to respond to dispute ${dispute_id} (belongs to ${dispute.seller_id})`);
+      console.error(
+        `🚨 SECURITY VIOLATION: Seller ${seller_id} attempted to respond to dispute ${dispute_id} (belongs to ${dispute.seller_id})`
+      );
       return {
         success: false,
         error: { message: 'Unauthorized: You cannot respond to disputes that do not belong to you' }
@@ -194,19 +201,17 @@ export const sellerRespond = async (
     }
 
     // Create timeline entry
-    const { error: timelineError } = await supabase
-      .from('dispute_timeline')
-      .insert([
-        {
-          id: uuidv4(),
-          dispute_id,
-          event_type: 'seller_responded',
-          actor: 'seller',
-          actor_id: seller_id,
-          description: `Seller provided response with ${evidence_file_urls.length} evidence file(s)`,
-          created_at: new Date().toISOString()
-        }
-      ]);
+    const { error: timelineError } = await supabase.from('dispute_timeline').insert([
+      {
+        id: uuidv4(),
+        dispute_id,
+        event_type: 'seller_responded',
+        actor: 'seller',
+        actor_id: seller_id,
+        description: `Seller provided response with ${evidence_file_urls.length} evidence file(s)`,
+        created_at: new Date().toISOString()
+      }
+    ]);
 
     if (timelineError) {
       console.error('Error creating timeline entry:', timelineError);
@@ -243,21 +248,17 @@ export const uploadDisputeEvidence = async (file: File, dispute_id: string) => {
     const fileExtension = file.name.split('.').pop();
     const fileName = `${dispute_id}/${uuidv4()}.${fileExtension}`;
 
-    const { data, error } = await supabase.storage
-      .from('dispute-evidence')
-      .upload(fileName, file, {
-        cacheControl: '3600',
-        upsert: false
-      });
+    const { data, error } = await supabase.storage.from('dispute-evidence').upload(fileName, file, {
+      cacheControl: '3600',
+      upsert: false
+    });
 
     if (error) {
       return { success: false, error };
     }
 
     // Get public URL
-    const { data: publicData } = supabase.storage
-      .from('dispute-evidence')
-      .getPublicUrl(fileName);
+    const { data: publicData } = supabase.storage.from('dispute-evidence').getPublicUrl(fileName);
 
     return {
       success: true,

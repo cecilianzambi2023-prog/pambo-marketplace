@@ -2,14 +2,14 @@
  * ServicesHubPage.tsx
  * ====================
  * Services Hub Landing & Category Explorer
- * 
+ *
  * Displays all available service categories organized in 4 main groups:
  * 1. Core Trades & Fundis (Plumber, Electrician, etc.)
  * 2. Home, Office & Facility Services
  * 3. Technical & Appliance Services
  * 4. Outdoor, Rural & Mashambani Services
  * 5. Events & Special Services
- * 
+ *
  * Features:
  * - Service category browsing
  * - Quick service search
@@ -64,7 +64,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 1240,
         averagePrice: '1,500 - 5,000 KES',
-        estimatedDuration: '1-4 hours',
+        estimatedDuration: '1-4 hours'
       },
       {
         id: 'electrician',
@@ -74,7 +74,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 1890,
         averagePrice: '2,000 - 8,000 KES',
-        estimatedDuration: '1-8 hours',
+        estimatedDuration: '1-8 hours'
       },
       {
         id: 'carpenter',
@@ -84,7 +84,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 2100,
         averagePrice: '2,500 - 10,000 KES',
-        estimatedDuration: '4-24 hours',
+        estimatedDuration: '4-24 hours'
       },
       {
         id: 'mason',
@@ -94,7 +94,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 1650,
         averagePrice: '3,000 - 15,000 KES',
-        estimatedDuration: '8-40 hours',
+        estimatedDuration: '8-40 hours'
       },
       {
         id: 'welder',
@@ -104,7 +104,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 890,
         averagePrice: '5,000 - 20,000 KES',
-        estimatedDuration: '4-24 hours',
+        estimatedDuration: '4-24 hours'
       },
       {
         id: 'painter',
@@ -114,7 +114,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 1520,
         averagePrice: '2,000 - 8,000 KES',
-        estimatedDuration: '4-16 hours',
+        estimatedDuration: '4-16 hours'
       },
       {
         id: 'tiler',
@@ -124,7 +124,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 780,
         averagePrice: '3,000 - 12,000 KES',
-        estimatedDuration: '8-32 hours',
+        estimatedDuration: '8-32 hours'
       },
       {
         id: 'gypsum',
@@ -134,7 +134,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 450,
         averagePrice: '4,000 - 15,000 KES',
-        estimatedDuration: '8-40 hours',
+        estimatedDuration: '8-40 hours'
       },
       {
         id: 'glass-aluminium',
@@ -144,7 +144,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 340,
         averagePrice: '10,000 - 50,000 KES',
-        estimatedDuration: '4-24 hours',
+        estimatedDuration: '4-24 hours'
       },
       {
         id: 'roofing',
@@ -154,7 +154,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 620,
         averagePrice: '8,000 - 40,000 KES',
-        estimatedDuration: '8-40 hours',
+        estimatedDuration: '8-40 hours'
       },
       {
         id: 'waterproofing',
@@ -164,7 +164,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 280,
         averagePrice: '6,000 - 25,000 KES',
-        estimatedDuration: '8-24 hours',
+        estimatedDuration: '8-24 hours'
       },
       {
         id: 'borehole',
@@ -174,7 +174,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 150,
         averagePrice: '20,000 - 100,000 KES',
-        estimatedDuration: '1-3 days',
+        estimatedDuration: '1-3 days'
       },
       {
         id: 'solar',
@@ -184,7 +184,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 420,
         averagePrice: '50,000 - 500,000 KES',
-        estimatedDuration: '1-5 days',
+        estimatedDuration: '1-5 days'
       },
       {
         id: 'cctv',
@@ -194,7 +194,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 380,
         averagePrice: '15,000 - 60,000 KES',
-        estimatedDuration: '4-8 hours',
+        estimatedDuration: '4-8 hours'
       },
       {
         id: 'gate-grill',
@@ -204,9 +204,9 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 560,
         averagePrice: '8,000 - 40,000 KES',
-        estimatedDuration: '8-24 hours',
-      },
-    ],
+        estimatedDuration: '8-24 hours'
+      }
+    ]
   },
   {
     title: '🏠 Home, Office & Facility Services',
@@ -222,7 +222,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 320,
         averagePrice: '10,000 - 50,000 KES',
-        estimatedDuration: '4-8 hours',
+        estimatedDuration: '4-8 hours'
       },
       {
         id: 'architect',
@@ -232,7 +232,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 180,
         averagePrice: '50,000 - 200,000 KES',
-        estimatedDuration: '24-72 hours',
+        estimatedDuration: '24-72 hours'
       },
       {
         id: 'quantity-surveyor',
@@ -242,7 +242,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'low',
         availableProviders: 95,
         averagePrice: '30,000 - 100,000 KES',
-        estimatedDuration: '8-24 hours',
+        estimatedDuration: '8-24 hours'
       },
       {
         id: 'construction-supervisor',
@@ -252,7 +252,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 210,
         averagePrice: '5,000 - 15,000 KES/day',
-        estimatedDuration: 'Ongoing',
+        estimatedDuration: 'Ongoing'
       },
       {
         id: 'facility-manager',
@@ -262,7 +262,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 140,
         averagePrice: '10,000 - 30,000 KES/month',
-        estimatedDuration: 'Ongoing',
+        estimatedDuration: 'Ongoing'
       },
       {
         id: 'property-valuer',
@@ -272,7 +272,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'low',
         availableProviders: 85,
         averagePrice: '20,000 - 80,000 KES',
-        estimatedDuration: '4-8 hours',
+        estimatedDuration: '4-8 hours'
       },
       {
         id: 'real-estate-agent',
@@ -282,7 +282,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 2400,
         averagePrice: 'Commission based',
-        estimatedDuration: 'Ongoing',
+        estimatedDuration: 'Ongoing'
       },
       {
         id: 'moving-services',
@@ -292,7 +292,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 890,
         averagePrice: '10,000 - 50,000 KES',
-        estimatedDuration: '4-8 hours',
+        estimatedDuration: '4-8 hours'
       },
       {
         id: 'cleaning',
@@ -302,7 +302,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 3200,
         averagePrice: '2,000 - 10,000 KES',
-        estimatedDuration: '2-6 hours',
+        estimatedDuration: '2-6 hours'
       },
       {
         id: 'pest-control',
@@ -312,7 +312,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 620,
         averagePrice: '3,000 - 15,000 KES',
-        estimatedDuration: '2-4 hours',
+        estimatedDuration: '2-4 hours'
       },
       {
         id: 'garbage-collection',
@@ -322,9 +322,9 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 440,
         averagePrice: '500 - 2,000 KES/month',
-        estimatedDuration: 'Recurring',
-      },
-    ],
+        estimatedDuration: 'Recurring'
+      }
+    ]
   },
   {
     title: '🔌 Technical & Appliance Services',
@@ -340,7 +340,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 780,
         averagePrice: '3,000 - 12,000 KES',
-        estimatedDuration: '2-4 hours',
+        estimatedDuration: '2-4 hours'
       },
       {
         id: 'refrigerator-repair',
@@ -350,7 +350,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 420,
         averagePrice: '2,000 - 8,000 KES',
-        estimatedDuration: '1-3 hours',
+        estimatedDuration: '1-3 hours'
       },
       {
         id: 'washing-machine',
@@ -360,7 +360,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 510,
         averagePrice: '2,000 - 8,000 KES',
-        estimatedDuration: '1-3 hours',
+        estimatedDuration: '1-3 hours'
       },
       {
         id: 'generator-repair',
@@ -370,7 +370,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 340,
         averagePrice: '3,000 - 15,000 KES',
-        estimatedDuration: '2-4 hours',
+        estimatedDuration: '2-4 hours'
       },
       {
         id: 'internet-wifi',
@@ -380,7 +380,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 620,
         averagePrice: '2,000 - 5,000 KES',
-        estimatedDuration: '1-3 hours',
+        estimatedDuration: '1-3 hours'
       },
       {
         id: 'computer-repair',
@@ -390,7 +390,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 1420,
         averagePrice: '2,000 - 10,000 KES',
-        estimatedDuration: '1-2 hours',
+        estimatedDuration: '1-2 hours'
       },
       {
         id: 'phone-repair',
@@ -400,9 +400,9 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 2100,
         averagePrice: '1,000 - 8,000 KES',
-        estimatedDuration: '30 min - 2 hrs',
-      },
-    ],
+        estimatedDuration: '30 min - 2 hrs'
+      }
+    ]
   },
   {
     title: '🌿 Outdoor, Rural & Mashambani Services',
@@ -418,7 +418,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 890,
         averagePrice: '5,000 - 20,000 KES',
-        estimatedDuration: '4-8 hours',
+        estimatedDuration: '4-8 hours'
       },
       {
         id: 'fencing',
@@ -428,7 +428,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 620,
         averagePrice: '8,000 - 40,000 KES',
-        estimatedDuration: '8-24 hours',
+        estimatedDuration: '8-24 hours'
       },
       {
         id: 'irrigation',
@@ -438,7 +438,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 340,
         averagePrice: '15,000 - 60,000 KES',
-        estimatedDuration: '8-16 hours',
+        estimatedDuration: '8-16 hours'
       },
       {
         id: 'farm-equipment',
@@ -448,7 +448,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 280,
         averagePrice: '5,000 - 25,000 KES',
-        estimatedDuration: '4-8 hours',
+        estimatedDuration: '4-8 hours'
       },
       {
         id: 'animal-health',
@@ -458,7 +458,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 520,
         averagePrice: '2,000 - 10,000 KES',
-        estimatedDuration: '1-3 hours',
+        estimatedDuration: '1-3 hours'
       },
       {
         id: 'greenhouse',
@@ -468,7 +468,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'low',
         availableProviders: 120,
         averagePrice: '30,000 - 150,000 KES',
-        estimatedDuration: '2-7 days',
+        estimatedDuration: '2-7 days'
       },
       {
         id: 'water-tank',
@@ -478,9 +478,9 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'medium',
         availableProviders: 280,
         averagePrice: '10,000 - 50,000 KES',
-        estimatedDuration: '4-8 hours',
-      },
-    ],
+        estimatedDuration: '4-8 hours'
+      }
+    ]
   },
   {
     title: '🎉 Events & Special Services',
@@ -496,7 +496,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 420,
         averagePrice: '20,000 - 100,000 KES',
-        estimatedDuration: '4-8 hours',
+        estimatedDuration: '4-8 hours'
       },
       {
         id: 'sound-lighting',
@@ -506,7 +506,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 340,
         averagePrice: '15,000 - 80,000 KES',
-        estimatedDuration: '4-8 hours',
+        estimatedDuration: '4-8 hours'
       },
       {
         id: 'photography',
@@ -516,7 +516,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 1200,
         averagePrice: '20,000 - 100,000 KES',
-        estimatedDuration: '4-8 hours',
+        estimatedDuration: '4-8 hours'
       },
       {
         id: 'security',
@@ -526,10 +526,10 @@ const SERVICE_GROUPS: ServiceGroup[] = [
         demandLevel: 'high',
         availableProviders: 680,
         averagePrice: '5,000 - 20,000 KES/day',
-        estimatedDuration: 'Ongoing',
-      },
-    ],
-  },
+        estimatedDuration: 'Ongoing'
+      }
+    ]
+  }
 ];
 
 // ============================================================
@@ -548,16 +548,17 @@ export const ServicesHubPage: React.FC<ServicesHubPageProps> = ({ onServiceSelec
   const branding = useHubBranding();
 
   // Filter services based on search
-  const filteredGroups = SERVICE_GROUPS.map(group => ({
+  const filteredGroups = SERVICE_GROUPS.map((group) => ({
     ...group,
-    services: group.services.filter(service =>
-      service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      service.description.toLowerCase().includes(searchQuery.toLowerCase())
-    ),
-  })).filter(group => group.services.length > 0);
+    services: group.services.filter(
+      (service) =>
+        service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        service.description.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  })).filter((group) => group.services.length > 0);
 
   // Get all services matching search
-  const allFilteredServices = filteredGroups.flatMap(g => g.services);
+  const allFilteredServices = filteredGroups.flatMap((g) => g.services);
 
   return (
     <div className="services-hub-page">
@@ -566,8 +567,8 @@ export const ServicesHubPage: React.FC<ServicesHubPageProps> = ({ onServiceSelec
         <div className="hero-content">
           <h1>🛠️ Services Hub</h1>
           <p className="hero-subtitle">
-            Find trusted professionals for any service. From plumbing to events, we connect you with quality
-            service providers.
+            Find trusted professionals for any service. From plumbing to events, we connect you with
+            quality service providers.
           </p>
 
           {/* SEARCH BAR */}
@@ -578,7 +579,7 @@ export const ServicesHubPage: React.FC<ServicesHubPageProps> = ({ onServiceSelec
               placeholder="Search services... (e.g., Plumber, Electrician, Cleaning)"
               className="search-input"
               value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
@@ -630,7 +631,7 @@ export const ServicesHubPage: React.FC<ServicesHubPageProps> = ({ onServiceSelec
             <button onClick={() => setSearchQuery('')}>Clear search</button>
           </div>
         ) : (
-          filteredGroups.map(group => (
+          filteredGroups.map((group) => (
             <div key={group.title} className="service-group">
               {/* GROUP HEADER */}
               <div className="group-header" style={{ borderColor: group.color }}>
@@ -654,7 +655,7 @@ export const ServicesHubPage: React.FC<ServicesHubPageProps> = ({ onServiceSelec
               {/* SERVICE GRID */}
               {(expandedGroup === group.title || expandedGroup === null) && (
                 <div className="service-grid">
-                  {group.services.map(service => (
+                  {group.services.map((service) => (
                     <div
                       key={service.id}
                       className="service-card"
@@ -664,7 +665,11 @@ export const ServicesHubPage: React.FC<ServicesHubPageProps> = ({ onServiceSelec
                       <div className="service-card-header">
                         <span className="service-icon">{service.icon}</span>
                         <div className="service-demand" style={{ backgroundColor: group.color }}>
-                          {service.demandLevel === 'high' ? '🔥 High Demand' : service.demandLevel === 'medium' ? '📊 Medium' : '📈 Available'}
+                          {service.demandLevel === 'high'
+                            ? '🔥 High Demand'
+                            : service.demandLevel === 'medium'
+                              ? '📊 Medium'
+                              : '📈 Available'}
                         </div>
                       </div>
 

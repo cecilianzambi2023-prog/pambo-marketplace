@@ -19,7 +19,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   actionLabel,
   onAction,
   customTitle,
-  customDescription,
+  customDescription
 }) => {
   const state = EMPTY_STATES[type];
   const title = customTitle || state.title;
@@ -29,7 +29,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     <div
       className="flex flex-col items-center justify-center py-16 px-4 text-center"
       style={{
-        background: `linear-gradient(135deg, ${COLORS.primary[50]} 0%, ${COLORS.gray[50]} 100%)`,
+        background: `linear-gradient(135deg, ${COLORS.primary[50]} 0%, ${COLORS.gray[50]} 100%)`
       }}
     >
       {/* Icon/Emoji */}
@@ -38,18 +38,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       </div>
 
       {/* Title */}
-      <h3
-        className="text-2xl font-bold mb-2"
-        style={{ color: COLORS.gray[900] }}
-      >
+      <h3 className="text-2xl font-bold mb-2" style={{ color: COLORS.gray[900] }}>
         {title}
       </h3>
 
       {/* Description */}
-      <p
-        className="text-lg max-w-md mb-8"
-        style={{ color: COLORS.gray[600] }}
-      >
+      <p className="text-lg max-w-md mb-8" style={{ color: COLORS.gray[600] }}>
         {description}
       </p>
 
@@ -60,7 +54,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           className="px-6 py-3 rounded-lg font-semibold transition-all hover:shadow-lg"
           style={{
             background: `linear-gradient(135deg, ${COLORS.primary[500]} 0%, ${COLORS.secondary[500]} 100%)`,
-            color: 'white',
+            color: 'white'
           }}
         >
           {actionLabel}

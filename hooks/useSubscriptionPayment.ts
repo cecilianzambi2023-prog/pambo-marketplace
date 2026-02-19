@@ -47,7 +47,7 @@ export const useSubscriptionPayment = () => {
         mkulima: 1500,
         starter: 3500,
         pro: 5000,
-        enterprise: 9000,
+        enterprise: 9000
       };
 
       if (validAmounts[request.tier] !== request.amount) {
@@ -55,7 +55,10 @@ export const useSubscriptionPayment = () => {
       }
 
       // Get auth token
-      const { data: { session }, error: authError } = await supabase.auth.getSession();
+      const {
+        data: { session },
+        error: authError
+      } = await supabase.auth.getSession();
       if (authError || !session) {
         throw new Error('Please log in to proceed with payment');
       }
@@ -69,8 +72,8 @@ export const useSubscriptionPayment = () => {
           description: `${request.tier.charAt(0).toUpperCase() + request.tier.slice(1)} Subscription - Offspring Decor Limited`,
           buyerId: request.userId,
           userEmail: request.email,
-          subscriptionType: request.tier,
-        },
+          subscriptionType: request.tier
+        }
       });
 
       if (functionError) {
@@ -87,7 +90,7 @@ export const useSubscriptionPayment = () => {
         success: true,
         message: 'Payment initiated. Please check your M-Pesa phone for the prompt.',
         paymentId: data.paymentId,
-        orderId: data.orderId,
+        orderId: data.orderId
       };
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
@@ -95,7 +98,7 @@ export const useSubscriptionPayment = () => {
       return {
         success: false,
         message: errorMessage,
-        error: errorMessage,
+        error: errorMessage
       };
     } finally {
       setLoading(false);
@@ -110,7 +113,7 @@ export const useSubscriptionPayment = () => {
       mkulima: 'Mkulima Mdogo',
       starter: 'Starter',
       pro: 'Pro',
-      enterprise: 'Enterprise',
+      enterprise: 'Enterprise'
     };
     return names[tier] || tier;
   };
@@ -128,7 +131,7 @@ export const useSubscriptionPayment = () => {
     success,
     initiatePayment,
     getTierName,
-    getPeriod,
+    getPeriod
   };
 };
 
@@ -158,7 +161,9 @@ export const getUserSubscription = async (userId: string) => {
   try {
     const { data, error } = await supabase
       .from('profiles')
-      .select('subscription_tier, subscription_expiry, subscription_start_date, subscription_period_days')
+      .select(
+        'subscription_tier, subscription_expiry, subscription_start_date, subscription_period_days'
+      )
       .eq('user_id', userId)
       .single();
 

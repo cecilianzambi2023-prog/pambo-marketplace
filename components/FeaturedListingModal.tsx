@@ -26,12 +26,12 @@ export const FeaturedListingModal: React.FC<FeaturedListingModalProps> = ({
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, '');
-    
+
     // Convert 0... to 254...
     if (value.startsWith('0')) {
       value = '254' + value.slice(1);
     }
-    
+
     setPhone(value);
   };
 
@@ -62,14 +62,13 @@ export const FeaturedListingModal: React.FC<FeaturedListingModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-screen overflow-auto animate-fade-in">
-        
         {/* Header */}
         <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 flex items-center justify-between sticky top-0">
           <div className="flex items-center gap-3">
             <Star size={24} className="fill-yellow-300" />
             <h2 className="text-xl font-bold">Feature Your Listing</h2>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="text-white hover:bg-white/20 p-1 rounded-lg transition"
           >
@@ -83,16 +82,17 @@ export const FeaturedListingModal: React.FC<FeaturedListingModalProps> = ({
               <Star size={32} className="text-green-600 fill-green-600" />
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">Featured! 🎉</h3>
-            <p className="text-gray-600 mb-4">Your listing will be featured for {FEATURED_LISTING_DURATION_DAYS} days</p>
+            <p className="text-gray-600 mb-4">
+              Your listing will be featured for {FEATURED_LISTING_DURATION_DAYS} days
+            </p>
             <p className="text-sm text-gray-500">Payment confirmed via M-Pesa. Redirecting...</p>
           </div>
         ) : (
           <div className="p-6 space-y-6">
-
             {/* Benefits */}
             <div className="space-y-3">
               <h3 className="font-bold text-gray-900 mb-3">Why Feature Your Listing?</h3>
-              
+
               <div className="flex gap-3">
                 <TrendingUp size={20} className="text-orange-500 flex-shrink-0 mt-0.5" />
                 <div>
@@ -112,7 +112,9 @@ export const FeaturedListingModal: React.FC<FeaturedListingModalProps> = ({
               <div className="flex gap-3">
                 <Clock size={20} className="text-orange-500 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-gray-900 text-sm">{FEATURED_LISTING_DURATION_DAYS} Days Promotion</p>
+                  <p className="font-semibold text-gray-900 text-sm">
+                    {FEATURED_LISTING_DURATION_DAYS} Days Promotion
+                  </p>
                   <p className="text-xs text-gray-600">Boost your sales this week</p>
                 </div>
               </div>
@@ -123,15 +125,21 @@ export const FeaturedListingModal: React.FC<FeaturedListingModalProps> = ({
               <p className="text-xs text-gray-600 mb-1">Featured Listing</p>
               <p className="font-semibold text-gray-900 text-sm line-clamp-2">{listingTitle}</p>
               {listingPrice && (
-                <p className="text-orange-600 font-bold text-sm mt-2">KES {listingPrice.toLocaleString()}</p>
+                <p className="text-orange-600 font-bold text-sm mt-2">
+                  KES {listingPrice.toLocaleString()}
+                </p>
               )}
             </div>
 
             {/* Pricing */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-600 font-medium">Featured for {FEATURED_LISTING_DURATION_DAYS} Days</span>
-                <span className="text-2xl font-bold text-orange-600">KES {FEATURED_LISTING_PRICE}</span>
+                <span className="text-gray-600 font-medium">
+                  Featured for {FEATURED_LISTING_DURATION_DAYS} Days
+                </span>
+                <span className="text-2xl font-bold text-orange-600">
+                  KES {FEATURED_LISTING_PRICE}
+                </span>
               </div>
               <p className="text-xs text-gray-600">One-time payment via M-Pesa</p>
             </div>
@@ -151,9 +159,7 @@ export const FeaturedListingModal: React.FC<FeaturedListingModalProps> = ({
                   disabled={isLoading}
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">
-                ✓ Your M-Pesa registered phone number
-              </p>
+              <p className="text-xs text-gray-500 mt-1">✓ Your M-Pesa registered phone number</p>
             </div>
 
             {/* Error Message */}
@@ -199,7 +205,6 @@ export const FeaturedListingModal: React.FC<FeaturedListingModalProps> = ({
                 )}
               </button>
             </div>
-
           </div>
         )}
       </div>

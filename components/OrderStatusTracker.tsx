@@ -28,16 +28,24 @@ export const OrderStatusTracker: React.FC<OrderStatusTrackerProps> = ({ status }
                     ${!isCompleted && !isActive ? 'bg-gray-200 border-gray-300' : ''}
                   `}
                 >
-                  {isCompleted ? <Check size={16} /> : (
-                      <div className={`w-3 h-3 rounded-full ${isActive ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                  {isCompleted ? (
+                    <Check size={16} />
+                  ) : (
+                    <div
+                      className={`w-3 h-3 rounded-full ${isActive ? 'bg-green-500' : 'bg-gray-300'}`}
+                    ></div>
                   )}
                 </div>
-                <p className={`text-xs mt-2 text-center ${isActive || isCompleted ? 'font-bold text-gray-800' : 'text-gray-500'}`}>
+                <p
+                  className={`text-xs mt-2 text-center ${isActive || isCompleted ? 'font-bold text-gray-800' : 'text-gray-500'}`}
+                >
                   {step}
                 </p>
               </div>
               {index < steps.length - 1 && (
-                <div className={`flex-1 h-1 mx-2 transition-colors duration-300 ${isCompleted ? 'bg-green-500' : 'bg-gray-300'}`}></div>
+                <div
+                  className={`flex-1 h-1 mx-2 transition-colors duration-300 ${isCompleted ? 'bg-green-500' : 'bg-gray-300'}`}
+                ></div>
               )}
             </React.Fragment>
           );

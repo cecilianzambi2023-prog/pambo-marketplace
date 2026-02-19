@@ -82,6 +82,7 @@ ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "reviews_select_all" ON reviews;
 DROP POLICY IF EXISTS "reviews_insert_buyer_only" ON reviews;
 DROP POLICY IF EXISTS "reviews_delete_author_only" ON reviews;
+DROP POLICY IF EXISTS "Admin can delete reviews" ON reviews;
 
 -- Everyone can READ reviews (helps build trust)
 CREATE POLICY "reviews_select_all" ON reviews FOR SELECT
@@ -91,9 +92,9 @@ CREATE POLICY "reviews_select_all" ON reviews FOR SELECT
 CREATE POLICY "reviews_insert_buyer_only" ON reviews FOR INSERT
   WITH CHECK (auth.uid() = buyerId);
 
--- Only authors can delete their reviews
-CREATE POLICY "reviews_delete_author_only" ON reviews FOR DELETE
-  USING (auth.uid() = buyerId);
+-- Only ADMINS can delete reviews
+CREATE POLICY "Admin can delete reviews" ON reviews FOR DELETE
+  USING (auth.uid() IN (SELECT id FROM users WHERE role = 'admin'));
 
 -- ============================================================
 -- 5. PAYMENTS TABLE - CRITICAL: Protect transaction data

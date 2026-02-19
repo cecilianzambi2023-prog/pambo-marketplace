@@ -26,27 +26,34 @@ export const CookiePolicy: React.FC<CookiePolicyProps> = ({ onClose }) => {
       {/* Content */}
       <div className="container mx-auto px-4 lg:px-8 py-12 max-w-4xl">
         <div className="space-y-8 text-gray-700">
-          
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">1. What Are Cookies?</h2>
             <p className="leading-relaxed">
-              Cookies are small files placed on your device by websites you visit. They are widely used to make 
-              websites work more efficiently as well as to provide information to the owners of the site. Cookies 
-              allow web applications to respond to you as an individual.
+              Cookies are small files placed on your device by websites you visit. They are widely
+              used to make websites work more efficiently as well as to provide information to the
+              owners of the site. Cookies allow web applications to respond to you as an individual.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">2. How We Use Cookies</h2>
-            <p className="leading-relaxed mb-3">
-              Pambo uses cookies for the following purposes:
-            </p>
+            <p className="leading-relaxed mb-3">Pambo uses cookies for the following purposes:</p>
             <ul className="list-disc list-inside space-y-2 ml-4">
-              <li><strong>Authentication:</strong> To keep you logged in to your account</li>
-              <li><strong>Preferences:</strong> To remember your settings and preferences</li>
-              <li><strong>Analytics:</strong> To understand how visitors use our platform</li>
-              <li><strong>Security:</strong> To prevent fraudulent activities</li>
-              <li><strong>Performance:</strong> To optimize website performance</li>
+              <li>
+                <strong>Authentication:</strong> To keep you logged in to your account
+              </li>
+              <li>
+                <strong>Preferences:</strong> To remember your settings and preferences
+              </li>
+              <li>
+                <strong>Analytics:</strong> To understand how visitors use our platform
+              </li>
+              <li>
+                <strong>Security:</strong> To prevent fraudulent activities
+              </li>
+              <li>
+                <strong>Performance:</strong> To optimize website performance
+              </li>
             </ul>
           </section>
 
@@ -56,21 +63,22 @@ export const CookiePolicy: React.FC<CookiePolicyProps> = ({ onClose }) => {
               <div>
                 <h3 className="font-semibold text-gray-900 mb-2">Session Cookies:</h3>
                 <p className="leading-relaxed">
-                  These are temporary cookies that are deleted when you close your browser. They are used to 
-                  maintain your session while you're using Pambo.
+                  These are temporary cookies that are deleted when you close your browser. They are
+                  used to maintain your session while you're using Pambo.
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 mb-2">Persistent Cookies:</h3>
                 <p className="leading-relaxed">
-                  These cookies remain on your device for a set period or until you delete them. They help us 
-                  recognize you when you return to Pambo.
+                  These cookies remain on your device for a set period or until you delete them.
+                  They help us recognize you when you return to Pambo.
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 mb-2">Third-Party Cookies:</h3>
                 <p className="leading-relaxed">
-                  These are set by third-party services we use for analytics and advertising purposes.
+                  These are set by third-party services we use for analytics and advertising
+                  purposes.
                 </p>
               </div>
             </div>
@@ -102,7 +110,6 @@ export const CookiePolicy: React.FC<CookiePolicyProps> = ({ onClose }) => {
               <p>Email: info@pambo.biz</p>
             </div>
           </section>
-
         </div>
       </div>
     </div>
