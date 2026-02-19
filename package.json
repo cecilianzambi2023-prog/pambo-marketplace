@@ -1,16 +1,29 @@
 {
   "name": "pambo",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "build:frontend": "vite build",
+    "build:backend": "echo 'Backend uses Supabase Edge Functions - no npm build needed'",
+    "deploy:functions": "supabase functions deploy",
+    "cap:sync": "npm run build && npx cap sync",
+    "cap:assets": "npx @capacitor/assets generate",
+    "cap:prepare": "npm run cap:assets && npm run cap:sync",
+    "cap:open:android": "npx cap open android",
+    "cap:open:ios": "npx cap open ios",
+    "preview": "vite preview",
+    "lint": "echo 'Lint not configured yet - add ESLint in Week 2'"
   },
   "dependencies": {
+    "@capacitor/android": "^8.1.0",
+    "@capacitor/core": "^8.1.0",
+    "@capacitor/ios": "^8.1.0",
     "@google/genai": "^1.40.0",
-    "@supabase/supabase-js": "^2.95.3",
+    "@sentry/react": "^10.39.0",
+    "@supabase/supabase-js": "^2.96.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.563.0",
     "react": "^18.2.0",
@@ -19,6 +32,8 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.1.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@types/node": "^22.14.0",
     "@types/uuid": "^10.0.0",

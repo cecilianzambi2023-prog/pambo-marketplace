@@ -8,7 +8,7 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_KEY || ''
+  process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY || ''
 );
 
 /**
@@ -229,6 +229,15 @@ export const getTrustBadge = async (sellerId: string) => {
 
     if (!badge) return null;
 
+    const iconMap = {
+      bronze: '🥉',
+      silver: '🥈',
+      gold: '🥇',
+      platinum: '💎',
+    } as const;
+
+    const trustLevel = badge.trustLevel as keyof typeof iconMap | undefined;
+
     return {
       level: badge.trustLevel,
       score: badge.trustScore,
@@ -236,12 +245,7 @@ export const getTrustBadge = async (sellerId: string) => {
       reviews: badge.totalReviews,
       verified: badge.identityVerified,
       isPremium: badge.isPremiumSeller,
-      icon: {
-        'bronze': '🥉',
-        'silver': '🥈',
-        'gold': '🥇',
-        'platinum': '💎'
-      }[badge.trustLevel]
+      icon: trustLevel ? iconMap[trustLevel] : undefined,
     };
   } catch {
     return null;

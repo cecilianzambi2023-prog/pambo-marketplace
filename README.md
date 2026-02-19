@@ -18,3 +18,7 @@ View your app in AI Studio: https://ai.studio/apps/drive/1BiP0yF_ZE6xgX5ujlEpVsh
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Mobile (Capacitor)
+
+Running `npm run cap:assets` and `npm run cap:prepare` generates or updates iOS scaffolding and assets (for example `ios/App/App/Base.lproj/*.storyboard`, `ios/App/CapApp-SPM/*`, and `resources/icon.png`). These files are expected and should be committed for iOS builds.

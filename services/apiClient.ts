@@ -3,7 +3,7 @@
  * Handles all API calls to the backend server
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 interface ApiResponse<T> {
   success: boolean;

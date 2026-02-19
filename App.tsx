@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { SUBSCRIPTION_FEE, SERVICE_CATEGORIES, DETAILED_PRODUCT_CATEGORIES, SECTION_BANNERS, KENYA_COUNTIES, FUEL_RATE_PER_KM, BASE_DELIVERY_FEE } from './constants';
 import { Product, ViewState, User, CartItem, Review, Order, BuyingRequest, FarmerProfile, LiveStream, ListingComment } from './types';
+import { DatabaseListing } from './types/database';
 import { ProductCard } from './components/ProductCard';
 import { ServiceCard } from './components/ServiceCard';
 import { ServiceCategoryGrid } from './components/ServiceCategoryGrid';
@@ -39,15 +40,22 @@ const MkulimaSignup = lazy(() => import('./components/MkulimaOnboarding').then(m
 const MkulimaDashboard = lazy(() => import('./components/MkulimaOnboarding').then(module => ({ default: module.MkulimaDashboard })));
 const FarmersMapView = lazy(() => import('./components/FarmersMapView').then(module => ({ default: module.FarmersMapView })));
 const WholesaleHub = lazy(() => import('./pages/WholesaleHub').then(module => ({ default: module.WholesaleHub })));
+const SecondhandHub = lazy(() => import('./pages/SecondhandHub').then(module => ({ default: module.SecondhandHub })));
+const ImportLinkGlobalHub = lazy(() => import('./pages/ImportLinkGlobalHub').then(module => ({ default: module.ImportLinkGlobalHub })));
 const TermsOfService = lazy(() => import('./components/TermsOfService').then(module => ({ default: module.TermsOfService })));
 const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy').then(module => ({ default: module.PrivacyPolicy })));
 const CookiePolicy = lazy(() => import('./components/CookiePolicy').then(module => ({ default: module.CookiePolicy })));
 const ContactPage = lazy(() => import('./components/ContactPage').then(module => ({ default: module.ContactPage })));
 const AiAssistantWidget = lazy(() => import('./components/AiAssistantWidget').then(module => ({ default: module.AiAssistantWidget })));
+const AuthModal = lazy(() => import('./components/AuthModal').then(module => ({ default: module.AuthModal })));
+const LiveCommerceView = lazy(() => import('./components/LiveCommerceView').then(module => ({ default: module.LiveCommerceView })));
+const LiveStreamPlayer = lazy(() => import('./components/LiveStreamPlayer').then(module => ({ default: module.LiveStreamPlayer })));
 
 const prefetchDashboard = () => { void import('./components/Dashboard'); };
 const prefetchAdminPanel = () => { void import('./components/AdminPanel'); };
 const prefetchWholesaleHub = () => { void import('./pages/WholesaleHub'); };
+const prefetchSecondhandHub = () => { void import('./pages/SecondhandHub'); };
+const prefetchImportLinkGlobalHub = () => { void import('./pages/ImportLinkGlobalHub'); };
 const prefetchFarmersMap = () => { void import('./components/FarmersMapView'); };
 
 const ADMIN_USER: User = {
@@ -65,6 +73,86 @@ const ADMIN_USER: User = {
   followers: [],
   reviews: [],
   acceptedTermsTimestamp: null,
+};
+
+const pathToViewMap: Record<string, ViewState> = {
+  '/': 'home',
+  '/home': 'home',
+  '/marketplace': 'marketplace',
+  '/browse-listings': 'marketplace',
+  '/search-products': 'marketplace',
+  '/view-sellers': 'marketplace',
+  '/wholesale': 'wholesale',
+  '/secondhand': 'secondhand',
+  '/importlink-global': 'importlinkGlobal',
+  '/services': 'services',
+  '/digital': 'digital',
+  '/live': 'live',
+  '/farmers': 'farmers',
+  '/dashboard': 'dashboard',
+  '/seller': 'dashboard',
+  '/sell': 'marketplace',
+  '/seller-tools': 'dashboard',
+  '/admin': 'admin',
+};
+
+const hashToViewMap: Record<string, ViewState> = {
+  '#/': 'home',
+  '#/home': 'home',
+  '#/marketplace': 'marketplace',
+  '#/browse-listings': 'marketplace',
+  '#/search-products': 'marketplace',
+  '#/view-sellers': 'marketplace',
+  '#/wholesale': 'wholesale',
+  '#/secondhand': 'secondhand',
+  '#/importlink-global': 'importlinkGlobal',
+  '#/services': 'services',
+  '#/digital': 'digital',
+  '#/live': 'live',
+  '#/farmers': 'farmers',
+  '#/dashboard': 'dashboard',
+  '#/seller': 'dashboard',
+  '#/sell': 'marketplace',
+  '#/seller-tools': 'dashboard',
+  '#/admin': 'admin',
+};
+
+const viewToPathMap: Record<ViewState, string> = {
+  home: '/',
+  marketplace: '/marketplace',
+  wholesale: '/wholesale',
+  secondhand: '/secondhand',
+  importlinkGlobal: '/importlink-global',
+  services: '/services',
+  dashboard: '/dashboard',
+  admin: '/admin',
+  digital: '/digital',
+  live: '/live',
+  banned: '/',
+  farmers: '/farmers',
+};
+
+const viewToHashMap: Record<ViewState, string> = {
+  home: '#/',
+  marketplace: '#/marketplace',
+  wholesale: '#/wholesale',
+  secondhand: '#/secondhand',
+  importlinkGlobal: '#/importlink-global',
+  services: '#/services',
+  dashboard: '#/dashboard',
+  admin: '#/admin',
+  digital: '#/digital',
+  live: '#/live',
+  banned: '#/',
+  farmers: '#/farmers',
+};
+
+const resolveViewFromPath = (path: string): ViewState => {
+  return pathToViewMap[path] || 'home';
+};
+
+const resolveViewFromHash = (hash: string): ViewState => {
+  return hashToViewMap[hash] || 'home';
 };
 
 // Helper to convert snake_case keys from Supabase to camelCase for the app
@@ -118,8 +206,11 @@ const Header: React.FC<{
   onViewChange: (v: ViewState) => void;
   onStartSelling: () => void;
   onLoginClick: () => void;
+  searchQuery: string;
+  onSearchQueryChange: (query: string) => void;
+  onSearchSubmit: () => void;
   onLogout: () => void;
-}> = ({ user, isLoggedIn, onViewChange, onStartSelling, onLoginClick, onLogout }) => (
+}> = ({ user, isLoggedIn, onViewChange, onStartSelling, onLoginClick, searchQuery, onSearchQueryChange, onSearchSubmit, onLogout }) => (
   <header className="navbar-alibaba">
     <TopBar onStartSelling={() => onStartSelling()} />
     <div className="container mx-auto px-4 lg:px-8 h-20 flex items-center justify-between gap-8">
@@ -145,9 +236,16 @@ const Header: React.FC<{
                 <input 
                     type="text" 
                     placeholder="What are you looking for..."
+                    value={searchQuery}
+                    onChange={(e) => onSearchQueryChange(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        onSearchSubmit();
+                      }
+                    }}
                     className="w-full h-12 text-[#212121] text-sm block px-4 outline-none bg-white"
                 />
-                <button className="bg-[#FF6700] h-12 px-6 text-white font-semibold flex items-center gap-2 hover:bg-[#E55100] transition shrink-0">
+                <button onClick={onSearchSubmit} className="bg-[#FF6700] h-12 px-6 text-white font-semibold flex items-center gap-2 hover:bg-[#E55100] transition shrink-0">
                     <Search size={18} />
                     Search
                 </button>
@@ -187,9 +285,12 @@ const Header: React.FC<{
 const SubNav: React.FC<{ view: ViewState, onViewChange: (v: ViewState) => void }> = ({ view, onViewChange }) => {
     const isMarketplace = view === 'marketplace' || view === 'home';
     const isWholesale = view === 'wholesale';
+    const isSecondhand = view === 'secondhand';
+    const isImportLinkGlobal = view === 'importlinkGlobal';
     const isServices = view === 'services';
     const isDigital = view === 'digital';
     const isFarmers = view === 'farmers';
+    const isLive = view === 'live';
 
     return (
         <div className="container mx-auto px-4 lg:px-8 py-4 flex items-center gap-3">
@@ -209,7 +310,27 @@ const SubNav: React.FC<{ view: ViewState, onViewChange: (v: ViewState) => void }
                     isWholesale ? 'bg-blue-800 text-white shadow-md' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
                 }`}
             >
-                <Package size={16}/> Wholesale Hub
+              <Package size={16}/> Kenya Wholesale Hub
+            </button>
+            <button
+                onClick={() => onViewChange('secondhand')}
+                onMouseEnter={prefetchSecondhandHub}
+                onFocus={prefetchSecondhandHub}
+                className={`px-5 py-2.5 rounded-full font-semibold text-sm flex items-center gap-2 transition ${
+                    isSecondhand ? 'bg-emerald-700 text-white shadow-md' : 'bg-white text-gray-700 border border-emerald-200 hover:bg-emerald-50'
+                }`}
+            >
+                <Leaf size={16}/> Secondhand Items
+            </button>
+            <button
+              onClick={() => onViewChange('importlinkGlobal')}
+              onMouseEnter={prefetchImportLinkGlobalHub}
+              onFocus={prefetchImportLinkGlobalHub}
+              className={`px-5 py-2.5 rounded-full font-semibold text-sm flex items-center gap-2 transition ${
+                isImportLinkGlobal ? 'bg-blue-800 text-white shadow-md' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              <Globe size={16}/> ImportLink Global
             </button>
             <button
                 onClick={() => onViewChange('farmers')}
@@ -236,6 +357,14 @@ const SubNav: React.FC<{ view: ViewState, onViewChange: (v: ViewState) => void }
                 }`}
             >
                 <Briefcase size={16}/> Services
+            </button>
+             <button
+              onClick={() => onViewChange('live')}
+              className={`px-5 py-2.5 rounded-full font-semibold text-sm flex items-center gap-2 transition ${
+                isLive ? 'bg-blue-800 text-white shadow-md' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              <Wifi size={16}/> Live Commerce
             </button>
         </div>
     );
@@ -354,7 +483,11 @@ const BottomNav: React.FC<{
 // --- MAIN APP COMPONENT ---
 
 export const App: React.FC = () => {
-  const [view, setView] = useState<ViewState>('home');
+  const [view, setView] = useState<ViewState>(() => {
+    if (typeof window === 'undefined') return 'home';
+    if (window.location.hash) return resolveViewFromHash(window.location.hash);
+    return resolveViewFromPath(window.location.pathname);
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
   const [sellers, setSellers] = useState<User[]>([]);
@@ -395,6 +528,8 @@ export const App: React.FC = () => {
   const [serviceFilter, setServiceFilter] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
   const [farmerCountyFilter, setFarmerCountyFilter] = useState<string>('All');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedLiveStream, setSelectedLiveStream] = useState<LiveStream | null>(null);
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [featuredListingIds, setFeaturedListingIds] = useState<Set<string>>(new Set());
   const [listingComments, setListingComments] = useState<Record<string, ListingComment[]>>({});
@@ -402,6 +537,9 @@ export const App: React.FC = () => {
   const [buyerLocation, setBuyerLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [insightLoadingFarmerId, setInsightLoadingFarmerId] = useState<string | null>(null);
   const [showAssistant, setShowAssistant] = useState(false);
+  const [isMPesaOpen, setIsMPesaOpen] = useState(false);
+  const [checkoutAmount, setCheckoutAmount] = useState(0);
+  const [cart, setCart] = useState<CartItem[]>([]);
 
   const assignPlaceholderImages = (products: Product[]): Product[] => {
     const imageMap: { [key: string]: string } = {
@@ -650,12 +788,53 @@ export const App: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const syncFromPath = () => {
+      const currentHash = window.location.hash;
+      const currentPath = window.location.pathname;
+      const resolvedView = currentHash
+        ? resolveViewFromHash(currentHash)
+        : resolveViewFromPath(currentPath);
+
+      setView(resolvedView);
+      setCategoryFilter(null);
+      setIsContactOpen(
+        currentPath === '/seller-support' ||
+        currentPath === '/contact-support' ||
+        currentHash === '#/seller-support' ||
+        currentHash === '#/contact-support'
+      );
+    };
+
+    syncFromPath();
+    window.addEventListener('popstate', syncFromPath);
+    window.addEventListener('hashchange', syncFromPath);
+
+    return () => {
+      window.removeEventListener('popstate', syncFromPath);
+      window.removeEventListener('hashchange', syncFromPath);
+    };
+  }, []);
+
   const isSubscriptionActive = user.subscriptionExpiry !== null && user.subscriptionExpiry > Date.now();
   
   const handleViewChange = (newView: ViewState) => {
     setView(newView);
     setCategoryFilter(null);
+
+    const targetHash = viewToHashMap[newView] || '#/';
+    if (window.location.hash !== targetHash) {
+      window.location.hash = targetHash;
+    }
   }
+
+  const handleSearchSubmit = () => {
+    setView('marketplace');
+    setCategoryFilter(null);
+    if (window.location.hash !== '#/marketplace') {
+      window.location.hash = '#/marketplace';
+    }
+  };
 
   const handleCategorySelect = (category: string | null) => {
     setView('marketplace');
@@ -701,9 +880,19 @@ export const App: React.FC = () => {
       };
 
       // Save to Supabase database
+      const dbListingData: Partial<DatabaseListing> = {
+        ...productWithSeller,
+        status:
+          productWithSeller.status === 'Active'
+            ? 'active'
+            : productWithSeller.status === 'Hidden'
+              ? 'rejected'
+              : 'draft',
+      };
+
       const dbResult = productToEdit 
-        ? await updateListing(productWithSeller.id, productWithSeller)
-        : await createListing(productWithSeller);
+        ? await updateListing(productWithSeller.id, dbListingData)
+        : await createListing(dbListingData);
 
       if (!dbResult) {
         alert('❌ Failed to save listing. Please try again.');
@@ -1031,7 +1220,7 @@ export const App: React.FC = () => {
       const updated: Record<string, ListingComment[]> = {};
 
       Object.entries(prev).forEach(([listingId, comments]) => {
-        updated[listingId] = comments.map(comment =>
+        updated[listingId] = (comments as ListingComment[]).map(comment =>
           comment.id === commentId ? { ...comment, status } : comment
         );
       });
@@ -1135,11 +1324,23 @@ export const App: React.FC = () => {
     const activeSellers = sellers.filter(s => s.accountStatus === 'active');
     const activeSellerIds = new Set(activeSellers.map(s => s.id));
     const visibleProducts = products.filter(p => p.listingStatus === 'active' && p.status !== 'Hidden' && activeSellerIds.has(p.sellerId));
-    const digitalProducts = visibleProducts.filter(p => p.isDigital);
-    const marketplaceProductsBase = visibleProducts.filter(p => !p.isWholesale && !SERVICE_CATEGORIES.includes(p.category) && !p.isDigital);
+    const normalizedSearch = searchQuery.trim().toLowerCase();
+    const matchesSearch = (product: Product) => {
+      if (!normalizedSearch) return true;
+      return (
+        product.title.toLowerCase().includes(normalizedSearch) ||
+        product.description.toLowerCase().includes(normalizedSearch) ||
+        product.category.toLowerCase().includes(normalizedSearch) ||
+        product.sellerName.toLowerCase().includes(normalizedSearch)
+      );
+    };
+    const searchableProducts = visibleProducts.filter(matchesSearch);
+
+    const digitalProducts = searchableProducts.filter(p => p.isDigital);
+    const marketplaceProductsBase = searchableProducts.filter(p => !p.isWholesale && !SERVICE_CATEGORIES.includes(p.category) && !p.isDigital);
     let marketplaceProducts = categoryFilter ? marketplaceProductsBase.filter(p => p.category === categoryFilter) : marketplaceProductsBase;
-    const serviceProducts = visibleProducts.filter(p => SERVICE_CATEGORIES.includes(p.category));
-    const wholesaleProducts = visibleProducts.filter(p => p.isWholesale);
+    const serviceProducts = searchableProducts.filter(p => SERVICE_CATEGORIES.includes(p.category));
+    const wholesaleProducts = searchableProducts.filter(p => p.isWholesale);
 
     // Sort products: featured first, then regular
     const sortByFeatured = (items: Product[]) => {
@@ -1243,6 +1444,24 @@ export const App: React.FC = () => {
                     onOpenSubscription={() => setIsSubscriptionOpen(true)}
                 />
             );
+        case 'secondhand':
+          return (
+            <SecondhandHub
+              user={user}
+              isAdmin={user.role === 'admin'}
+              onFollowToggle={handleToggleFollow}
+              isFollowing={(sellerId) => user.following.includes(sellerId)}
+              onLoginRequired={() => setIsAuthOpen(true)}
+            />
+          );
+        case 'importlinkGlobal':
+          return (
+            <ImportLinkGlobalHub 
+              isLoggedIn={isLoggedIn}
+              user={user}
+              onOpenSubscription={() => setIsSubscriptionOpen(true)}
+            />
+          );
         case 'farmers':
             const farmersWithDistance = buyerLocation ? farmers.map(f => ({ ...f, distance: calculateDistance(buyerLocation.lat, buyerLocation.lng, f.coordinates.lat, f.coordinates.lng) })) : farmers;
             const filteredFarmers = farmerCountyFilter === 'All' ? farmersWithDistance : farmersWithDistance.filter(f => f.county === farmerCountyFilter);
@@ -1314,6 +1533,14 @@ export const App: React.FC = () => {
                     )}
                 </div>
             );
+              case 'live':
+                return (
+                  <LiveCommerceView
+                    streams={liveStreams}
+                    products={visibleProducts}
+                    onViewStream={setSelectedLiveStream}
+                  />
+                );
         case 'dashboard':
             const currentUserIsFarmer = farmers.find(f => f.id === user.id);
             if (currentUserIsFarmer) {
@@ -1363,7 +1590,17 @@ export const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-900 flex flex-col">
       <div className="flex-grow">
-        <Header user={user} isLoggedIn={isLoggedIn} onViewChange={handleViewChange} onStartSelling={() => handleStartSelling()} onLoginClick={() => {}} onLogout={handleLogout} />
+        <Header
+          user={user}
+          isLoggedIn={isLoggedIn}
+          onViewChange={handleViewChange}
+          onStartSelling={() => handleStartSelling()}
+          onLoginClick={() => setIsAuthOpen(true)}
+          searchQuery={searchQuery}
+          onSearchQueryChange={setSearchQuery}
+          onSearchSubmit={handleSearchSubmit}
+          onLogout={handleLogout}
+        />
         <div className="hidden md:block">{view !== 'dashboard' && view !== 'admin' && <SubNav view={view} onViewChange={handleViewChange} />}</div>
         <main className="container mx-auto px-4 lg:px-8 py-2 flex-1 mb-24 md:mb-8">
           <Suspense fallback={<div className="py-12 flex items-center justify-center"><Loader2 size={28} className="text-orange-500 animate-spin" /></div>}>
@@ -1381,7 +1618,9 @@ export const App: React.FC = () => {
         onAdminLogin={() => console.log('Admin panel opened')}
       />
       <BottomNav view={view} onViewChange={handleViewChange} onStartSelling={() => handleStartSelling()} />
-      {/* AuthModal removed - fully guest-enabled marketplace */}
+      <Suspense fallback={null}>
+        <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} onSuccess={handleAuthSuccess} />
+      </Suspense>
       <Suspense fallback={null}>
         <VerificationModal isOpen={isVerificationOpen} onClose={() => setIsVerificationOpen(false)} onVerify={handleVerify} />
       </Suspense>
@@ -1440,6 +1679,19 @@ export const App: React.FC = () => {
             </Suspense>
           </div>
         </div>
+      )}
+      {selectedLiveStream && (
+        <Suspense fallback={null}>
+          <LiveStreamPlayer
+            stream={selectedLiveStream}
+            featuredProduct={products.find((product) => product.id === selectedLiveStream.featuredProductId)}
+            onClose={() => setSelectedLiveStream(null)}
+            onBuyNow={(product) => {
+              setSelectedLiveStream(null);
+              setSelectedProduct(product);
+            }}
+          />
+        </Suspense>
       )}
       {showAssistant && (
         <Suspense fallback={null}>

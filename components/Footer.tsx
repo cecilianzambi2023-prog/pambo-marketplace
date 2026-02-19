@@ -4,9 +4,10 @@ import {
   CreditCard, Lock, Settings
 } from 'lucide-react';
 import { PLATFORM_CONFIG } from '../constants';
+import { ViewState } from '../types';
 
 interface FooterProps {
-  onNavigate?: (view: string, hub?: string) => void;
+    onNavigate?: (view: ViewState) => void;
   currentUser?: { email?: string } | null;
   onOpenTerms?: () => void;
   onOpenPrivacy?: () => void;
@@ -27,8 +28,21 @@ export const Footer: React.FC<FooterProps> = ({
   const [adminHover, setAdminHover] = useState(false);
 
   const handleHubClick = (hubName: string) => {
+        const hubToView: Record<string, ViewState> = {
+            marketplace: 'marketplace',
+            wholesale: 'wholesale',
+            importlinkGlobal: 'importlinkGlobal',
+            services: 'services',
+            digital: 'digital',
+            live: 'live',
+            farmers: 'farmers',
+        };
+
+        const targetView = hubToView[hubName];
+        if (!targetView) return;
+
     if (onNavigate) {
-      onNavigate('hub', hubName);
+            onNavigate(targetView);
     }
   };
 
@@ -61,7 +75,7 @@ export const Footer: React.FC<FooterProps> = ({
                                 <p className="text-xs text-gray-400">{PLATFORM_CONFIG.domain}</p>
                             </div>
                         </div>
-                        <p className="text-sm text-gray-400 mb-6 leading-relaxed">A multi-hub marketplace platform for trading across Eastern Africa.</p>
+                        <p className="text-sm text-gray-400 mb-6 leading-relaxed">A multi-hub marketplace platform built for trading across Kenya.</p>
                         
                         <div className="space-y-3 mb-6">
                             <div className="flex items-center gap-3 text-sm">
@@ -87,10 +101,10 @@ export const Footer: React.FC<FooterProps> = ({
                     <div>
                         <h4 className="font-bold text-white uppercase text-sm mb-5">For Buyers</h4>
                         <nav className="flex flex-col gap-3">
-                            <a href="#" className="text-gray-400 hover:text-orange-500 transition text-sm">Browse Listings</a>
-                            <a href="#" className="text-gray-400 hover:text-orange-500 transition text-sm">Search Products</a>
-                            <a href="#" className="text-gray-400 hover:text-orange-500 transition text-sm">View Sellers</a>
-                            <a href="#" className="text-gray-400 hover:text-orange-500 transition text-sm">Contact Support</a>
+                            <span className="text-gray-400 text-sm">Browse Listings</span>
+                            <span className="text-gray-400 text-sm">Search Products</span>
+                            <span className="text-gray-400 text-sm">View Sellers</span>
+                            <span className="text-gray-400 text-sm">Contact Support</span>
                         </nav>
                     </div>
 
@@ -98,10 +112,10 @@ export const Footer: React.FC<FooterProps> = ({
                     <div>
                         <h4 className="font-bold text-white uppercase text-sm mb-5">For Sellers</h4>
                         <nav className="flex flex-col gap-3">
-                            <a href="#" className="text-gray-400 hover:text-orange-500 transition text-sm">Seller Center</a>
-                            <a href="#" className="text-gray-400 hover:text-orange-500 transition text-sm">Start Selling</a>
-                            <a href="#" className="text-gray-400 hover:text-orange-500 transition text-sm">Seller Tools</a>
-                            <a href="#" className="text-gray-400 hover:text-orange-500 transition text-sm">Seller Support</a>
+                            <span className="text-gray-400 text-sm">Seller Center</span>
+                            <span className="text-gray-400 text-sm">Start Selling</span>
+                            <span className="text-gray-400 text-sm">Seller Tools</span>
+                            <span className="text-gray-400 text-sm">Seller Support</span>
                         </nav>
                     </div>
 
@@ -110,9 +124,11 @@ export const Footer: React.FC<FooterProps> = ({
                         <h4 className="font-bold text-white uppercase text-sm mb-5">Our Platforms</h4>
                         <nav className="flex flex-col gap-3">
                             <button onClick={() => handleHubClick('marketplace')} className="text-gray-400 hover:text-orange-500 transition text-sm text-left cursor-pointer">Marketplace</button>
-                            <button onClick={() => handleHubClick('wholesale')} className="text-gray-400 hover:text-orange-500 transition text-sm text-left cursor-pointer">Wholesale</button>
+                            <button onClick={() => handleHubClick('wholesale')} className="text-gray-400 hover:text-orange-500 transition text-sm text-left cursor-pointer">Kenya Wholesale Hub</button>
+                            <button onClick={() => handleHubClick('importlinkGlobal')} className="text-gray-400 hover:text-orange-500 transition text-sm text-left cursor-pointer">ImportLink Global</button>
                             <button onClick={() => handleHubClick('services')} className="text-gray-400 hover:text-orange-500 transition text-sm text-left cursor-pointer">Services</button>
                             <button onClick={() => handleHubClick('digital')} className="text-gray-400 hover:text-orange-500 transition text-sm text-left cursor-pointer">Digital Products</button>
+                            <button onClick={() => handleHubClick('live')} className="text-gray-400 hover:text-orange-500 transition text-sm text-left cursor-pointer">Live Commerce</button>
                         </nav>
                     </div>
 

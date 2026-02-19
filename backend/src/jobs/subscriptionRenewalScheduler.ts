@@ -9,7 +9,7 @@ import axios from 'axios';
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_KEY || ''
+  process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY || ''
 );
 
 interface SubscriptionRenewal {

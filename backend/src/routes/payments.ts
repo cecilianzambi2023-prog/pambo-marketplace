@@ -11,7 +11,7 @@ const router = Router();
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_KEY || ''
+  process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY || ''
 );
 
 // ============================================
@@ -24,7 +24,7 @@ const MPESA_CONFIG = {
   businessShortCode: process.env.MPESA_BUSINESS_SHORT_CODE || '174379',
   passkey: process.env.MPESA_PASSKEY || '',
   baseUrl: process.env.MPESA_BASE_URL || 'https://sandbox.safaricom.co.ke',
-  callbackUrl: process.env.MPESA_CALLBACK_URL || 'http://localhost:5000/api/payments/mpesa/callback',
+  callbackUrl: process.env.MPESA_CALLBACK_URL || '',
 };
 
 // ============================================
@@ -87,6 +87,13 @@ const formatPhoneNumber = (phone: string): string => {
 router.post('/stk-push', async (req: Request, res: Response) => {
   try {
     const { phone, amount, orderId, description } = req.body;
+
+    if (!MPESA_CONFIG.callbackUrl) {
+      return res.status(500).json({
+        success: false,
+        error: 'MPESA_CALLBACK_URL is not configured'
+      });
+    }
 
     // Validate input
     if (!phone || !amount || !orderId) {

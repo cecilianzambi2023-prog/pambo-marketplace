@@ -1,11 +1,13 @@
 import express, { Router, Request, Response } from 'express';
 import { createClient } from '@supabase/supabase-js';
+import { eventQueue } from '../lib/eventQueue';
+import { scaleMetrics } from '../lib/scaleMetrics';
 
 const router = Router();
 
 const supabase = createClient(
   process.env.VITE_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_KEY || ''
+  process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY || ''
 );
 
 /**
@@ -56,6 +58,14 @@ router.post('/', async (req: Request, res: Response) => {
       .select();
 
     if (error) throw error;
+
+    eventQueue.emit('LISTING_CREATED', 'api.listings.create', {
+      listingId: listing?.[0]?.id,
+      hub: hub || 'marketplace',
+      sellerId,
+      category,
+    });
+    scaleMetrics.increment('listings.created', { hub: hub || 'marketplace' });
 
     res.status(201).json({
       success: true,
@@ -251,6 +261,14 @@ router.get('/search/:query', async (req: Request, res: Response) => {
       .limit(Number(limit));
 
     if (error) throw error;
+
+    eventQueue.emit('LISTING_SEARCH', 'api.listings.search', {
+      query,
+      hub: hub || null,
+      limit: Number(limit),
+      resultCount: listings?.length || 0,
+    });
+    scaleMetrics.increment('listings.search', { hub: String(hub || 'all') });
 
     res.json({
       success: true,

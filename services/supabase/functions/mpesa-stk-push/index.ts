@@ -1,11 +1,39 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+const defaultAllowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://pambo.biz",
+  "https://www.pambo.biz",
+];
+
+function getAllowedOrigins(): string[] {
+  const configured = Deno.env.get("CORS_ALLOWED_ORIGINS");
+  if (!configured) return defaultAllowedOrigins;
+
+  return configured
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+}
+
+function buildCorsHeaders(origin: string | null): Record<string, string> {
+  const allowedOrigins = getAllowedOrigins();
+  const isAllowedOrigin = !!origin && allowedOrigins.includes(origin);
+
+  return {
+    "Access-Control-Allow-Origin": isAllowedOrigin ? origin : allowedOrigins[0],
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Vary": "Origin",
+  };
+}
+
+function isRequestOriginAllowed(origin: string | null): boolean {
+  if (!origin) return true;
+  return getAllowedOrigins().includes(origin);
+}
 
 interface STKPushRequest {
   phone_number: string;
@@ -142,6 +170,19 @@ async function initiateSTKPush(
 }
 
 serve(async (req) => {
+  const origin = req.headers.get("origin");
+  const corsHeaders = buildCorsHeaders(origin);
+
+  if (!isRequestOriginAllowed(origin)) {
+    return new Response(
+      JSON.stringify({ error: "Origin not allowed" }),
+      {
+        status: 403,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      }
+    );
+  }
+
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -149,11 +190,11 @@ serve(async (req) => {
 
   try {
     // Get environment variables
-    const consumerKey = Deno.env.get("VITE_MPESA_CONSUMER_KEY");
-    const consumerSecret = Deno.env.get("VITE_MPESA_CONSUMER_SECRET");
-    const shortCode = Deno.env.get("VITE_MPESA_SHORTCODE");
-    const passkey = Deno.env.get("VITE_MPESA_PASSKEY");
-    const callbackUrl = Deno.env.get("VITE_MPESA_CALLBACK_URL");
+    const consumerKey = Deno.env.get("MPESA_CONSUMER_KEY");
+    const consumerSecret = Deno.env.get("MPESA_CONSUMER_SECRET");
+    const shortCode = Deno.env.get("MPESA_SHORTCODE");
+    const passkey = Deno.env.get("MPESA_PASSKEY");
+    const callbackUrl = Deno.env.get("MPESA_CALLBACK_URL");
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 

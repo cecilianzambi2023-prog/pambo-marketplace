@@ -177,6 +177,35 @@ export interface BulkOffering {
   verifiedSeller?: boolean;
   responses?: number;
   status?: 'active' | 'sold_out' | 'inactive';
+  viewsCount?: number;
+  commentsCount?: number;
+  followersCount?: number;
+  photos?: string[];
+  videos?: string[];
+}
+
+export interface SecondhandListing {
+  id: string;
+  sellerId: string;
+  sellerName: string;
+  sellerPhone?: string;
+  sellerWhatsapp?: string;
+  sellerEmail?: string;
+  title: string;
+  description?: string;
+  price: number;
+  condition: 'new' | 'like_new' | 'used' | 'fair';
+  category?: string;
+  county?: string;
+  city?: string;
+  status?: 'active' | 'sold' | 'inactive';
+  moderationStatus?: 'pending' | 'approved' | 'rejected' | 'suspended';
+  moderationNotes?: string;
+  viewsCount?: number;
+  commentsCount?: number;
+  photos?: string[];
+  videos?: string[];
+  createdAt?: string;
 }
 
 // BULK INQUIRIES - Buyers inquire about bulk offerings
@@ -194,7 +223,7 @@ export interface BulkInquiry {
   updated_at: string;
 }
 
-export type ViewState = 'home' | 'marketplace' | 'wholesale' | 'services' | 'dashboard' | 'admin' | 'digital' | 'live' | 'banned' | 'farmers';
+export type ViewState = 'home' | 'marketplace' | 'wholesale' | 'importlinkGlobal' | 'secondhand' | 'services' | 'dashboard' | 'admin' | 'digital' | 'live' | 'banned' | 'farmers';
 
 export interface CartItem extends Product {
   quantity: number;

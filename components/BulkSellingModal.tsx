@@ -13,6 +13,8 @@ interface BulkSellingModalProps {
     pricePerUnit: number;
     minOrderQuantity: number;
     hub: string;
+    photos?: string[];
+    videos?: string[];
   }) => void;
 }
 
@@ -26,6 +28,8 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
     pricePerUnit: 0,
     minOrderQuantity: 1,
     hub: 'wholesale',
+    photoUrls: '',
+    videoUrls: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -49,7 +53,30 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
 
     setIsSubmitting(true);
     try {
-      onSubmit(formData);
+      const photos = formData.photoUrls
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .slice(0, 10);
+
+      const videos = formData.videoUrls
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .slice(0, 2);
+
+      onSubmit({
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        quantity: formData.quantity,
+        unit: formData.unit,
+        pricePerUnit: formData.pricePerUnit,
+        minOrderQuantity: formData.minOrderQuantity,
+        hub: formData.hub,
+        photos,
+        videos,
+      });
       setFormData({
         title: '',
         description: '',
@@ -59,6 +86,8 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
         pricePerUnit: 0,
         minOrderQuantity: 1,
         hub: 'wholesale',
+        photoUrls: '',
+        videoUrls: '',
       });
     } finally {
       setIsSubmitting(false);
@@ -135,6 +164,33 @@ export const BulkSellingModal: React.FC<BulkSellingModalProps> = ({ isOpen, onCl
               rows={4}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Photo URLs (max 10)</label>
+              <textarea
+                name="photoUrls"
+                value={formData.photoUrls}
+                onChange={handleChange}
+                placeholder="One URL per line"
+                rows={4}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              />
+              <p className="text-xs text-gray-500 mt-1">{formData.photoUrls.split('\n').map(v => v.trim()).filter(Boolean).length}/10</p>
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Video URLs (max 2)</label>
+              <textarea
+                name="videoUrls"
+                value={formData.videoUrls}
+                onChange={handleChange}
+                placeholder="One URL per line"
+                rows={4}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              />
+              <p className="text-xs text-gray-500 mt-1">{formData.videoUrls.split('\n').map(v => v.trim()).filter(Boolean).length}/2</p>
+            </div>
           </div>
 
           {/* Quantity Section */}
